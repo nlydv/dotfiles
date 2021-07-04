@@ -1,0 +1,125 @@
+#!/usr/bin/env bash
+#
+# ~/.bash_colors
+#
+#   ANSI color code variables.
+#   Convenient escape characters for applying color/styling to
+#   output text in the terminal. Used in ~./command_prompt and
+#   else where; sourced by ~/.bashrc.
+#
+#     Neel Yadav
+#     07.03.2021
+
+
+# Basic escape code guide:
+#       30's  =>  foreground normal
+#       90's  =>  foreground bright
+#       40's  =>  background normal
+#      100's  =>  background bright
+#     0;[x]m  =>  reset all, apply x
+#       [x]m  =>  use prior, apply x
+#   [y];[x]m  =>  use prior, apply both x & y
+
+
+reset="\e[0m"
+
+# TEXT STYLES
+
+bold="\e[1m"
+dim="\e[2m"
+italic="\e[3m"
+under="\e[4m"
+blink="\e[5m"
+reverse="\e[7m"
+invisible="\e[8m"
+strike="\e[9m"
+
+# FOREGROUND COLORS
+
+black="\e[0;30m"
+red="\e[0;31m"
+green="\e[0;32m"
+yellow="\e[0;33m"
+blue="\e[0;34m"
+magenta="\e[0;35m"
+cyan="\e[0;36m"
+white="\e[0;37m"
+
+# BRIGHT FOREGROUND COLORS
+# The terms light & bright are used interchangably and the l-color
+# variables (lblue, lred, etc.) use l for "light" as a prefix instead
+# of b for "bright" because it's easier to distinguish.
+
+lblack="\e[0;90m"
+lred="\e[0;91m"
+lgreen="\e[0;92m"
+lyellow="\e[0;93m"
+lblue="\e[0;94m"
+lmagenta="\e[0;95m"
+lcyan="\e[0;96m"
+lwhite="\e[0;97m"
+
+# BACKGROUND COLORS
+
+black_bg="\e[40m"
+red_bg="\e[41m"
+green_bg="\e[42m"
+yellow_bg="\e[43m"
+blue_bg="\e[44m"
+magenta_bg="\e[45m"
+cyan_bg="\e[46m"
+white_bg="\e[47m"
+
+# BRIGHT BACKGROUND COLORS
+
+lblack_bg="\e[100m"
+lred_bg="\e[101m"
+lgreen_bg="\e[102m"
+lyellow_bg="\e[103m"
+lblue_bg="\e[104m"
+lmagenta_bg="\e[105m"
+lcyan_bg="\e[106m"
+lwhite_bg="\e[107m"
+
+### TEXT STYLE EXAMPLES ###
+
+## Bold Text
+# echo -e "${red}${bold}Such red, much bold.${reset}"
+
+## Strikthrough Text
+# echo -e "${green}${strike}Such green, much strike.${reset}"
+
+## Blinking Text
+# echo -e "${blue}${blink}Such blue, much blink.${reset}"
+
+
+### FORE/BACKGROUND & STYLE COMBOS ###
+
+## Black text, no style, white background
+# echo -e "${black}${white_bg}Black on white${reset}"
+
+## White text, italics, blue background
+# echo -e "${white}${italic}${blue_bg}A lot going on in this text...${reset}"
+
+## Yellow text, bold, italics, blinking, underlined, bright green background
+# echo -e "${yellow}${bold}${italic}${blink}${strike}${lgreen_bg}Turn the dial up to 'information overload'.${reset}"
+
+
+### SEGMENTED EXAMPLES ###
+
+## Italics red text, emphasis with underline and bold
+# echo -e "${red}${italic}Italics red text, ${reverse}${bold}emphasis${reset} ${red}${italic}with ${bold}bold${reset} ${red}${italic}and ${reverse}highlight${reset}"
+
+## NOTE: The ${reset} clears all previous style, it's not needed if you
+##       you're about to change (or restate) the text color because the
+##       the basic foreground color codes auto-resets previous trailing
+##       styles. At the minimum, you should add the ${reset} var to the
+##       end of your total ouput, otherwise you might end up seeing some
+##       weird effects in your terminal afterwords.
+
+## NOTE: The exact colors associated with the 16 ANSI variables depend on
+##       what theme you use with your specific console/terminal emulator.
+##       And the "bright" colors may also be set to automatically appear
+##       bolded, though there's usually a setting to enable/disable that
+##       setting in applications like the default macOS Terminal.app and
+##       the 3rd party alternative, iTerm2.

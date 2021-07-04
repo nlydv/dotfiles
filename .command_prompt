@@ -1,0 +1,149 @@
+#!/usr/bin/env bash
+#
+# ~/.command_prompt
+#
+#   Dedicated file for setting prompt.
+#   For bulky customizations. Sourced by ~/.bashrc.
+#
+#     Neel Yadav
+#     06.30.2021
+
+
+# ————Git——————————————————————————————————————————————————————————————
+# Copied these two functions from a website guide or something.
+
+# get current branch in git repo
+get_git () {
+	BRANCH=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')
+	if [ ! "${BRANCH}" == "" ]
+	then
+		STAT="$(stat_git)"
+		echo "[${BRANCH}${STAT}] "
+	else
+		echo ""
+	fi
+}
+
+# get current status of git repo
+stat_git () {
+	status=$(git status 2>&1 | tee)
+	dirty=$(echo -n "${status}" 2> /dev/null | grep "modified:" &> /dev/null; echo "$?")
+	untracked=$(echo -n "${status}" 2> /dev/null | grep "Untracked files" &> /dev/null; echo "$?")
+	ahead=$(echo -n "${status}" 2> /dev/null | grep "Your branch is ahead of" &> /dev/null; echo "$?")
+	newfile=$(echo -n "${status}" 2> /dev/null | grep "new file:" &> /dev/null; echo "$?")
+	renamed=$(echo -n "${status}" 2> /dev/null | grep "renamed:" &> /dev/null; echo "$?")
+	deleted=$(echo -n "${status}" 2> /dev/null | grep "deleted:" &> /dev/null; echo "$?")
+	bits=''
+	if [ "${renamed}" == "0" ]; then
+		bits=">${bits}"
+	fi
+	if [ "${ahead}" == "0" ]; then
+		bits="*${bits}"
+	fi
+	if [ "${newfile}" == "0" ]; then
+		bits="+${bits}"
+	fi
+	if [ "${untracked}" == "0" ]; then
+		bits="?${bits}"
+	fi
+	if [ "${deleted}" == "0" ]; then
+		bits="x${bits}"
+	fi
+	if [ "${dirty}" == "0" ]; then
+		bits="!${bits}"
+	fi
+	if [ ! "${bits}" == "" ]; then
+		echo " ${bits}"
+	else
+		echo ""
+	fi
+}
+
+# ————iTerm2———————————————————————————————————————————————————————————
+# Since the only thing I really want from iTerm2's shell integration is
+# the ability to use keyboard shortcuts to jump through command history
+# these 3 functions are copied from their script and wrapped around the
+# actual prompt in the same manner
+
+# Prefix: before everything else
+iterm2_prompt_prefix () {
+    printf "\033]" # iterm2_begin_osc
+    printf "133;D;\$?"
+    printf "\007" # iterm2_end_osc
+}
+
+# Mark: before the prompt, after the prefix
+iterm2_prompt_mark () {
+    printf "\033]" # iterm2_begin_osc
+    printf "133;A"
+    printf "\007" # iterm2_end_osc
+}
+
+# Suffix: after everything else
+iterm2_prompt_suffix () {
+    printf "\033]" # iterm2_begin_osc
+    printf "133;B"
+    printf "\007" # iterm2_end_osc
+}
+
+# ————Personalizations—————————————————————————————————————————————————
+
+prompt_host () {
+    local user; local host
+
+    if [[ ! $(logname) == $(id -u -n) ]]; then
+        user="$(logname)"
+    else
+        user=$(id -u -n)
+    fi
+
+    which hostname &> /dev/null && host=$(hostname) || host=$HOSTNAME
+
+    if [[ -z $SSH_CONNECTION ]]; then
+        if [[ $user == "neel" ]] && [[ $OSTYPE == "darwin"* ]]; then
+            echo "\h "
+        else
+            echo "\u@\h "
+        fi
+    elif [[ $host == *"neelyadav.com" ]]; then
+        if [[ $user == "neel" ]]; then
+            echo "\H"
+        else
+            echo "\u@\H "
+        fi
+    else
+        echo "\u@\h "
+    fi
+}
+
+# this function is totally worthless but easier to read/debug the raw prompt this way
+prompt_dir () {
+    echo "\W "
+}
+
+prompt_symbol () {
+    if [[ $(id -u -n) == "neel" ]]; then
+        echo "❯ "
+    elif [[ $EUID == 0 ]]; then
+        echo "\[${red}${bold}\]!! "
+    else
+        echo "\[${white}${bold}\]\$ "
+    fi
+}
+
+# assemble the prompt
+PS1="\[${white}${bold}\]$(prompt_host)\[${blue}${bold}\]$(prompt_dir)\[${white}${dim}\]$(get_git)\[${magenta}${bold}\]$(prompt_symbol)\[${reset}\]"
+
+# make container for the prompt
+prompt_prefix="$(iterm2_prompt_prefix)$(iterm2_prompt_mark)"
+prompt_suffix="$(iterm2_prompt_suffix)"
+
+# pack and ship the prompt
+PS1="\[${prompt_prefix}\]${PS1}\[${prompt_suffix}\]"
+
+# buy one get one free prompt
+PS2="⑊ "
+
+
+# previous prompt backup
+# PS1="\[${white}${bold}\]\h \[${blue}${bold}\]\W\[${white}${dim}\]$(get_git_branch) \[${white}${bold}\]\$ \[${reset}\]"
