@@ -2,7 +2,7 @@
 #
 # ~/.bashrc (macOS)
 #
-#   Startup bash file for non-interactive login shells.
+#   Startup bash file for interactive non-login shells.
 #   Apparently some OS' will run ~/.bash_profile for all login
 #   shells. This is sourced by ~/.bash_profile anyways but is
 #   otherwise run automatically by the system on interactive
@@ -94,6 +94,13 @@ ssh-add -A &> /dev/null # && ssh-add -A ~/.ssh/other-keys &> /dev/null
 # Add user's home bin if it exists
 [ -d ~/bin ] && export PATH="$HOME/bin:$PATH"
 
+# Homebrew Environment (also see `brew shellenv`)
+if [ -x "$(which brew)" ]; then
+    export HOMEBREW_PREFIX=$(brew --prefix)
+    export HOMEBREW_CELLAR=$(brew --cellar)
+    export HOMEBREW_REPOSITORY=$(brew --repository)
+fi
+
 # OpenSSL Keg-Only Paths
 export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
 
@@ -112,7 +119,7 @@ export PATH="/usr/local/opt/php@7.2/bin:$PATH"
 export PATH="/usr/local/opt/php@7.2/sbin:$PATH"
 
 # Python ... also see ~/.bash_aliases
-export PATH="/usr/local/opt/python/bin:$PATH"
+#export PATH="/usr/local/opt/python/bin:$PATH"
 
 # NVM: node/npm version manager
 export NVM_DIR="$HOME/.nvm"

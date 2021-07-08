@@ -5,6 +5,9 @@
 #     Neel Yadav
 #	  07.04.2021
 
+
+[core]
+	excludesFile = ~/.config/git/ignore
 [user]
 	name = Neel Yadav
 	email = mail@neelyadav.com
@@ -22,3 +25,7 @@
 	gpgsign = true
 [credential]
 	helper = osxkeychain
+[alias]
+	logadog = log --all --decorate --oneline --graph
+        uncommit = reset --soft HEAD~1
+        delcommit = reset --hard HEAD~1
