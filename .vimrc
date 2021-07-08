@@ -1,4 +1,4 @@
-" ~/.vimrc
+" ~/.vimrc (macOS)
 "
 "   Compatibility of functionality with my terminal
 "   app and keymap settings.

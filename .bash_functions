@@ -30,27 +30,32 @@ submod () {
 # realx: get real underlying executable path
 # —————
 realx () {
-    local name=$1
+    [[ -n $2 ]] && local name=$2 || local name=$1
 
-    [[ $1 == "-a" && -n $2 ]] && name=$2
+    if [[ $1 =~ ^-.*$ ]] && [[ ! $1 =~ ^-[a|A]$ ]]; then
+        echo "realx: invalid option"
+        return 1
+    elif ! type -t $name &> /dev/null; then
+        echo "realx: unresolvable argument"
+        return 1
+    fi
+
     while [[ $(type -t $name) == "alias" ]]; do
         name=$(alias $name | sed -E "s/.*'(.*)'/\1/")
     done
 
-    if [[ $1 == "-*" ]]; then
-        echo "realx error: only available option is -a";
-        exit 11;
-    elif [[ -n $name ]]; then
-	    realpath $(type -p $name);
-    elif [[ $1 == "-a" ]]; then
-        realpath $(type -ap $name);
+    if [[ -n $1 && -n $name ]]; then
+        realpath $(type -p $name) 2> /dev/null
+        if [[ $1 =~ ^-[a|A]$ ]]; then
+            realpath $(type -ap $2) 2> /dev/null
+        fi
     else
-        echo -e "${bold}usage: realx [-a] NAME${reset}\n"
-        echo -e "desc: Gets the first executable found in the current \$PATH"
-	echo -e "      that's named NAME and outputs its 'real' underlying"
-	echo -e "      executable file path by expanding redirects and"
-	echo -e "      following symlinks.\n";
-        echo -e "  -a  Do for all matches of NAME in \$PATH\n"
+        echo -e "${bold}usage: realx [-a] NAME${reset}"
+        echo -e "desc:  Gets the first executable found in the current \$PATH"
+        echo -e "       that's named NAME and outputs its 'real' underlying"
+        echo -e "       executable path by expanding redirects and following"
+        echo -e "       any symlinks.\n";
+        echo -e "   -a  Do for all matches of NAME in \$PATH\n"
     fi
 }
 
@@ -58,20 +63,20 @@ realx () {
 # —————————
 colortest () {
     for i in {0..7}; do
-        test_normal="\e[0;3${i}mTesting color $i normal${reset}"
-        echo -e $test_normal;
-    done
-
-    for i in {0..7}; do
-        test_bolded="\e[1;3${i}mTesting color $i bold${reset}"
-        echo -e $test_bolded;
+        color_output="Testing color $i\n\e[0;3${i}mnormal${reset} | \e[1;3${i}mbold${reset}\n\e[0;9${i}mlight ${reset} | \e[1;9${i}mlight bold${reset}\n"
+        echo -e $color_output;
     done
 }
 
-# upgrade-nodejs: simple command to upgrade nodejs/npm and transfer npm packages to new version via nvm
-# ———————————
-upgrade-nodejs () {
-    echo "Getting available versions..."
+# nvm-upgrade-lts: simple command to upgrade node/npm and transfer npm packages to new version via nvm
+# ———————————————
+nvm-upgrade-lts () {
+    if [[ -z $(type -t nvm) ]]; then
+        echo "error: nvm is not installed"
+        return 1
+    else
+        echo "Getting available versions..."
+    fi
 
     node_cur=$(nvm current)
     latest_lts=$(nvm version-remote --lts)
@@ -102,4 +107,27 @@ upgrade-nodejs () {
             cp -r $i $nodemod_new
         fi
     done
+}
+
+# extract: no more randomly guessing option combos
+# ———————  credit: Mpho Mphego (https://dev.to/mmphego/share-your-bashrc-251n)
+extract () {
+     if [ -f $1 ] ; then
+         case $1 in
+             *.tar.bz2)   tar xjf $1    ;;
+             *.tar.gz)    tar xzf $1    ;;
+             *.bz2)       bunzip2 $1    ;;
+             *.rar)       rar x $1      ;;
+             *.gz)        gunzip $1     ;;
+             *.tar)       tar xf $1     ;;
+             *.tbz2)      tar xjf $1    ;;
+             *.tgz)       tar xzf $1    ;;
+             *.zip)       unzip $1      ;;
+             *.Z)         uncompress $1 ;;
+             *.7z)        7z x $1       ;;
+             *)           echo "'$1' cannot be extracted via extract()" ;;
+         esac
+     else
+         echo "'$1' is not a valid file"
+     fi
 }
