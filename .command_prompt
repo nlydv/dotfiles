@@ -86,64 +86,33 @@ iterm2_prompt_suffix () {
     printf "\007" # iterm2_end_osc
 }
 
-# ————Personalizations—————————————————————————————————————————————————
-
-prompt_host () {
-    local user; local host
-
-    if [[ ! $(logname) == $(id -u -n) ]]; then
-        user="$(logname)"
-    else
-        user=$(id -u -n)
-    fi
-
-    which hostname &> /dev/null && host=$(hostname) || host=$HOSTNAME
-
-    if [[ -z $SSH_CONNECTION ]]; then
-        if [[ $user == "neel" ]] && [[ $OSTYPE == "darwin"* ]]; then
-            echo "\h "
-        else
-            echo "\u@\h "
-        fi
-    elif [[ $host == *"neelyadav.com" ]]; then
-        if [[ $user == "neel" ]]; then
-            echo "\H"
-        else
-            echo "\u@\H "
-        fi
-    else
-        echo "\u@\h "
-    fi
-}
-
-# this function is totally worthless but easier to read/debug the raw prompt this way
-prompt_dir () {
-    echo "\W "
-}
-
-prompt_symbol () {
-    if [[ $(id -u -n) == "neel" ]]; then
-        echo "❯ "
-    elif [[ $EUID == 0 ]]; then
-        echo "\[${red}${bold}\]!! "
-    else
-        echo "\[${white}${bold}\]\$ "
-    fi
-}
+# ————Prompt———————————————————————————————————————————————————————————
+# Finally putting all the pieces together into the actual prompt
 
 # assemble the prompt
-PS1="\[${white}${bold}\]$(prompt_host)\[${blue}${bold}\]$(prompt_dir)\[${white}${dim}\]$(get_git)\[${magenta}${bold}\]$(prompt_symbol)\[${reset}\]"
+prompt_user=$(id -u)
+_PS1='\[\e[0;1;37m\]'
+
+if [[ $prompt_user == 501 ]]; then
+    _PS1+='\h'
+elif [[ $prompt_user == 0 ]]; then
+    _PS1+="\[${red}\]\u\[${white}\]@\[${_PS1}\]\h"
+else
+    _PS1+='\u@\h'
+fi
+
+_PS1+=' \[\e[0;1;34m\]\W \[\e[0;2;37m\]$(get_git)\[\e[0;1;35m\]❯ \[\e[0m\]'
 
 # make container for the prompt
 prompt_prefix="$(iterm2_prompt_prefix)$(iterm2_prompt_mark)"
 prompt_suffix="$(iterm2_prompt_suffix)"
 
 # pack and ship the prompt
-PS1="\[${prompt_prefix}\]${PS1}\[${prompt_suffix}\]"
+PS1="\[${prompt_prefix}\]${_PS1}\[${prompt_suffix}\]"
 
 # buy one get one free prompt
-PS2="⑊ "
+PS2='\[\e[2m\]⑊\[\e[0m\] '
 
 
 # previous prompt backup
-# PS1="\[${white}${bold}\]\h \[${blue}${bold}\]\W\[${white}${dim}\]$(get_git_branch) \[${white}${bold}\]\$ \[${reset}\]"
+# PS1="\[${white}${bold}\]\h \[${blue}${bold}\]\W\[${white}${dim}\]$(get_git) \[${white}${bold}\]\$ \[${reset}\]"
