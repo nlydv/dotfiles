@@ -29,7 +29,7 @@ alias l='ls -CF'
 
 # Git aliases
 alias adog='git log --all --decorate --oneline --graph'
-alias dotfiles='git --git-dir=$HOME/git/dotfiles.git/ --work-tree=$HOME'
+alias dot='git --git-dir=$HOME/git/dotfiles.git/ --work-tree=$HOME'
 alias uncommit='git reset --soft HEAD~1'    # undo last commit; keep changes
 alias delcommit='git reset --hard HEAD~1'   # undo last commit; discard changes
 
