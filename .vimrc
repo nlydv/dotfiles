@@ -1,7 +1,7 @@
-" ~/.vimrc (macOS)
+" ~/.vimrc (Linux server)
 "
 "   Compatibility of functionality with my terminal
-"   app and keymap settings.
+"   app and keymap settings (unmodified clone of the macOS version for now).
 "
 "     Neel Yadav
 "     06.29.2021

@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 #
-# ~/.command_prompt
+# ~/.command_prompt (Linux server)
 #
 #   Dedicated file for setting prompt.
 #   For bulky customizations. Sourced by ~/.bashrc.
 #
 #     Neel Yadav
-#     06.30.2021
+#     07.06.2021
 
 
 # ————Git——————————————————————————————————————————————————————————————
@@ -90,18 +90,22 @@ iterm2_prompt_suffix () {
 # Finally putting all the pieces together into the actual prompt
 
 # assemble the prompt
-prompt_user=$(id -u)
-_PS1='\[\e[0;1;37m\]'
+[[ ! $(logname) == $(id -u -n) ]] && cmd_user="$(logname)" || cmd_user=$(id -u -n)
+which hostname &> /dev/null && cmd_host=$(hostname) || cmd_host=$HOSTNAME
 
-if [[ $prompt_user == 501 ]]; then
-    _PS1+='\h'
-elif [[ $prompt_user == 0 ]]; then
-    _PS1+="\[${red}\]\u\[${white}\]@\[${_PS1}\]\h"
+if [[ $cmd_host == *"neelyadav.com" ]]; then
+    _PS1="\[${white}${bold}${black_bg}\]"
+    if [[ $cmd_user == "neel" ]]; then
+        _PS1+='\H'
+    elif [[ $EUID == 0 ]]; then
+        _PS1="\[${red}${italic}${black_bg}\]\u\[\e[37m\]@\[${_PS1}\]\h"
+    else
+        _PS1+='\u@\h'
+    fi
+    _PS1+='\[\e[0m\] \[\e[0;1;34m\]\w \[\e[0;37m\e[2m\]$(get_git)\[\e[0;1;35m\]◇\[\e[0m\] '
 else
-    _PS1+='\u@\h'
+    _PS1='\[\e[0;1;90;40m\]\u@\h\[\e[0;1;34m\] \w \[\e[0;2;97m\]$(get_git)\[\e[0;1;97m\]◆\[\e[0m\] '
 fi
-
-_PS1+=' \[\e[0;1;34m\]\W \[\e[0;2;37m\]$(get_git)\[\e[0;1;35m\]❯ \[\e[0m\]'
 
 # make container for the prompt
 prompt_prefix="$(iterm2_prompt_prefix)$(iterm2_prompt_mark)"
@@ -115,4 +119,4 @@ PS2='\[\e[2m\]⑊\[\e[0m\] '
 
 
 # previous prompt backup
-# PS1="\[${white}${bold}\]\h \[${blue}${bold}\]\W\[${white}${dim}\]$(get_git) \[${white}${bold}\]\$ \[${reset}\]"
+# PS1="\[${white}${bold}\]$(prompt_host)\[${blue}${bold}\]$(prompt_dir)\[${white}${dim}\]$(get_git)\[${magenta}${bold}\]$(prompt_symbol)\[${reset}\]"

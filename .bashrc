@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 #
-# ~/.bashrc (macOS)
+# ~/.bashrc (Linux server)
 #
 #   Startup bash file for interactive non-login shells.
 #   Apparently some OS' will run ~/.bash_profile for all login
@@ -9,7 +9,7 @@
 #   shell invocation. So most stuff goes (or is sourced) here.
 #
 #     Neel Yadav
-#     06.29.2021
+#     07.06.2021
 
 
 # ————Basic startup checks & sourcing other dotfiles————————
@@ -35,22 +35,51 @@ shopt -s checkwinsize
 # ——————————————————————————————————————————————————————————
 
 
-# ————Bash completion sourcing————————
+# ————Defaults from /etc/skel that're fine as is————————
 
-# Manually added commands to source bash-completion@2 and
-# enable Homebrew formula's completion scripts to be read
-export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
-[ -r "/usr/local/etc/profile.d/bash_completion.sh" ] && . "/usr/local/etc/profile.d/bash_completion.sh"
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+HISTCONTROL=ignoreboth
 
-# Manually sourcing bash-completion script for git because
-# it wasn't working for whatever reason via Homebrew's setup
-if [ -f "$(brew --prefix)/etc/bash_completion.d/git-completion.bash" ]; then
-  . "$(brew --prefix)/etc/bash_completion.d/git-completion.bash"
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+# If set, the pattern "**" used in a pathname expansion context will
+# match all files and zero or more directories and subdirectories.
+#shopt -s globstar
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
 fi
 
-# TODO: eventually look into if either of these 2 are still necessary
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-# ————————————————————————————————————
+# ——————————————————————————————————————————————————————
+
+
+# ————Sourcing other dotfiles————————
+
+# Personal aliases and functions
+[ -r ~/.bash_aliases ] && . $HOME/.bash_aliases
+[ -r ~/.bash_functions ] && . $HOME/.bash_functions
+
+# Pull in my ANSI color/style escape code vars (used in command prompt)
+[ -r ~/.bash_colors ] && . $HOME/.bash_colors
+
+# Source dedicated file for custom command prompt
+[ -r ~/.command_prompt ] && . $HOME/.command_prompt
+
+# ———————————————————————————————————
 
 
 # ————SSH-Agent startup connection————————
@@ -98,54 +127,46 @@ fi
 # ————————————————————————————————————————
 
 
-# ————Setting PATH locations & priortizing non-system executables————————
+# ————PATH & Bash Completions————————
 
-# Add user's home bin if it exists
+# Add user's private bins if they exist
 [ -d ~/bin ] && export PATH="$HOME/bin:$PATH"
+[ -d ~/.local/bin ] && export PATH="$HOME/.local/bin:$PATH"
 
-# Homebrew Environment (also see `brew shellenv`)
-if [ -x "$(which brew)" ]; then
-    export HOMEBREW_PREFIX=$(brew --prefix)
-    export HOMEBREW_CELLAR=$(brew --cellar)
-    export HOMEBREW_REPOSITORY=$(brew --repository)
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if ! shopt -oq posix; then
+    if [ -f /usr/share/bash-completion/bash_completion ]; then
+        . /usr/share/bash-completion/bash_completion
+    elif [ -f /etc/bash_completion ]; then
+        . /etc/bash_completion
+    fi
 fi
 
-# OpenSSL Keg-Only Paths
-export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
+# Bash Completion
+[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
 
-# cURL Keg-Only Paths
-export PATH="/usr/local/opt/curl/bin:$PATH"
+# ———————————————————————————————————
 
-# Ruby Gems Environment Variables
-export GEM_HOME="/usr/local/lib/ruby/gems/3.0.0"
-export PATH="$GEM_HOME/bin:$PATH"
-export PATH="/usr/local/opt/ruby/bin:$PATH"
 
-# PHP/Composer Environment Variables
-export COMPOSER_HOME="/Users/neel/.composer"
-export PATH="$COMPOSER_HOME/vendor/bin:$PATH"
-export PATH="/usr/local/opt/php@7.2/bin:$PATH"
-export PATH="/usr/local/opt/php@7.2/sbin:$PATH"
+# ————Other————————
 
-# Python ... also see ~/.bash_aliases
-#export PATH="/usr/local/opt/python/bin:$PATH"
+# Sign git commits with PGP keys (?)
+export GPG_TTY=$(tty)
+
+# Somewhere over the rainbow
+export GREP_COLOR='1;34'
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+export LS_COLORS='di=1;34:ln=1;35:so=1;32:pi=1;33:ex=1;31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43'
+alias ls='ls --color=auto'
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # NVM: node/npm version manager
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-# ———————————————————————————————————————————————————————————————————————
-
-
-# ————Other————————
-
-# Add color to the command line!
-export GREP_OPTIONS='--color=auto' GREP_COLOR='1;32'
-export CLICOLOR=1
-export LSCOLORS=ExFxCxDxBxegedabagacad
-
-# iTerm2 Shell Integration
-# source ~/.iterm2/iterm2_shell_integration.bash
 
 # —————————————————

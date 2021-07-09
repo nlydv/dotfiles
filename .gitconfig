@@ -1,9 +1,9 @@
-# ~/.gitconfig (macOS)
+# ~/.gitconfig (Linux server)
 #
 #   This is Git's per-user configuration file.
 #
 #     Neel Yadav
-#	  07.04.2021
+#	  07.07.2021
 
 
 [core]
@@ -11,21 +11,14 @@
 [user]
 	name = Neel Yadav
 	email = mail@neelyadav.com
-	signingkey = 2EE08C445EE9CB7F47774138ED84CBAAA8A7B576
+	signingkey = ED84CBAAA8A7B576
 [pull]
 	rebase = false
-[filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
 [init]
 	defaultBranch = master
 [commit]
 	gpgsign = true
-[credential]
-	helper = osxkeychain
 [alias]
 	logadog = log --all --decorate --oneline --graph
-        uncommit = reset --soft HEAD~1
-        delcommit = reset --hard HEAD~1
+	uncommit = reset --soft HEAD~1
+	delcommit = reset --hard HEAD~1
