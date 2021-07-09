@@ -55,28 +55,37 @@ fi
 
 # ————SSH-Agent startup connection————————
 
-running_agent () {
+live_agent () {
     if [[ -S "$SSH_AUTH_SOCK" ]]; then
-        # testing if ssh-agent is running by asking it for keys
-        ssh-add -l &> /dev/null
-        [[ $? == 2 ]] && return 1 || return 0
+        # check if previous agent still alive by asking for keys
+        _status=$(ssh-add -l &> /dev/null; echo $?)
+
+        if [[ $_status -eq 0 ]]; then
+            return 0                # is alive; still gaurding keys
+        elif [[ $_status -eq 1 ]]; then
+            ssh-agent -k            # murder agent for not doing its job, probs not its fault but ya never know
+            return 1                # is dead now ¯\_(ツ)_/¯
+        elif [[ $_status -eq 2 ]]; then
+            return 1                # is dead
+        fi
     else
-        # sock not found, assume is asleep
-        return 1
+        return 1    # sock not found, assume previous agent is dead
     fi
 }
 
-ssh_env="$HOME/.ssh/agent.env"
-if ! running_agent; then
-    export SSH_AUTH_SOCK="$(cat $ssh_env 2> /dev/null)"     # check if agent.env can tell us where to find a woke agent
-    if ! running_agent; then                                # ...and try connecting one more time before starting new agent
-        eval $(ssh-agent -s) > $ssh_env                     # ...store new agent info for future reference
+if ! live_agent &> /dev/null; then
+    ssh_env="$HOME/.ssh/agent.env"
+    [[ -e $ssh_env ]] || touch $ssh_env
+    eval "$(cat $ssh_env)" &> /dev/null      # check if existing agent.env tells us where to find live agent, and
+    if ! live_agent; then                    # look for live agent once more before getting new one, otherwise...
+        ssh-agent -s > $ssh_env              #   get new agent & store info for future reference
+        eval "$(cat $ssh_env)" &> /dev/null  #   then deploy the new agent
+        ssh-add -A &> /dev/null              #   and tell it to gaurd our keys
     fi
+    unset _status
 fi
 
-ssh-add -A &> /dev/null # && ssh-add -A ~/.ssh/other-keys &> /dev/null
-
-# Note: make sure macOS' default openssh tools (/usr/bin/ssh-*) used first in $PATH
+# Note: make sure macOS' default openssh tools (/usr/bin/ssh-*) used first in $PATH to use Keychain passwords
 
 # reference material:
 #   https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh
