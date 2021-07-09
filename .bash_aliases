@@ -16,8 +16,11 @@
 alias sizes='sudo du -h -d 1'
 alias tth='terminal-to-html'
 alias alpine='alpine -sort date/reverse'
+
+# Aliases 2 small 2 function
 alias reload-shell='clear;[[ -r ~/.bash_profile ]] && . ~/.bash_profile || echo "cannot source ~/.bash_profile"'
 alias fresh-brew='brew update; brew upgrade; brew upgrade --cask; brew cleanup --prune 0' # don't walk away, some upgrades ask for pass
+alias path-list='printf $PATH | awk -v RS=: "{print}"'
 
 # El-iases
 alias lss='ls -Alth'

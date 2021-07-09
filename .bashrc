@@ -135,6 +135,10 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+# Dedupe any repeated directories in PATH
+PATH="$(echo "$PATH" | sed -E -e ':b;s/:([^:]*)(:.*):\1/:\1\2/;tb;s/^([^:]*)(:.*):\1/:\1\2/' -e 's/^:(\/.*)/\1/')"
+export PATH
+
 # ———————————————————————————————————————————————————————————————————————
 
 
