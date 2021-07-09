@@ -1,0 +1,26 @@
+# ~/.config/git/ignore
+#
+#   Global .gitignore file
+#
+#     Neel Yadav
+#     07.07.2021
+
+
+# ————macOS————————
+
+# Generic
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# Files/directories found in top directory of volume drives
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent

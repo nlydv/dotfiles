@@ -13,8 +13,13 @@
 [ -r ~/.ssh/host_aliases ] && . $HOME/.ssh/host_aliases
 
 # Shorthand aliases
+alias sizes='sudo du -h -d 1'
+alias alpine='alpine -sort date/reverse'
+
+# Aliases 2 small 2 function
 alias reload-nginx='sudo nginx -t && sudo systemctl reload nginx'
 alias reload-shell='clear;[[ -r ~/.bash_profile ]] && . ~/.bash_profile || echo "cannot source ~/.bash_profile"'
+alias path-list='printf $PATH | awk -v RS=: "{print}"'
 
 # El-iases
 alias lss='ls -Alth'

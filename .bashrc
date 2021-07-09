@@ -130,8 +130,12 @@ fi
 # ————PATH & Bash Completions————————
 
 # Add user's private bins if they exist
-[ -d ~/bin ] && export PATH="$HOME/bin:$PATH"
 [ -d ~/.local/bin ] && export PATH="$HOME/.local/bin:$PATH"
+[ -d ~/bin ] && export PATH="$HOME/bin:$PATH"
+
+# Dedupe any repeated directories in PATH
+PATH="$(echo "$PATH" | sed -E -e ':b;s/:([^:]*)(:.*):\1/:\1\2/;tb;s/^([^:]*)(:.*):\1/:\1\2/' -e 's/^:(\/.*)/\1/')"
+export PATH
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -160,7 +164,7 @@ export GREP_COLOR='1;34'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
-export LS_COLORS='di=1;34:ln=1;35:so=1;32:pi=1;33:ex=1;31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43'
+export LS_COLORS='di=1;34:ln=1;35:so=1;32:pi=1;33:ex=1;31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43:*.tar=1;31:*.tgz=1;31:*.arj=1;31:*.taz=1;31:*.lzh=1;31:*.lzma=1;31:*.tlz=1;31:*.txz=1;31:*.zip=1;31:*.z=1;31:*.Z=1;31:*.dz=1;31:*.gz=1;31:*.lz=1;31:*.xz=1;31:*.bz2=1;31:*.bz=1;31:*.tbz=1;31:*.tbz2=1;31:*.tz=1;31:*.deb=1;31:*.rpm=1;31:*.jar=1;31:*.rar=1;31:*.ace=1;31:*.7z=1;31:*.rz=1;31'
 alias ls='ls --color=auto'
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
