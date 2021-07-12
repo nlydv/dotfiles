@@ -108,6 +108,10 @@ if [ -x "$(which brew)" ]; then
     export HOMEBREW_PREFIX=$(brew --prefix)
     export HOMEBREW_CELLAR=$(brew --cellar)
     export HOMEBREW_REPOSITORY=$(brew --repository)
+    # note: skipping unnecessary PATH additions
+    export MANPATH="/usr/local/share/man${MANPATH+:$MANPATH}:";
+    export INFOPATH="/usr/local/share/info:${INFOPATH:-}";
+
 fi
 
 # OpenSSL Keg-Only Paths
