@@ -86,6 +86,16 @@ iterm2_prompt_suffix () {
     printf "\007" # iterm2_end_osc
 }
 
+# ————Custom———————————————————————————————————————————————————————————
+# Additional custom-made prompt functionality
+
+# outputs a superscript number indicating how many shells deep you are (if > 1)
+sh_depth () {
+    if [[ $SHLVL -gt 1 ]]; then
+        echo $SHLVL | sed 'y/0123456789/⁰¹²³⁴⁵⁶⁷⁸⁹/'
+    fi
+}
+
 # ————Prompt———————————————————————————————————————————————————————————
 # Finally putting all the pieces together into the actual prompt
 
@@ -102,9 +112,9 @@ if [[ $cmd_host == *"neelyadav.com" ]]; then
     else
         _PS1+='\u@\h'
     fi
-    _PS1+='\[\e[0m\] \[\e[0;1;34m\]\w \[\e[0;37m\e[2m\]$(get_git)\[\e[0;1;35m\]◇\[\e[0m\] '
+    _PS1+='\[\e[0m\] \[\e[0;1;34m\]\w \[\e[0;37m\e[2m\]$(get_git)\[\e[0;1;35m\]◇\[\e[0;90m\]$(sh_depth)\[\e[0m\] '
 else
-    _PS1='\[\e[0;1;90;40m\]\u@\h\[\e[0;1;34m\] \w \[\e[0;2;97m\]$(get_git)\[\e[0;1;97m\]◆\[\e[0m\] '
+    _PS1='\[\e[0;1;90;40m\]\u@\h\[\e[0;1;34m\] \w \[\e[0;2;97m\]$(get_git)\[\e[0;1;97m\]◆\[\e[0;90m\]$(sh_depth)\[\e[0m\] '
 fi
 
 # make container for the prompt

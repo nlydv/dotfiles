@@ -156,8 +156,9 @@ fi
 
 # ————Other————————
 
-# Sign git commits with PGP keys (?)
+# PGP stuff
 export GPG_TTY=$(tty)
+gpgconf --create-socketdir
 
 # Somewhere over the rainbow
 export GREP_COLOR='1;34'

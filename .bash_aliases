@@ -15,10 +15,13 @@
 # Shorthand aliases
 alias sizes='sudo du -h -d 1'
 alias alpine='alpine -sort date/reverse'
+alias home='cd ~'
+alias top='cd /'
+alias up='cd ..'
 
 # Aliases 2 small 2 function
 alias reload-nginx='sudo nginx -t && sudo systemctl reload nginx'
-alias reload-shell='clear;[[ -r ~/.bash_profile ]] && . ~/.bash_profile || echo "cannot source ~/.bash_profile"'
+alias reload-shell='_path=$PATH;clear;[[ -r ~/.bash_profile ]] && . ~/.bash_profile || echo "err";PATH=$_path;unset _path'
 alias path-list='printf $PATH | awk -v RS=: "{print}"'
 
 # El-iases
