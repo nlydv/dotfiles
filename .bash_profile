@@ -17,7 +17,7 @@
 # the future. No reason (currently) to use on personal macbook.
 
 # This is cute but pointless
-localtime=$(date +%-H%M)
+localtime="$(date +%-H%M)"
 greetings="Welcome back"
 
 if [[ ! $(logname) == $(id -u -n) ]]; then
