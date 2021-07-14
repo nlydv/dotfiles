@@ -131,3 +131,14 @@ extract () {
          echo "'$1' is not a valid file"
      fi
 }
+
+# entropy: informational display of entropy avail in sys, updates every second
+# ———————
+entropy () {
+    printf "\nAvailable entropy:\e[0;2m (press any key to exit)\e[0m\n"
+    while true; do
+        printf "$(cat /proc/sys/kernel/random/entropy_avail)"
+        read -t 1 && printf "\n" && return 0
+        printf "\r"
+    done
+}

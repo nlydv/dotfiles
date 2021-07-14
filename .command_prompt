@@ -104,7 +104,7 @@ sh_depth () {
 which hostname &> /dev/null && cmd_host=$(hostname) || cmd_host=$HOSTNAME
 
 if [[ $cmd_host == *"neelyadav.com" ]]; then
-    _PS1="\[${white}${bold}${black_bg}\]"
+    _PS1="\[${lwhite}${bold}${italic}\e[48;5;235m\]"
     if [[ $cmd_user == "neel" ]]; then
         _PS1+='\H'
     elif [[ $EUID == 0 ]]; then
@@ -114,7 +114,7 @@ if [[ $cmd_host == *"neelyadav.com" ]]; then
     fi
     _PS1+='\[\e[0m\] \[\e[0;1;34m\]\w \[\e[0;37m\e[2m\]$(get_git)\[\e[0;1;35m\]◇\[\e[0;90m\]$(sh_depth)\[\e[0m\] '
 else
-    _PS1='\[\e[0;1;90;40m\]\u@\h\[\e[0;1;34m\] \w \[\e[0;2;97m\]$(get_git)\[\e[0;1;97m\]◆\[\e[0;90m\]$(sh_depth)\[\e[0m\] '
+    _PS1='\[\e[0;1;40m\e[38;5;250m\]\u@\h\[\e[0;1;34m\] \w \[\e[0;2;97m\]$(get_git)\[\e[0;1;97m\]◆\[\e[0;90m\]$(sh_depth)\[\e[0m\] '
 fi
 
 # make container for the prompt
