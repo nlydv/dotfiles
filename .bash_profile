@@ -22,3 +22,5 @@ fi
 
 # Source non-login startup commands as well
 [ -r ~/.bashrc ] && . ~/.bashrc
+
+export TZ='America/Chicago'

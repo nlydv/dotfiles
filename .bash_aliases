@@ -15,8 +15,6 @@
 # Shorthand aliases
 alias sizes='sudo du -h -d 1'
 alias alpine='alpine -sort date/reverse'
-alias home='cd ~'
-alias top='cd /'
 alias up='cd ..'
 
 # Aliases 2 small 2 function
@@ -43,3 +41,6 @@ alias pip='/usr/bin/pip3'
 alias pip2='/usr/bin/pip'
 alias mpython='/usr/local/lib/mailinabox/env/bin/python3'
 alias mpip='/usr/local/lib/mailinabox/env/bin/pip'
+
+# Misc.
+alias gpg='gpg --no-autostart'
