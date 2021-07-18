@@ -49,11 +49,14 @@ cd $HOME/git || exit 12
 dot="git --git-dir=$HOME/git/dotfiles.git/ --work-tree=$HOME"
 
 if [[ ! -d dotfiles.git ]]; then
-    git clone --bare https://github.com/nlydv/dotfiles.git
-    $dot config --local status.showUntrackedFiles no
+    git clone -n --bare git@github.com:nlydv/dotfiles.git
     echo -e '.dotfiles\n.gnupg/**\n.ssh/**\n.bash_history\n.bash_sessions\n~/[gG]it/' >> $HOME/git/dotfiles.git/info/exclude
-    cd $HOME || exit 12
+    $dot config --local status.showUntrackedFiles no
+    $dot config --local remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+    $dot config --local remote.origin.pushurl "git@github.com:nlydv/dotfiles.git"
+    $dot fetch --all; $dot branch -u origin/linux linux; $dot branch -u origin/macos macos
 
+    cd $HOME || exit 12
     if ! $dot checkout linux 2> /dev/null; then
         defdots=$($dot checkout linux 2>&1 | sed -n -E 's/^\s+(.*)$/\1/p')
         [[ ! -d $HOME/Archive ]] && mkdir -p $HOME/Archive/default-dots
@@ -68,8 +71,15 @@ if [[ ! -d dotfiles.git ]]; then
 else
     echo 'git/dotfiles.git already exists... skipping dotfiles setup.'
 fi
-gpg --keyserver hkps://keys.openpgp.org --receive-keys ED84CBAAA8A7B576
+# @TODO: any situs where unwanted effects from this script overwritting itself while checking out dotfiles could cause problems?
 unset dot
+
+echo -e "\nPulling public PGP key from keyserver..."
+gpg --keyserver hkps://keys.openpgp.org --receive-keys ED84CBAAA8A7B576
+echo -e "\nSetting public PGP key as trusted..."
+_keyfp=$(gpg --list-keys ED84CBAAA8A7B576 | head -n2 | tail -n1 | tr -d '[:blank:]')
+echo -e "5\ny\n" | gpg --command-fd 0 --edit-key "$_keyfp" trust
+gpg --update-trustdb
 
 
 # ————Timezone—————————————————————————————————————————————————————————
