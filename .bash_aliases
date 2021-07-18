@@ -16,8 +16,6 @@
 alias sizes='sudo du -h -d 1'
 alias tth='terminal-to-html'
 alias alpine='alpine -sort date/reverse'
-alias home='cd ~'
-alias top='cd /'
 alias up='cd ..'
 
 # Aliases 2 small 2 function
