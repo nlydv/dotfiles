@@ -25,6 +25,7 @@ fi
 # ————Nginx install & config———————————————————————————————————————————
 echo -e "\n  ——NGINX——\n"
 apt install -y nginx-extras certbot
+mkdir /var/www/_certbot
 systemctl start nginx
 systemctl enable nginx
 ufw allow 'Nginx Full'; ufw reload
@@ -51,11 +52,11 @@ sed -i -E 's/(# )?(server_tokens) .*/\2 off;/' /etc/nginx/nginx.conf
 sed -i -E 's/(# )?(ssl_protocols) .*/\2 TLSv1.2 TLSv1.3;/' /etc/nginx/nginx.conf
 sed -i -E 's/(# )?(server_names_hash_bucket_size) .*/\2 128;/' /etc/nginx/nginx.conf
 
-mkdir /var/www/_certbot
 
 # ————PHP install and setup w/ Nginx———————————————————————————————————
 echo -e "\n  ——PHP——\n"
-apt install -y php${phpv}-common php${phpv}-cli php${phpv}-curl php${phpv}-json php${phpv}-fpm php${phpv}-dev idn2
+apt install -y php${phpv}-common php${phpv}-cli php${phpv}-curl php${phpv}-json php${phpv}-fpm php${phpv}-dev \
+    php${phpv}-gmp php${phpv}-bz2 php${phpv}-mysql php${phpv}-sqlite3 idn2
 sed -i -E 's/expose_php.*/expose_php = Off/' /etc/php/${phpv}/fpm/php.ini
 systemctl start php${phpv}-fpm
 systemctl enable php${phpv}-fpm
