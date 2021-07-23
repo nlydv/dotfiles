@@ -24,7 +24,8 @@ fi
 
 # ————Nginx install & config———————————————————————————————————————————
 echo -e "\n  ——NGINX——\n"
-apt install -y nginx-extras certbot
+apt install -y nginx-extras
+snap install --classic certbot
 mkdir /var/www/_certbot
 systemctl start nginx
 systemctl enable nginx

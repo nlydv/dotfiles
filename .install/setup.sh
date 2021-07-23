@@ -17,8 +17,11 @@ sudo add-apt-repository -y ppa:certbot/certbot
 sudo apt update
 sudo apt -y upgrade
 sudo apt -y install build-essential coreutils automake autoconf make libtool openssl libssl-dev tzdata util-linux adduser haveged \
-curl wget git gnupg nmap vim unzip fail2ban ufw htop bash bash-completion bash-builtins bash-doc units sqlite3 jq
+curl wget git gnupg nmap vim unzip fail2ban ufw htop bash bash-completion bash-builtins bash-doc units sqlite3 jq python3 python3-pip python3-venv
 sudo apt -y autoremove
+
+[[ ! -e /usr/local/bin/python && -e /usr/bin/python3 ]] && sudo ln -s /usr/bin/python3 /usr/local/bin/python
+[[ ! -e /usr/local/bin/pip && -e /usr/bin/pip3 ]] && sudo ln -s /usr/bin/pip3 /usr/local/bin/pip
 
 
 # ————Security—————————————————————————————————————————————————————————

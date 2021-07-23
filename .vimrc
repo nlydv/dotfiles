@@ -6,23 +6,26 @@
 "     Neel Yadav
 "     06.29.2021
 
-syntax on
+if has("syntax")
+  syntax on
+endif
+
 set notermguicolors t_Co=16
+
 set mouse=a
+if has('mouse_sgr')
+    set ttymouse=sgr
+endif
+
 if has("clipboard")
   set clipboard=unnamed " copy to the system clipboard
   if has("unnamedplus") " X11 support
     set clipboard+=unnamedplus
   endif
 endif
-if has('mouse_sgr')
-    set ttymouse=sgr
-endif
 
-nmap <C-c> "+y<CR>
-imap <C-c> "+y<CR>
 vmap <C-c> "+y<CR>
 
-nmap <ESC>[200~ "*p
-imap <ESC>[200~ "*p
-vmap <ESC>[200~ "*p
+nmap <ESC>[200~ "+p<CR>
+imap <ESC>[200~ "+p<CR>
+vmap <ESC>[200~ "+p<CR>
