@@ -19,10 +19,5 @@ if has('mouse_sgr')
     set ttymouse=sgr
 endif
 
-nmap <C-c> "+y<CR>
 imap <C-c> "+y<CR>
 vmap <C-c> "+y<CR>
-
-nmap <ESC>[200~ "*p
-imap <ESC>[200~ "*p
-vmap <ESC>[200~ "*p

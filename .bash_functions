@@ -104,7 +104,7 @@ nvm-upgrade-lts () {
 
     for i in $nodemod_cur; do
         if [[ -d $i && ! $(basename $i) == "npm" ]]; then
-            cp -r $i $nodemod_new
+            cp -p -r $i $nodemod_new
         fi
     done
 }

@@ -9,7 +9,7 @@
 	<key>Actions</key>
 	<array/>
 	<key>AllowClipboardAccess</key>
-	<true/>
+	<false/>
 	<key>AllowTabbarInTitlebarAccessoryBigSur</key>
 	<true/>
 	<key>AlternateMouseScroll</key>
@@ -7944,6 +7944,8 @@ Marks and Annotations.Next Mark</string>
 	<false/>
 	<key>OscColorReport16Bits</key>
 	<false/>
+	<key>PMPrintingExpandedStateForPrint2</key>
+	<false/>
 	<key>PasteSpecialChunkDelay</key>
 	<real>0.01</real>
 	<key>PasteSpecialChunkSize</key>
@@ -7991,6 +7993,8 @@ Marks and Annotations.Next Mark</string>
 	</dict>
 	<key>PreserveWindowSizeWhenTabBarVisibilityChanges</key>
 	<true/>
+	<key>Print In Black And White</key>
+	<true/>
 	<key>QuitWhenAllWindowsClosed</key>
 	<false/>
 	<key>SensitiveScrollWheel</key>
@@ -8019,6 +8023,8 @@ Marks and Annotations.Next Mark</string>
 	<integer>18</integer>
 	<key>ThrottleMetalConcurrentFrames</key>
 	<true/>
+	<key>TrimWhitespaceOnCopy</key>
+	<false/>
 	<key>UseBorder</key>
 	<false/>
 	<key>UseCustomTabBarFontSize</key>

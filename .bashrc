@@ -128,8 +128,9 @@ export PATH="/usr/local/opt/ruby/bin:$PATH"
 # PHP/Composer Environment Variables
 export COMPOSER_HOME="/Users/neel/.composer"
 export PATH="$COMPOSER_HOME/vendor/bin:$PATH"
-export PATH="/usr/local/opt/php@7.2/bin:$PATH"
-export PATH="/usr/local/opt/php@7.2/sbin:$PATH"
+#export PATH="/usr/local/opt/php@7.4/bin:$PATH"
+#export PATH="/usr/local/opt/php@7.4/sbin:$PATH"
+source /Users/neel/.phpbrew/bashrc
 
 # Python ... also see ~/.bash_aliases
 #export PATH="/usr/local/opt/python/bin:$PATH"

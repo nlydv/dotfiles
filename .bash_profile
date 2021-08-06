@@ -17,7 +17,7 @@
 # the future. No reason (currently) to use on personal macbook.
 
 # This is cute but pointless
-localtime="$(date +%-H%M)"
+localtime=$(( 10#$(date +%-H%M) ))
 greetings="Welcome back"
 
 if [[ ! $(logname) == $(id -u -n) ]]; then
@@ -26,14 +26,14 @@ else
     _user="\e[1;34m$(id -u -n)\e[0m"
 fi
 
-if [[ "$localtime" -lt 430 ]]; then
+if [[ $localtime -lt 430 ]]; then
     greetings="🛌  Getting awfully late"
     message="You humans ought not sacrafice sleep"
-elif [[ "$localtime" -le 800 ]]; then
+elif [[ $localtime -le 800 ]]; then
     greetings="🐓  You're up early"
-elif [[ "$localtime" -lt 1230 ]]; then
+elif [[ $localtime -lt 1230 ]]; then
     greetings="🌞  Good morning"
-elif [[ "$localtime" -lt 1700 ]]; then
+elif [[ $localtime -lt 1700 ]]; then
     greetings="👁 👁  Good afternoon"
 else
     greetings="🌜  Good evening"
