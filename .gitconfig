@@ -19,6 +19,6 @@
 [commit]
 	gpgsign = true
 [alias]
-	logadog = log --all --decorate --oneline --graph
+	adog = log --all --decorate --oneline --graph
 	uncommit = reset --soft HEAD~1
 	delcommit = reset --hard HEAD~1
