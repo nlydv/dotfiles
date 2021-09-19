@@ -144,11 +144,11 @@ export NVM_DIR="$HOME/.nvm"
 # PM2: node process manager
 if [[ -n $(which pm2) ]]; then
     pm2sh="$HOME/.pm2/completion.sh"
-    if [[ -s pm2sh ]]; then
-        . pm2sh
+    if [[ -s $pm2sh ]]; then
+        . $pm2sh
     else
-        pm2 completion > pm2sh
-        . pm2sh
+        pm2 completion > $pm2sh
+        . $pm2sh
     fi
     unset pm2sh
 fi
