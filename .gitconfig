@@ -18,6 +18,8 @@
 	defaultBranch = master
 [commit]
 	gpgsign = true
+[submodule]
+	recurse = true
 [alias]
 	adog = log --all --decorate --oneline --graph
 	uncommit = reset --soft HEAD~1

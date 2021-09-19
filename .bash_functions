@@ -18,7 +18,7 @@ submod () {
         if [[ $1 == "update" || $1 == "pull" ]]; then
             git submodule update --recursive --remote --merge
         elif [[ $1 == "push" ]]; then
-            git add -A && sudo git commit -a -m "Update submodules $(date '+%B %-d, %Y')" && git push
+            git add -A && git commit -m "Update submodules $(date '+%B %-d, %Y')" && git push
         fi
     elif [[ $git == "fatal: not a git repository (or any of the parent directories): .git" ]]; then
         printf "  Directory not part of git repository\r\n"
