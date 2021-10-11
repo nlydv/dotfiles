@@ -1,3 +1,0 @@
-[submodule ".install"]
-	path = .install
-	url = git@github.com:nlydv/install-scripts.git
