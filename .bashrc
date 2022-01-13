@@ -103,15 +103,19 @@ fi
 # Add user's home bin if it exists
 [ -d ~/bin ] && export PATH="$HOME/bin:$PATH"
 
+# Include GO bin
+[ -d ~/go/bin ] && export PATH="$HOME/go/bin:$PATH"
+
 # Homebrew Environment (also see `brew shellenv`)
 if [ -x "$(which brew)" ]; then
     export HOMEBREW_PREFIX=$(brew --prefix)
     export HOMEBREW_CELLAR=$(brew --cellar)
     export HOMEBREW_REPOSITORY=$(brew --repository)
     # note: skipping unnecessary PATH additions
-    export MANPATH="/usr/local/share/man${MANPATH+:$MANPATH}:";
-    export INFOPATH="/usr/local/share/info:${INFOPATH:-}";
-
+    export MANPATH="/usr/local/share/man${MANPATH+:$MANPATH}:"
+    export INFOPATH="/usr/local/share/info:${INFOPATH:-}"
+    # homebrew global bundle dump file location
+    export HOMEBREW_BUNDLE_FILE="$HOME/.brewfile"
 fi
 
 # OpenSSL Keg-Only Paths
@@ -137,8 +141,9 @@ source /Users/neel/.phpbrew/bashrc
 
 # NVM: node/npm version manager
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                    # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[ -s "$NVM_DIR/auto_nvm_use.sh" ] && \. "$NVM_DIR/auto_nvm_use.sh"  # This manually added .sh auto-detects and used node version if .nvmrc is found in PWD
 
 # Dedupe any repeated directories in PATH
 PATH="$(echo "$PATH" | sed -E -e ':b;s/:([^:]*)(:.*):\1/:\1\2/;tb;s/^([^:]*)(:.*):\1/:\1\2/' -e 's/^:(\/.*)/\1/')"
