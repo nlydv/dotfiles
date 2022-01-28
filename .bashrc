@@ -119,6 +119,8 @@ export PATH="/usr/local/opt/curl/bin:$PATH"
 export GEM_HOME="/usr/local/lib/ruby/gems/3.0.0"
 export PATH="$GEM_HOME/bin:$PATH"
 export PATH="/usr/local/opt/ruby/bin:$PATH"
+# Backward's compatibility for older gems macOS Catalina and later (10.15+)
+export SDKROOT=$(xcrun --show-sdk-path)
 
 # PHP/Composer Environment Variables
 export COMPOSER_HOME="/Users/neel/.composer"
