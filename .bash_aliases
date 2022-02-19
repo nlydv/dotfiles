@@ -40,3 +40,7 @@ alias pip &> /dev/null && unalias pip
 alias pip2 &> /dev/null && unalias pip2
 alias python &> /dev/null && unalias python
 alias python2 &> /dev/null && unalias python2
+
+# Clipboard content shortcut
+alias paste='echo "$(pbpaste)"'
+ 

@@ -170,6 +170,10 @@ export GREP_OPTIONS='--color=auto' GREP_COLOR='1;32'
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
 
+# Attempting to reduce $HOME clutter
+export LESSHISTFILE="-"
+#export NODE_REPL_HISTORY=""
+
 # iTerm2 Shell Integration
 # source ~/.iterm2/iterm2_shell_integration.bash
 
