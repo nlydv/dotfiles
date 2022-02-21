@@ -8,6 +8,11 @@
 
 syntax on
 set notermguicolors t_Co=16
+
+colorscheme base16-tomorrow-night
+hi Normal ctermbg=NONE
+hi Normal guibg=NONE
+
 set mouse=a
 if has("clipboard")
   set clipboard=unnamed " copy to the system clipboard

@@ -174,6 +174,10 @@ export LSCOLORS=ExFxCxDxBxegedabagacad
 export LESSHISTFILE="-"
 #export NODE_REPL_HISTORY=""
 
+# Bash env vars need for stuff
+export COLUMNS
+export LINES
+
 # iTerm2 Shell Integration
 # source ~/.iterm2/iterm2_shell_integration.bash
 
