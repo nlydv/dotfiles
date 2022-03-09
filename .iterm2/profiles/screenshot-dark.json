@@ -8,7 +8,7 @@
     "Alpha Component" : 1,
     "Green Component" : 0.13333334028720856
   },
-  "Rows" : 30,
+  "Rows" : 35,
   "Ansi 11 Color" : {
     "Red Component" : 1,
     "Color Space" : "sRGB",
@@ -595,7 +595,7 @@
     "Green Component" : 0.23137255012989044
   },
   "Use Bold Font" : true,
-  "Silence Bell" : false,
+  "Silence Bell" : true,
   "Ansi 12 Color" : {
     "Red Component" : 0,
     "Color Space" : "sRGB",
@@ -737,7 +737,7 @@
     "Alpha Component" : 1,
     "Green Component" : 0.20000000298023224
   },
-  "Columns" : 81,
+  "Columns" : 91,
   "Use Tab Color" : true,
   "Visual Bell" : false,
   "Custom Directory" : "No",
