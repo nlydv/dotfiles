@@ -9,7 +9,7 @@
 #     06.29.2021
 
 
-# Quick SSH locations specified on a per-host basis
+# Quick SSH locations specified on a per-user basis (don't want public here)
 [ -r ~/.ssh/host_aliases ] && . $HOME/.ssh/host_aliases
 
 # Shorthand aliases

@@ -1,21 +1,23 @@
-Applications/**
-Archive/**
-Desktop/**
-Documents/**
-Downloads/**
-[gG]it/**
-Library/**
-Movies/**
-Music/**
-Pictures/**
-Public/**
+[A-Z]*/**
+.Trash/**
+bin/**
+misc/**
+projects/**
 
-.gnupg/**
-.ssh/**
 .config/**
 !.config/git/
 !.config/git/global.ignore
+
+.atom/**
+.gnupg/**
+.local/**
+.npm/**
+.nvm/**
+.ssh/**
  
 .bash_history 
 .bash_sessions 
-.dotfiles
+.brewfile
+.npmrc
+
+.DS_Store

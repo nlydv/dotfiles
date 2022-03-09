@@ -99,10 +99,10 @@ fi
 # ————Setting PATH locations & priortizing non-system executables————————
 
 # Add user's home bin if it exists
-[ -d ~/bin ] && export PATH="$HOME/bin:$PATH"
+[[ -r $HOME/bin ]] && export PATH="$HOME/bin:$PATH"
 
 # Include GO bin
-[ -d ~/go/bin ] && export PATH="$HOME/go/bin:$PATH"
+[[ -r $HOME/go/bin ]] && export PATH="$HOME/go/bin:$PATH"
 
 # Homebrew Environment Variables (see `brew help shellenv`)
 export HOMEBREW_PREFIX="/opt/homebrew"
@@ -128,8 +128,8 @@ export PATH="/opt/homebrew/opt/curl/bin:$PATH"
 # backward's compatibility for older gems in macOS Catalina and later (10.15+)
 export SDKROOT=$(xcrun --show-sdk-path)
 
-# PHP/Composer Environment Variables
-export COMPOSER_HOME="/Users/neel/.composer"
+# PHP & PHPBrew & Composer Environment Variables
+export COMPOSER_HOME="$HOME/.composer"
 export PATH="$COMPOSER_HOME/vendor/bin:$PATH"
     #export PATH="/opt/homebrew/opt/php@7.4/bin:$PATH"
     #export PATH="/opt/homebrew/opt/php@7.4/sbin:$PATH"
@@ -153,11 +153,10 @@ fi
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                    # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-[ -s "$NVM_DIR/auto_nvm_use.sh" ] && \. "$NVM_DIR/auto_nvm_use.sh"  # This manually added .sh auto-detects and used node version if .nvmrc is found in PWD
+[[ -s "$NVM_DIR/auto_nvm_use.sh" ]] && \. "$NVM_DIR/auto_nvm_use.sh"  # This manually added .sh auto-detects and used node version if .nvmrc is found in PWD
 
-# Dedupe any repeated directories in PATH
-PATH="$(echo "$PATH" | sed -E -e 's/:([^:]*)(:.*):\1/:\1\2/' -e 's/^([^:]*)(:.*):\1/:\1\2/' -e 's/^:(\/.*)/\1/')"
-export PATH
+# Dedupe $PATH Directories
+export PATH="$(echo "$PATH" | sed -E -e 's/:([^:]*)(:.*):\1/:\1\2/' -e 's/^([^:]*)(:.*):\1/:\1\2/' -e 's/^:(\/.*)/\1/')"
 
 # ———————————————————————————————————————————————————————————————————————
 
@@ -172,21 +171,21 @@ for c in /usr/local/etc/bash_completion.d/*; do
     [[ -r "$c" ]] && . "$c"
 done
 
+# GPG Pinentry Display (remote SSH, etc. pinentry redirect to orig local display)
+export GPG_TTY=$(tty)
 
 # Add color to the command line!
 export GREP_OPTIONS='--color=auto' GREP_COLOR='1;32'
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
 
-# Attempting to reduce $HOME clutter
+# Attempting to reduce auto-generated dotfile clutter in home dir
 export LESSHISTFILE="-"
-#export NODE_REPL_HISTORY=""
+export NODE_REPL_HISTORY="$HOME/.nvm/versions/node/.node_repl_history"
 
-# Bash env vars need for stuff
+# Bash env vars needed for stuff
 export COLUMNS
 export LINES
 
-# iTerm2 Shell Integration
-# source ~/.iterm2/iterm2_shell_integration.bash
-
 # —————————————————
+
