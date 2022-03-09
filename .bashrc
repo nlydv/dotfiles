@@ -77,7 +77,7 @@ if ! live_agent &> /dev/null; then
     ssh_env="$HOME/.ssh/agent.env"
     [[ -e $ssh_env ]] || touch $ssh_env
     eval "$(cat $ssh_env)" &> /dev/null      # check if existing agent.env tells us where to find live agent, and
-    if ! live_agent; then                    # look for live agent once more before getting new one, otherwise...
+    if ! live_agent &> /dev/null; then       # look for live agent once more before getting new one, otherwise...
         ssh-agent -s > $ssh_env              #   get new agent & store info for future reference
         eval "$(cat $ssh_env)" &> /dev/null  #   then deploy the new agent
         ssh-add -A &> /dev/null              #   and tell it to gaurd our keys

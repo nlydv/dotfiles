@@ -13,14 +13,13 @@
 [ -r ~/.ssh/host_aliases ] && . $HOME/.ssh/host_aliases
 
 # Shorthand aliases
-alias sizes='sudo du -h -s ./* | sort -h'
 alias tth='terminal-to-html'
 alias alpine='alpine -sort date/reverse'
 alias up='cd ..'
 
 # Aliases 2 small 2 function
 alias reload-shell='_path=$PATH;clear;[[ -r ~/.bash_profile ]] && . ~/.bash_profile || echo "err";PATH=$_path;unset _path'
-alias fresh-brew='brew update; brew upgrade; brew upgrade --cask; brew cleanup --prune 0' # don't walk away, some upgrades ask for pass
+alias fresh-brew='brew update; brew upgrade; brew upgrade --cask; brew autoremove; brew cleanup --prune 0' # don't walk away, some upgrades ask for pass
 alias path-list='printf $PATH | awk -v RS=: "{print}"'
 
 # El-iases
