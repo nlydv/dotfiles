@@ -39,6 +39,22 @@ shopt -s checkwinsize
 
 export APPLE_SSH_ADD_BEHAVIOR="macos"
 
+# MACOS SSH NOTES
+#   1) Native keychain integration requires macOS' default
+#      openssh tools (/usr/bin/ssh-*), so if extra openssh
+#      installed, make builtins first in $PATH to use it
+#   2) Running `ssh-add -A` (as below) does nothing if the
+#      user Keychain doesnt contain any priv key passwords
+#   3) Add to Keychain with `ssh-add -K <PATH-TO-KEY>` and
+#      enter password once
+#   4) Now it will remember that key-pass combo and future
+#      `ssh-add -A` commands will add the key to ssh-agent
+#   4) Likewise, the same command as in (3) but with extra
+#      `-d` flag deletes pass from Keychain & ssh-agent
+#   5) Apple's changing -A flag to --apple-load-keychain &
+#      -K to --apple-use-keychain; both currently work the
+#      same (with caveats), but see ssh-add(1) for details
+
 live_agent () {
     if [[ -S "$SSH_AUTH_SOCK" ]]; then
         # check if previous agent still alive by asking for keys
@@ -69,8 +85,6 @@ if ! live_agent &> /dev/null; then
     unset _status
 fi
 
-# Note: make sure macOS' default openssh tools (/usr/bin/ssh-*) used first in $PATH to use Keychain passwords
-
 # reference material:
 #   https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh
 #   https://github.com/mattbostock/dotfiles/blob/master/ssh-agent-setup.sh
@@ -90,49 +104,52 @@ fi
 # Include GO bin
 [ -d ~/go/bin ] && export PATH="$HOME/go/bin:$PATH"
 
-# Homebrew Environment (also see `brew shellenv`)
-if [ -x "$(which brew)" ]; then
-    export HOMEBREW_PREFIX=$(brew --prefix)
-    export HOMEBREW_CELLAR=$(brew --cellar)
-    export HOMEBREW_REPOSITORY=$(brew --repository)
-else
-    export HOMEBREW_PREFIX="/opt/homebrew"
-    export HOMEBREW_CELLAR="/opt/homebrew/Cellar"
-    export HOMEBREW_REPOSITORY="/opt/homebrew"
-fi
-
-export BREW=$HOMEBREW_PREFIX
-export PATH="$BREW/bin:$BREW/sbin${PATH+:$PATH}"
-export MANPATH="$BREW/share/man${MANPATH+:$MANPATH}:"
-export INFOPATH="$BREW/share/info:${INFOPATH:-}"
+# Homebrew Environment Variables (see `brew help shellenv`)
+export HOMEBREW_PREFIX="/opt/homebrew"
+export HOMEBREW_CELLAR="/opt/homebrew/Cellar"
+export HOMEBREW_REPOSITORY="/opt/homebrew"
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin${PATH+:$PATH}"
+export MANPATH="/opt/homebrew/share/man${MANPATH+:$MANPATH}:"
+export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}"
 
 # Homebrew global bundle dump file location
 export HOMEBREW_BUNDLE_FILE="$HOME/.brewfile"
 
 # OpenSSL Keg-Only Paths
-export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
+export PATH="/opt/homebrew/opt/openssl@1.1/bin:$PATH"
 
 # cURL Keg-Only Paths
-export PATH="/usr/local/opt/curl/bin:$PATH"
+export PATH="/opt/homebrew/opt/curl/bin:$PATH"
 
 # Ruby Gems Environment Variables
-export GEM_HOME="/usr/local/lib/ruby/gems/3.0.0"
+export GEM_HOME="/opt/homebrew/lib/ruby/gems/3.1.0"
 export PATH="$GEM_HOME/bin:$PATH"
-export PATH="/usr/local/opt/ruby/bin:$PATH"
-# Backward's compatibility for older gems macOS Catalina and later (10.15+)
+export PATH="/opt/homebrew/opt/curl/bin:$PATH"
+# backward's compatibility for older gems in macOS Catalina and later (10.15+)
 export SDKROOT=$(xcrun --show-sdk-path)
 
 # PHP/Composer Environment Variables
 export COMPOSER_HOME="/Users/neel/.composer"
 export PATH="$COMPOSER_HOME/vendor/bin:$PATH"
-#export PATH="/usr/local/opt/php@7.4/bin:$PATH"
-#export PATH="/usr/local/opt/php@7.4/sbin:$PATH"
-[ -e ~/.phpbrew/bashrc ] && . $HOME/.phpbrew/bashrc
+    #export PATH="/opt/homebrew/opt/php@7.4/bin:$PATH"
+    #export PATH="/opt/homebrew/opt/php@7.4/sbin:$PATH"
+[[ -e ~/.phpbrew/bashrc ]] && . $HOME/.phpbrew/bashrc
 
-# Python ... also see ~/.bash_aliases
-#export PATH="/usr/local/opt/python/bin:$PATH"
+# Python Versioning and PATH Priority
+if [[ -x /opt/homebrew/bin/python3 ]]; then
+    if [[ ! -L /usr/local/bin/python ]]; then
+        echo -e "Linking & prioritizing python3 over python2."
+        echo -e "Admin password may be requested below.\n"
+        sudo ln -s /opt/homebrew/bin/python3 /usr/local/bin/python &> /dev/null
+        sudo ln -s /opt/homebrew/bin/python3-config /usr/local/bin/python-config &> /dev/null
+        sudo ln -s /opt/homebrew/bin/pip3 /usr/local/bin/pip &> /dev/null
+    fi
+    export PATH="/usr/local/bin/python:/usr/local/bin/python-config:/usr/local/bin/pip:$PATH"
+else
+    echo -e "\n\e[1;33mWarning\e[0m: No python3 installation found in Homebrew bin.\nDefaulting to deprecated python2 version pre-installed on system.\n\nTo fix, run    \e[1;37mbrew install python3\e[0m    and then reload shell.\n"
+fi
 
-# NVM: node/npm version manager
+# NVM - NodeJS & NPM Version Manager
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                    # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
@@ -145,25 +162,16 @@ export PATH
 # ———————————————————————————————————————————————————————————————————————
 
 
-# ————Bash completion sourcing————————
-
-# Manually added commands to source bash-completion@2 and
-# enable Homebrew formula's completion scripts to be read
-export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
-[ -r "/usr/local/etc/profile.d/bash_completion.sh" ] && . "/usr/local/etc/profile.d/bash_completion.sh"
-
-# Manually sourcing bash-completion script for git because
-# it wasn't working for whatever reason via Homebrew's setup
-if [ -f "$(brew --prefix)/etc/bash_completion.d/git-completion.bash" ]; then
-  . "$(brew --prefix)/etc/bash_completion.d/git-completion.bash"
-fi
-
-# TODO: eventually look into if either of these 2 are still necessary
-
-# ————————————————————————————————————
-
-
 # ————Other————————
+
+# Enable CLI completions via "bash-completion@2" Homebrew formula
+[[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
+
+# Other Completions (manually save completion output from non-brew tools here)
+for c in /usr/local/etc/bash_completion.d/*; do
+    [[ -r "$c" ]] && . "$c"
+done
+
 
 # Add color to the command line!
 export GREP_OPTIONS='--color=auto' GREP_COLOR='1;32'

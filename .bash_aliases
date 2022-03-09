@@ -36,11 +36,21 @@ alias uncommit='git reset --soft HEAD~1'    # undo last commit; keep changes
 alias delcommit='git reset --hard HEAD~1'   # undo last commit; discard changes
 
 # Python version aliases
-alias pip &> /dev/null && unalias pip
-alias pip2 &> /dev/null && unalias pip2
-alias python &> /dev/null && unalias python
-alias python2 &> /dev/null && unalias python2
+#alias pip &> /dev/null && unalias pip
+#alias pip2 &> /dev/null && unalias pip2
+#alias python &> /dev/null && unalias python
+#alias python2 &> /dev/null && unalias python2
+
+#alias python2='/usr/bin/python2'            # Legacy python installed with macOS
+#alias python3='/opt/homebrew/bin/python3'   # Latest python install via Homebrew
+#alias python='/opt/homebrew/bin/python3'    # Default to user-installed python3
+#alias pip3='/opt/homebrew/bin/pip3'         # Latest pip, comes with Homebrew pkg
+#alias pip='/opt/homebrew/bin/pip3'          # Use our default python's pip
+
+# Homebrew used to have a python@2 versioned package but I guess they finally got
+# rid of it so no pip2 here since macOS doesn't seem to have a pip pre-installed
+# alongside its legacy system version of python2
 
 # Clipboard content shortcut
 alias paste='echo "$(pbpaste)"'
- 
+
