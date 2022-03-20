@@ -158,8 +158,10 @@ fi
 # ————Other————————
 
 # PGP stuff
-export GPG_TTY=$(tty)
-gpgconf --create-socketdir
+if [[ -d "$HOME/.gnupg" ]] && which gpg &> /dev/null; then
+    export GPG_TTY=$(tty)
+    gpgconf --create-socketdir
+fi
 
 # Somewhere over the rainbow
 export GREP_COLOR='1;34'
