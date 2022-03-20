@@ -1,16 +1,17 @@
 " ~/.vimrc (Linux server)
 "
 "   Compatibility of functionality with my terminal
-"   app and keymap settings (unmodified clone of the macOS version for now).
+"   app and keymap setting. Mostly identical to macOS.
 "
 "     Neel Yadav
 "     06.29.2021
 
-if has("syntax")
-  syntax on
-endif
-
+syntax on
 set notermguicolors t_Co=16
+
+colorscheme base16-tomorrow-night
+hi Normal ctermbg=NONE
+hi Normal guibg=NONE
 
 set mouse=a
 if has('mouse_sgr')

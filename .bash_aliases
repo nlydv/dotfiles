@@ -13,7 +13,6 @@
 [ -r ~/.ssh/host_aliases ] && . $HOME/.ssh/host_aliases
 
 # Shorthand aliases
-alias sizes='sudo du -h -d 1'
 alias alpine='alpine -sort date/reverse'
 alias up='cd ..'
 

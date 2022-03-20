@@ -118,10 +118,6 @@ fi
 [ -d ~/.local/bin ] && export PATH="$HOME/.local/bin:$PATH"
 [ -d ~/bin ] && export PATH="$HOME/bin:$PATH"
 
-# Dedupe any repeated directories in PATH
-PATH="$(echo "$PATH" | sed -E -e ':b;s/:([^:]*)(:.*):\1/:\1\2/;tb;s/^([^:]*)(:.*):\1/:\1\2/' -e 's/^:(\/.*)/\1/')"
-export PATH
-
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
@@ -153,6 +149,9 @@ if [[ -n $(which pm2) ]]; then
     unset pm2sh
 fi
 
+# Dedupe $PATH Directories
+#export PATH="$(echo "$PATH" | sed -E -e 's/:([^:]*)(:.*):\1/:\1\2/' -e 's/^([^:]*)(:.*):\1/:\1\2/' -e 's/^:(\/.*)/\1/')"
+
 # ———————————————————————————————————
 
 
@@ -174,5 +173,9 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 # Prefer C-style alphabetical sorting with 'ls' & things
 export LC_COLLATE=C
 export LANG=en_US.UTF-8 # reiterate default lang for everything else just in case
+
+# Attempting to reduce auto-generated dotfile clutter in home dir
+export LESSHISTFILE="-"
+export NODE_REPL_HISTORY="$HOME/.nvm/versions/node/.node_repl_history"
 
 # —————————————————
