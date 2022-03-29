@@ -98,9 +98,6 @@ fi
 
 # ————Setting PATH locations & priortizing non-system executables————————
 
-# Add user's home bin if it exists
-[[ -r $HOME/bin ]] && export PATH="$HOME/bin:$PATH"
-
 # Include GO bin
 [[ -r $HOME/go/bin ]] && export PATH="$HOME/go/bin:$PATH"
 
@@ -111,6 +108,10 @@ export HOMEBREW_REPOSITORY="/opt/homebrew"
 export PATH="/opt/homebrew/bin:/opt/homebrew/sbin${PATH+:$PATH}"
 export MANPATH="/opt/homebrew/share/man${MANPATH+:$MANPATH}:"
 export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}"
+
+# Homebrew config env options
+export HOMEBREW_NO_INSTALL_CLEANUP=1
+export HOMEBREW_NO_INSTALL_UPGRADE=1
 
 # Homebrew global bundle dump file location
 export HOMEBREW_BUNDLE_FILE="$HOME/.brewfile"
@@ -151,9 +152,29 @@ fi
 
 # NVM - NodeJS & NPM Version Manager
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                    # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-[[ -s "$NVM_DIR/auto_nvm_use.sh" ]] && \. "$NVM_DIR/auto_nvm_use.sh"  # This manually added .sh auto-detects and used node version if .nvmrc is found in PWD
+## this loads nvm
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+## this loads nvm bash_completion
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+## optional nvm script to detect and switch to config'd version when in dir with .nvmrc
+[[ -s "$NVM_DIR/auto_nvm_use.sh" ]] && \. "$NVM_DIR/auto_nvm_use.sh"
+
+## create env vars and dynamic symlink pointing to versions of node/npm
+## executables set for use through nvm
+update_nvm_links () {
+    echo -e "Updating dynamic node/npm symlinks to nvm-installed executables."
+    echo -e "Admin password may be requested below.\n"
+    sudo ln -s $NVM_BIN/node /usr/local/bin/node
+    sudo ln -s $NVM_BIN/npm /usr/local/bin/npm
+}
+
+for n in {node,npm}; do
+    [[ ! -L /usr/local/bin/$n || $(realpath /usr/local/bin/$n) != $(realpath $NVM_BIN/$n) ]] \
+        && update_nvm_links
+done
+
+# Add user's home bin if it exists
+[[ -r $HOME/bin ]] && export PATH="$HOME/bin:$PATH"
 
 # Dedupe $PATH Directories
 export PATH="$(echo "$PATH" | sed -E -e 's/:([^:]*)(:.*):\1/:\1\2/' -e 's/^([^:]*)(:.*):\1/:\1\2/' -e 's/^:(\/.*)/\1/')"
