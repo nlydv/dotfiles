@@ -63,6 +63,7 @@ misc/
 projects/
 
 .config/**/*
+!.config/pythonrc
 !.config/git/
 !.config/git/config
 !.config/git/ignore

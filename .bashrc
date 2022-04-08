@@ -154,7 +154,7 @@ else
 fi
 
 # Set env var for .pythonrc config file
-export PYTHONSTARTUP="$HOME/.pythonrc"
+export PYTHONSTARTUP="$HOME/.config/pythonrc"
 
 # NVM - NodeJS & NPM Version Manager
 export NVM_DIR="$HOME/.nvm"
