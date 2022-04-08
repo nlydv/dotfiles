@@ -135,8 +135,10 @@ extract () {
 # sizes: shortcut command for using `du` to get real sizes of files/directories. orig an alias
 # —————
 sizes () {
-    _sizes_var="$PWD"
-    [[ $# -gt 0 ]] && _sizes_var="$@"
-    sudo du -h -s $_sizes_var | sort -h
+    if [[ $# -eq 0 ]]; then
+        sudo du -h -s "$PWD"
+    else
+        sudo du -h -s "$@" | sort -h
+    fi
 }
 

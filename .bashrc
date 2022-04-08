@@ -141,14 +141,20 @@ if [[ -x /opt/homebrew/bin/python3 ]]; then
     if [[ ! -L /usr/local/bin/python ]]; then
         echo -e "Linking & prioritizing python3 over python2."
         echo -e "Admin password may be requested below.\n"
+
         sudo ln -s /opt/homebrew/bin/python3 /usr/local/bin/python &> /dev/null
         sudo ln -s /opt/homebrew/bin/python3-config /usr/local/bin/python-config &> /dev/null
         sudo ln -s /opt/homebrew/bin/pip3 /usr/local/bin/pip &> /dev/null
     fi
     export PATH="/usr/local/bin/python:/usr/local/bin/python-config:/usr/local/bin/pip:$PATH"
 else
-    echo -e "\n\e[1;33mWarning\e[0m: No python3 installation found in Homebrew bin.\nDefaulting to deprecated python2 version pre-installed on system.\n\nTo fix, run    \e[1;37mbrew install python3\e[0m    and then reload shell.\n"
+    echo -e "\n\e[1;33mWarning\e[0m: No python3 installation found in Homebrew bin."
+    echo -e "Defaulting to deprecated python2 version pre-installed on system.\n"
+    echo -e "To fix, run    \e[1;37mbrew install python3\e[0m    and then reload shell.\n"
 fi
+
+# Set env var for .pythonrc config file
+export PYTHONSTARTUP="$HOME/.pythonrc"
 
 # NVM - NodeJS & NPM Version Manager
 export NVM_DIR="$HOME/.nvm"
@@ -200,9 +206,23 @@ export GREP_OPTIONS='--color=auto' GREP_COLOR='1;32'
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
 
-# Attempting to reduce auto-generated dotfile clutter in home dir
-export LESSHISTFILE="-"
-export NODE_REPL_HISTORY="$HOME/.nvm/versions/node/.node_repl_history"
+# ————Shell Optimizations————————
+
+# Reduce auto-generated dotfile clutter in $HOME + related opts
+shopt -s cmdhist
+shopt -s lithist
+
+export HISTCONTROL="ignoredups"
+export HISTDIR="$HOME/.history"
+export HISTFILE="$HISTDIR/bash_history"
+
+export SHELL_SESSION_DIR="$HISTDIR/bash_sessions"
+export SHELL_SESSION_FILE="$SHELL_SESSION_DIR/$TERM_SESSION_ID.session"
+[[ ! -e $SHELL_SESSION_DIR ]] && mkdir -p $SHELL_SESSION_DIR
+
+export LESSHISTFILE="$HISTDIR/lesshist"
+export NODE_REPL_HISTORY="$HISTDIR/node_repl_history"
+export SQLITE_HISTORY="$HISTDIR/sqlite_history"
 
 # Bash env vars needed for stuff
 export COLUMNS
