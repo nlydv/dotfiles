@@ -1,6 +1,13 @@
-# ~/.gitconfig (macOS)
+# ~/.config/git/config (macOS)
 #
-#   This is Git's per-user configuration file.
+#   Global/user level config for git. Per-repo configs
+#   will override any parameters set here. This config
+#   overrides paramaters in system config (whereever
+#   that may or may not be located).
+#
+#   According to git manpage, that order of precedence
+#   now also searches for a global/user config file at
+#   ~/.config/git/config in addition to ~/.gitconfig
 #
 #     Neel Yadav
 #	  07.04.2021
@@ -11,7 +18,7 @@
 	email = mail@neelyadav.com
 	signingkey = 2EE08C445EE9CB7F47774138ED84CBAAA8A7B576
 [core]
-	excludesfile = ~/.config/git/global.ignore
+	excludesfile = ~/.config/git/ignore
 [pull]
 	rebase = false
 [filter "lfs"]
