@@ -4,7 +4,9 @@
 #   tab completion and moves the interactive REPL command
 #   history file from the default location ~/.python_history
 #   to a dedicated history directory I started using at
-#   ~/.history/python_history
+#   ~/.history/python_history. This file's path needs to be
+#   exported in the $PYTHONSTARTUP env var (e.g in ~/.bashrc
+#   or similar shell startup file).
 #
 #   I don't actually use or know much python myself and these
 #   commands seemed to be commonly recommended based off a
