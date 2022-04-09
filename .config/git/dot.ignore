@@ -1,6 +1,7 @@
 # ~/.config/git/dot.ignore (macOS)
 #
-#   Gitignore file specifically for dotfiles repo.
+#   Local gitignore for dotfiles repo.
+#
 #   Since the dotfiles repo is a special snowflake,
 #   it gets to have its very own gitignore alongside
 #   the global one!
@@ -23,21 +24,22 @@
 #     04.07.2022
 
 
-# —————————————————————— #
-# GLOBAL IGNORE PATTERNS #
-# —————————————————————— #
+# ———————————————————————————————
+#     GLOBAL IGNORE PATTERNS
+# ———————————————————————————————
 
-# ———— macOS ———————————
 
-# Generic
+## ———— macOS ———————————————————
+
+### Generic
 .DS_Store
 .AppleDouble
 .LSOverride
 
-# Thumbnails
+### Thumbnails
 ._*
 
-# Files/directories found in top directory of volume drives
+### Files/directories found in top directory of volume drives
 .DocumentRevisions-V100
 .fseventsd
 .Spotlight-V100
@@ -46,15 +48,19 @@
 .VolumeIcon.icns
 .com.apple.timemachine.donotpresent
 
-# ———— Other ———————————
+## ———— Node & NPM ——————————————
 
 node_modules
 .npm-debug.log
 .tern-project
 
-# ——————————————————————————— #
-# LOCAL DOTFILE REPO PATTERNS #
-# ——————————————————————————— #
+
+# ———————————————————————————————
+#   LOCAL DOTFILE REPO PATTERNS
+# ———————————————————————————————
+
+
+## ———— Personal ————————————————
 
 [A-Z]*/
 .Trash/
@@ -62,12 +68,7 @@ bin/
 misc/
 projects/
 
-.config/**/*
-!.config/pythonrc
-!.config/git/
-!.config/git/config
-!.config/git/ignore
-!.config/git/dot.ignore
+## ———— Privacy & Security ——————
 
 .atom/
 .gnupg/
@@ -76,6 +77,15 @@ projects/
 .npm/
 .nvm/
 .ssh/
- 
+
 .brewfile
 
+## ———— Vetted Configs ——————————
+
+.config/**/*
+!.config/pythonrc
+!.config/git/
+!.config/git/config
+!.config/git/ignore
+!.config/git/dot.config
+!.config/git/dot.ignore

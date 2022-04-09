@@ -1,22 +1,37 @@
-# ~/.config/git/global.ignore
+# ~/.config/git/ignore (macOS)
 #
-#   Global .gitignore file
+#   Global gitignore file.
+#
+#   Herein are a set of patterns which git automatically
+#   excludes from tracking in all repositories by default.
+#   These patterns can be explicitly overrided for local
+#   by its own local configs and/or .gitignore files.
+#
+#   Similar to how & where git searches for the user's
+#   global gitconfig file, the path ~/.config/git/ignore
+#   is seen as an alternative location to ~/.gitconfig (in
+#   recent versions of git, apparently).
+#
+#   Therefore, in theory, when keeping the global config
+#   file's (~/.gitconfig OR ~/.config/git/config) core
+#   `excludesFile` option empty, git will automatically
+#   find and fallback to this ignore file globally.
 #
 #     Neel Yadav
 #     07.07.2021
 
 
-# ————macOS————————
+## ———— macOS ———————————————————
 
-# Generic
+### Generic
 .DS_Store
 .AppleDouble
 .LSOverride
 
-# Thumbnails
+### Thumbnails
 ._*
 
-# Files/directories found in top directory of volume drives
+### Files/directories found in top directory of volume drives
 .DocumentRevisions-V100
 .fseventsd
 .Spotlight-V100
@@ -24,3 +39,9 @@
 .Trashes
 .VolumeIcon.icns
 .com.apple.timemachine.donotpresent
+
+## ———— Node & NPM ——————————————
+
+node_modules
+.npm-debug.log
+.tern-project
