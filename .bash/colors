@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 #
-# ~/.bash_colors
+# ~/.bash/colors
 #
 #   ANSI color code variables.
 #   Convenient escape characters for applying color/styling to
-#   output text in the terminal. Used in ~./command_prompt and
+#   output text in the terminal. Used in ~/.bash/prompt and
 #   else where; sourced by ~/.bashrc.
 #
 #     Neel Yadav

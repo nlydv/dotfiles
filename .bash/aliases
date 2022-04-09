@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# ~/.bash_aliases (macOS)
+# ~/.bash/aliases (macOS)
 #
 #   Custom user defined aliases
 #   Sourced by ~/.bashrc

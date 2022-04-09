@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# ~/.command_prompt
+# ~/.bash/prompt
 #
 #   Dedicated file for setting prompt.
 #   For bulky customizations. Sourced by ~/.bashrc.

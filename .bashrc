@@ -23,14 +23,14 @@ fi
 shopt -s checkwinsize
 
 # Source personal aliases and functions
-[ -r ~/.bash_aliases ] && . $HOME/.bash_aliases
-[ -r ~/.bash_functions ] && . $HOME/.bash_functions
+[ -r $HOME/.bash/aliases ] && source $HOME/.bash/aliases
+[ -r $HOME/.bash/functions ] && source $HOME/.bash/functions
 
 # Pull in my ANSI color/style escape code vars (used in command prompt)
-[ -r ~/.bash_colors ] && . $HOME/.bash_colors
+[ -r $HOME/.bash/colors ] && source $HOME/.bash/colors
 
 # Source dedicated file for custom command prompt
-[ -r ~/.command_prompt ] && . $HOME/.command_prompt
+[ -r $HOME/.bash/prompt ] && source $HOME/.bash/prompt
 
 # ——————————————————————————————————————————————————————————
 
@@ -163,7 +163,7 @@ export NVM_DIR="$HOME/.nvm"
 ## this loads nvm bash_completion
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 ## optional nvm script to detect and switch to config'd version when in dir with .nvmrc
-[[ -s "$NVM_DIR/auto_nvm_use.sh" ]] && \. "$NVM_DIR/auto_nvm_use.sh"
+[[ -s "$NVM_DIR/auto_nvm_use.sh" ]] && source "$NVM_DIR/auto_nvm_use.sh"
 
 ## create env vars and dynamic symlink pointing to versions of node/npm
 ## executables set for use through nvm

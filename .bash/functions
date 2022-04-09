@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# ~/.bash_functions
+# ~/.bash/functions
 #
 #   Custom user functions loaded on startup
 #   Sourced by ~/.bashrc
