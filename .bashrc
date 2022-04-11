@@ -8,8 +8,8 @@
 #   otherwise run automatically by the system on interactive
 #   shell invocation. So most stuff goes (or is sourced) here.
 #
-#     Neel Yadav
-#     06.29.2021
+#   Neel Yadav
+#   06.29.2021
 
 
 # ————Basic startup checks & sourcing other dotfiles————————
@@ -188,24 +188,6 @@ export PATH="$(echo "$PATH" | sed -E -e 's/:([^:]*)(:.*):\1/:\1\2/' -e 's/^([^:]
 # ———————————————————————————————————————————————————————————————————————
 
 
-# ————Other————————
-
-# Enable CLI completions via "bash-completion@2" Homebrew formula
-[[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
-
-# Other Completions (manually save completion output from non-brew tools here)
-for c in /usr/local/etc/bash_completion.d/*; do
-    [[ -r "$c" ]] && . "$c"
-done
-
-# GPG Pinentry Display (remote SSH, etc. pinentry redirect to orig local display)
-export GPG_TTY=$(tty)
-
-# Add color to the command line!
-export GREP_OPTIONS='--color=auto' GREP_COLOR='1;32'
-export CLICOLOR=1
-export LSCOLORS=ExFxCxDxBxegedabagacad
-
 # ————Shell Optimizations————————
 
 # Reduce auto-generated dotfile clutter in $HOME + related opts
@@ -224,9 +206,31 @@ export LESSHISTFILE="$HISTDIR/lesshist"
 export NODE_REPL_HISTORY="$HISTDIR/node_repl_history"
 export SQLITE_HISTORY="$HISTDIR/sqlite_history"
 
+# Defined here instead of in .bash/aliases for logical grouping
+alias wget='wget --hsts-file ~/.history/wget-hsts'
+
 # Bash env vars needed for stuff
 export COLUMNS
 export LINES
 
-# —————————————————
+# ———————————————————————————————
+
+
+# ————Other————————
+
+# Enable CLI completions via "bash-completion@2" Homebrew formula
+[[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
+
+# Other Completions (manually save completion output from non-brew tools here)
+for c in /usr/local/etc/bash_completion.d/*; do
+    [[ -r "$c" ]] && . "$c"
+done
+
+# GPG Pinentry Display (remote SSH, etc. pinentry redirect to orig local display)
+export GPG_TTY=$(tty)
+
+# Add color to the command line!
+export GREP_OPTIONS='--color=auto' GREP_COLOR='1;32'
+export CLICOLOR=1
+export LSCOLORS=ExFxCxDxBxegedabagacad
 

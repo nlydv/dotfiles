@@ -37,3 +37,6 @@ alias delcommit='git reset --hard HEAD~1'   # undo last commit; discard changes
 # Clipboard content shortcut
 alias paste='echo "$(pbpaste)"'
 
+# Defined in .bashrc but commented out here for reference
+#alias wget='wget --hsts-file ~/.history/wget-hsts'
+
