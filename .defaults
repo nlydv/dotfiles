@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+#
+# ~/.defaults (macOS)
+#
+#   Store of macOS' settings hidden behind "defaults" CLI
+#
+#   These "non-default defaults" configs aren't really here to
+#   be used or accessed programatically, but rather just for
+#   documentation and reference purposes. I figured I should
+#   start writing down all the minor little switches I have, or
+#   in the future, will flip here and there so I know what my
+#   personal "defaults" are that I've come to expect.
+#
+#   I guess these are just shell commands and executing this
+#   file would just revert back any deviated settings. So I
+#   added a bash shebang up top but haven't added +x bit to
+#   avoid accidental executions.
+#
+#   Neel Yadav
+#   04.08.2022
+
+
+# ————— FINDER —————————————————————————
+# ——————————————————————————————————————
+
+## Show dotfiles
+defaults write com.apple.finder AppleShowAllFiles -bool true
+## For visible path bar, start from $HOME
+defaults write com.apple.finder PathBarRootAtHome -bool true
+## Search current folder by default
+defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+
+# ————— TERMINAL ———————————————————————
+# ——————————————————————————————————————
+
+# I use iTerm2 but might as well
+defaults write com.apple.terminal FocusFollowsMouse -string YES
+
+# ————— TEXT EDIT ——————————————————————
+# ——————————————————————————————————————
+
+## Open untitled doc on start instead of file chooser
+defaults write com.apple.TextEdit NSShowAppCentricOpenPanelInsteadOfUntitledFile -bool false
+## Default to plain text format rather than rich text
+defaults write com.apple.TextEdit RichText -int 0
