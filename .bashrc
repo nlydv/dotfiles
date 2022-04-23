@@ -165,20 +165,6 @@ export NVM_DIR="$HOME/.nvm"
 ## optional nvm script to detect and switch to config'd version when in dir with .nvmrc
 [[ -s "$NVM_DIR/auto_nvm_use.sh" ]] && source "$NVM_DIR/auto_nvm_use.sh"
 
-## create env vars and dynamic symlink pointing to versions of node/npm
-## executables set for use through nvm
-update_nvm_links () {
-    echo -e "Updating dynamic node/npm symlinks to nvm-installed executables."
-    echo -e "Admin password may be requested below.\n"
-    sudo ln -s $NVM_BIN/node /usr/local/bin/node
-    sudo ln -s $NVM_BIN/npm /usr/local/bin/npm
-}
-
-for n in {node,npm}; do
-    [[ ! -L /usr/local/bin/$n || $(realpath /usr/local/bin/$n) != $(realpath $NVM_BIN/$n) ]] \
-        && update_nvm_links
-done
-
 # Add user's home bin if it exists
 [[ -r $HOME/bin ]] && export PATH="$HOME/bin:$PATH"
 
