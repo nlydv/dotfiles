@@ -6,17 +6,18 @@
 #     07.07.2021
 
 
-# ————macOS————————
 
-# Generic
+## ———— macOS ———————————————————
+
+### Generic
 .DS_Store
 .AppleDouble
 .LSOverride
 
-# Thumbnails
+### Thumbnails
 ._*
 
-# Files/directories found in top directory of volume drives
+### Files/directories found in top directory of volume drives
 .DocumentRevisions-V100
 .fseventsd
 .Spotlight-V100
@@ -24,3 +25,9 @@
 .Trashes
 .VolumeIcon.icns
 .com.apple.timemachine.donotpresent
+
+## ———— Node & NPM ——————————————
+
+node_modules
+.npm-debug.log
+.tern-project

@@ -1,0 +1,101 @@
+# ~/.config/git/dot.ignore (Linux server)
+#
+#   Local gitignore for dotfiles repo.
+#
+#   Since the dotfiles repo is a special snowflake,
+#   it gets to have its very own gitignore alongside
+#   the global one!
+#
+#   Previously, I had a ~/.gitignore acting as a
+#   local-level ignore file for the dotfile repo,
+#   but that also ends up doubling as a global/user
+#   level ignore file as far git is concerned. So
+#   now the dotfiles repo has a local "excludesFile"
+#   config value pointing to this file instead.
+#
+#   However, this way of setting an ignore file seems
+#   to completely override the entire global ignore
+#   file (sibling of this file named "ignore") rather
+#   than having a cascading inheritance effect. So, I
+#   just copy/pasted the global ignore here and added
+#   on the dotfile repos local ignore patterns.
+#   (cloned from macOS branch)
+#
+#     Neel Yadav
+#     04.07.2022
+
+
+# ———————————————————————————————
+#     GLOBAL IGNORE PATTERNS
+# ———————————————————————————————
+
+
+## ———— macOS ———————————————————
+
+### Generic
+.DS_Store
+.AppleDouble
+.LSOverride
+
+### Thumbnails
+._*
+
+### Files/directories found in top directory of volume drives
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+## ———— Node & NPM ——————————————
+
+node_modules
+.npm-debug.log
+.tern-project
+
+
+# ———————————————————————————————
+#   LOCAL DOTFILE REPO PATTERNS
+# ———————————————————————————————
+
+
+## ———— Personal ————————————————
+
+[A-Z]*/
+.Trash/
+bin/
+misc/
+projects/
+
+## ———— Privacy & Security ——————
+
+.atom/
+.gnupg/
+.history/
+.local/
+.npm/
+.nvm/
+.ssh/
+
+.brewfile
+
+## ———— Vetted Configs ——————————
+
+.config/**/*
+!.config/pythonrc
+!.config/git/
+!.config/git/config
+!.config/git/ignore
+!.config/git/dot.config
+!.config/git/dot.ignore
+!.config/iterm2/
+!.config/iterm2/*.itermkeymap
+!.config/iterm2/colors/
+!.config/iterm2/colors/*.itermcolors
+!.config/iterm2/prefs/
+!.config/iterm2/prefs/*iterm2.plist
+!.config/iterm2/profiles/
+!.config/iterm2/profiles/*.json
+

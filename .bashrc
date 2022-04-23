@@ -155,6 +155,34 @@ fi
 # ———————————————————————————————————
 
 
+# ————Shell Optimizations————————
+
+# Reduce auto-generated dotfile clutter in $HOME + related opts
+shopt -s cmdhist
+shopt -s lithist
+
+export HISTCONTROL="ignoredups"
+export HISTDIR="$HOME/.history"
+export HISTFILE="$HISTDIR/bash_history"
+
+export SHELL_SESSION_DIR="$HISTDIR/bash_sessions"
+export SHELL_SESSION_FILE="$SHELL_SESSION_DIR/$TERM_SESSION_ID.session"
+[[ ! -e $SHELL_SESSION_DIR ]] && mkdir -p $SHELL_SESSION_DIR
+
+export LESSHISTFILE="$HISTDIR/lesshist"
+export NODE_REPL_HISTORY="$HISTDIR/node_repl_history"
+export SQLITE_HISTORY="$HISTDIR/sqlite_history"
+
+# Defined here instead of in .bash/aliases for logical grouping
+alias wget='wget --hsts-file ~/.history/wget-hsts'
+
+# Bash env vars needed for stuff
+export COLUMNS
+export LINES
+
+# ———————————————————————————————
+
+
 # ————Other————————
 
 # PGP stuff
@@ -175,9 +203,5 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 # Prefer C-style alphabetical sorting with 'ls' & things
 export LC_COLLATE=C
 export LANG=en_US.UTF-8 # reiterate default lang for everything else just in case
-
-# Attempting to reduce auto-generated dotfile clutter in home dir
-export LESSHISTFILE="-"
-export NODE_REPL_HISTORY="$HOME/.nvm/versions/node/.node_repl_history"
 
 # —————————————————
