@@ -72,41 +72,50 @@ colortest () {
 # ———————————————
 nvm-upgrade-lts () {
     if [[ -z $(type -t nvm) ]]; then
-        echo "error: nvm is not installed"
-        return 1
+        echo "error: nvm is not installed";
+        return 1;
     else
-        echo "Getting available versions..."
+        echo -e "Getting available versions...";
+        echo -e "Using:   $(nvm current)\n";
     fi
 
-    node_cur=$(nvm current)
-    latest_lts=$(nvm version-remote --lts)
-    nodemod_cur="$HOME/.nvm/versions/node/${node_cur}/lib/node_modules/*"
-
-    if [[ $latest_lts == "N/A" ]]; then
-        echo "error: unable to get latest LTS version"
-    elif [[ $node_cur == $latest_lts ]]; then
-        echo "NodeJS is already up-to-date."
-        return 0
+    current=$(nvm version default &> /dev/null && echo $(nvm version default) || echo $(nvm version current));
+    echo -e "${bold}Current${reset}: ${blue}${bold}$current${reset}";
+    
+    latest=$(nvm version-remote --lts);
+    
+    if [[ $latest == "N/A" ]]; then
+        echo -e "\n${red}${bold}Error${reset} - unable to pull remote LTS versions\n";
+        return 2;
     else
-        echo -e "\nNew version available.\n\nCurrent: $node_cur\nLatest LTS: $latest_lts\n"
-        read -e -r -t 60 -p "Continue with upgrade? (y\N) — " input
-        case "$input" in
-            [yY][eE][sS]|[yY])
-                echo "Ok. Upgrading to $latest_lts ...";;
+        echo -n -e "${bold}Latest${reset}:  ";
+    fi
+    
+    if [[ $current == $latest ]]; then
+        echo -e "${blue}${bold}$latest${reset}\n";
+        echo -e "    Node.js is already up-to-date with the latest LTS release\n";
+        return 0;
+    else
+        echo -e "${magenta}${bold}$latest${reset}\n";
+        echo -e "    Updated LTS version is available.";
+        read -e -r -t 60 -p "    Continue with upgrade? (y/N) - " input;
+    
+        case "$input" in 
+            [yY][eE][sS] | [yY])
+                echo -e "\nOk. Upgrading to ${magenta}${bold}$latest${reset} ...\n"
+            ;;
             *)
-                return 1 ;;
+                echo -e "\nAborted upgrade.\n";
+                return 3
+            ;;
         esac
     fi
 
-    nvm install --lts --latest-npm
-    node_new=$(nvm current)
-    nodemod_new="$HOME/.nvm/versions/node/${node_new}/lib/node_modules"
-
-    for i in $nodemod_cur; do
-        if [[ -d $i && ! $(basename $i) == "npm" ]]; then
-            cp -p -r $i $nodemod_new
-        fi
-    done
+    nvm use $current > /dev/null;
+    nvm install --lts --default --reinstall-packages-from=current > /dev/null || return 4;
+    nvm install-latest-npm > /dev/null;
+ 
+    echo -e "\n${bold}Node.js successfully upgraded ${reset} ${blue}${bold}$current${reset} → ${magenta}${bold}$latest${reset}\n"
 }
 
 # extract: no more randomly guessing option combos
@@ -116,6 +125,7 @@ extract () {
          case $1 in
              *.tar.bz2)   tar xjf $1    ;;
              *.tar.gz)    tar xzf $1    ;;
+             *.tar.xz)    tar xJf $1    ;;
              *.bz2)       bunzip2 $1    ;;
              *.rar)       rar x $1      ;;
              *.gz)        gunzip $1     ;;

@@ -13,13 +13,13 @@
 [ -r ~/.ssh/host_aliases ] && . $HOME/.ssh/host_aliases
 
 # Shorthand aliases
-alias tth='terminal-to-html'
-alias alpine='alpine -sort date/reverse'
 alias up='cd ..'
+alias cd..='cd ..'
+alias tth='terminal-to-html'
 
 # Aliases 2 small 2 function
 alias reload-shell='_path=$PATH;clear;[[ -r ~/.bash_profile ]] && . ~/.bash_profile || echo "err";PATH=$_path;unset _path'
-alias fresh-brew='brew update; brew upgrade; brew upgrade --cask; brew autoremove; brew cleanup --prune 0' # don't walk away, some upgrades ask for pass
+alias fresh-brew='sudo -v && brew update && brew upgrade && brew upgrade --cask && brew autoremove && brew cleanup --prune 0'
 alias path-list='printf $PATH | awk -v RS=: "{print}"'
 
 # El-iases
@@ -31,6 +31,7 @@ alias l='ls -CF'
 # Git aliases
 alias adog='git log --all --decorate --oneline --graph'
 alias dot='git --git-dir=$HOME/Git/dotfiles.git/ --work-tree=$HOME'
+alias commit='f() { git commit -m "$*" 1> /dev/null && prev; unset f; }; f'
 alias uncommit='git reset --soft HEAD~1'    # undo last commit; keep changes
 alias delcommit='git reset --hard HEAD~1'   # undo last commit; discard changes
 
@@ -39,4 +40,5 @@ alias paste='echo "$(pbpaste)"'
 
 # Defined in .bashrc but commented out here for reference
 #alias wget='wget --hsts-file ~/.history/wget-hsts'
+#alias alpine='alpine -p "$HOME/.config/alpine/pinerc" -pwdcertdir "$HOME/.config/alpine/smime"'
 

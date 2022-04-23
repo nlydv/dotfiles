@@ -208,6 +208,7 @@ export SQLITE_HISTORY="$HISTDIR/sqlite_history"
 
 # Defined here instead of in .bash/aliases for logical grouping
 alias wget='wget --hsts-file ~/.history/wget-hsts'
+alias alpine='alpine -p "$HOME/.config/alpine/pinerc" -pwdcertdir "$HOME/.config/alpine/smime"'
 
 # Bash env vars needed for stuff
 export COLUMNS

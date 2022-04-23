@@ -89,3 +89,12 @@ projects/
 !.config/git/ignore
 !.config/git/dot.config
 !.config/git/dot.ignore
+!.config/iterm2/
+!.config/iterm2/*.itermkeymap
+!.config/iterm2/colors/
+!.config/iterm2/colors/*.itermcolors
+!.config/iterm2/prefs/
+!.config/iterm2/prefs/*iterm2.plist
+!.config/iterm2/profiles/
+!.config/iterm2/profiles/*.json
+

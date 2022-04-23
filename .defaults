@@ -20,26 +20,62 @@
 #   04.08.2022
 
 
-# ————— FINDER —————————————————————————
-# ——————————————————————————————————————
+## ————————————————————————————————————————
+## ————— FINDER ———————————————————————————
+## ————————————————————————————————————————
 
-## Show dotfiles
+# Show dotfiles
 defaults write com.apple.finder AppleShowAllFiles -bool true
-## For visible path bar, start from $HOME
+
+# For visible path bar, start from $HOME
 defaults write com.apple.finder PathBarRootAtHome -bool true
-## Search current folder by default
+
+# Search current folder by default
 defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
 
-# ————— TERMINAL ———————————————————————
-# ——————————————————————————————————————
+# Always use Icon View (iconv) by default in Finder windows
+defaults write com.apple.finder FXPreferredViewStyle -string "iconv"
+
+
+## ————————————————————————————————————————
+## ————— SAFARI ———————————————————————————
+## ————————————————————————————————————————
+
+# Enable sourcing locally installed fonts (if available) despite fingerprinting risks
+defaults write -app Safari WebKitPreferences.shouldAllowUserInstalledFonts -bool true
+
+# Enable developer settings and things
+defaults write -app Safari IncludeDevelopMenu -bool true
+defaults write -app Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+defaults write -app Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
+
+# Access web inspector in non-Safari webkit renderings
+defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
+
+
+## ————————————————————————————————————————
+## ————— TERMINAL —————————————————————————
+## ————————————————————————————————————————
 
 # I use iTerm2 but might as well
-defaults write com.apple.terminal FocusFollowsMouse -string YES
+defaults write -app Terminal FocusFollowsMouse -bool true
 
-# ————— TEXT EDIT ——————————————————————
-# ——————————————————————————————————————
 
-## Open untitled doc on start instead of file chooser
-defaults write com.apple.TextEdit NSShowAppCentricOpenPanelInsteadOfUntitledFile -bool false
-## Default to plain text format rather than rich text
-defaults write com.apple.TextEdit RichText -int 0
+## ————————————————————————————————————————
+## ————— TEXT EDIT ————————————————————————
+## ————————————————————————————————————————
+
+# Open blank, untitled txt file on start instead of file chooser
+defaults write -app TextEdit NSShowAppCentricOpenPanelInsteadOfUntitledFile -bool false
+
+# Default to plain text format rather than rich text
+defaults write -app TextEdit RichText -bool true
+
+
+## ————————————————————————————————————————
+## ————— SCRIPT EDITOR ————————————————————
+## ————————————————————————————————————————
+
+# Open blank, untitled scpt file on start instead of file chooser
+defaults write -app 'Script Editor' NSShowAppCentricOpenPanelInsteadOfUntitledFile -bool false
+
