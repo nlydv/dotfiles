@@ -221,3 +221,6 @@ export GREP_OPTIONS='--color=auto' GREP_COLOR='1;32'
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
 
+# Had a few programs lately complaining about this not being set
+export EDITOR=vim
+

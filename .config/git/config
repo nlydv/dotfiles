@@ -44,8 +44,16 @@
 
 [alias]
     adog = log --all --decorate --oneline --graph
+    recent = show --compact-summary --name-status
     uncommit = reset --soft HEAD~1
     delcommit = reset --hard HEAD~1
+
+[log]
+    abbrevCommit = true
+    date = "format:%b %d, %Y  %-l:%M %p %Z"
+
+[format]
+    pretty = "format:%C(auto)%h%d%n%nAuthor:  %Cblue%an%C(auto) <%ae>%nTime:    %Cblue%ad%C(auto) (%ar)%nSigner: %C(always,green)% GK%C(auto)%n%n%>(4)%>|(4)%s%n%n%-N%n"
 
 # Special include for dotfiles repo.
 # More info in sibling "dot.config" file header

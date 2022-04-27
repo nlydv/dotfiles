@@ -31,7 +31,8 @@ alias l='ls -CF'
 # Git aliases
 alias adog='git log --all --decorate --oneline --graph'
 alias dot='git --git-dir=$HOME/Git/dotfiles.git/ --work-tree=$HOME'
-alias commit='f() { git commit -m "$*" 1> /dev/null && prev; unset f; }; f'
+alias recent='git recent'
+alias commit='f() { git commit -m "$*" 1> /dev/null && recent; unset f; }; f'
 alias uncommit='git reset --soft HEAD~1'    # undo last commit; keep changes
 alias delcommit='git reset --hard HEAD~1'   # undo last commit; discard changes
 
