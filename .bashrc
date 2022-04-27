@@ -204,4 +204,6 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 export LC_COLLATE=C
 export LANG=en_US.UTF-8 # reiterate default lang for everything else just in case
 
-# —————————————————
+# Had a few programs lately complaining about this not being set
+export EDITOR=vim
+
