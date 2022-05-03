@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 #
-# ~/.bash/functions
+#   ~/.bash/functions
 #
-#   Custom user functions loaded on startup
-#   Sourced by ~/.bashrc
+#     Custom user functions loaded on startup.
+#     Sourced by ~/.bashrc
 #
-#     Neel Yadav
-#     06.29.2019
+#   Neel Yadav
+#   06.29.2019
 
 
 # submod: git submodule pull/push function

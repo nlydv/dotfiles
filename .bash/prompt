@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 #
-# ~/.bash/prompt
+#   ~/.bash/prompt
 #
-#   Dedicated file for setting prompt.
-#   For bulky customizations. Sourced by ~/.bashrc.
+#     Dedicated file for setting prompt.
+#     For bulky customizations. Sourced by ~/.bashrc.
 #
-#     Neel Yadav
-#     06.30.2021
+#   Neel Yadav
+#   06.30.2021
 
 
 # ————Git——————————————————————————————————————————————————————————————

@@ -1,12 +1,12 @@
 # shellcheck shell=bash
 #
-# ~/.bashrc (macOS)
+#   ~/.bashrc (macOS)
 #
-#   Startup bash file for interactive non-login shells.
-#   Apparently some OS' will run ~/.bash_profile for all login
-#   shells. This is sourced by ~/.bash_profile anyways but is
-#   otherwise run automatically by the system on interactive
-#   shell invocation. So most stuff goes (or is sourced) here.
+#     Startup bash file for interactive non-login shells.
+#     Apparently some OS' will run ~/.bash_profile for all login
+#     shells. This is sourced by ~/.bash_profile anyways but is
+#     otherwise run automatically by the system on interactive
+#     shell invocation. So most stuff goes (or is sourced) here.
 #
 #   Neel Yadav
 #   06.29.2021
@@ -15,22 +15,27 @@
 # ————Basic startup checks & sourcing other dotfiles————————
 
 # If not running interactively, don't do anything
-if [ -z "$PS1" ]; then
+if [[ -z "$PS1" ]]; then
    return
 fi
 
 # Make bash check its window size after a process completes
 shopt -s checkwinsize
 
-# Source personal aliases and functions
-[ -r $HOME/.bash/aliases ] && source $HOME/.bash/aliases
-[ -r $HOME/.bash/functions ] && source $HOME/.bash/functions
+# Source personal bash aliases
+[[ -r $HOME/.bash/aliases ]]   && source $HOME/.bash/aliases
 
-# Pull in my ANSI color/style escape code vars (used in command prompt)
-[ -r $HOME/.bash/colors ] && source $HOME/.bash/colors
+# Source personal bash functions
+[[ -r $HOME/.bash/functions ]] && source $HOME/.bash/functions
+
+# Source my ANSI color/style escape code vars (used in .bash/prompt)
+[[ -r $HOME/.bash/colors ]]    && source $HOME/.bash/colors
 
 # Source dedicated file for custom command prompt
-[ -r $HOME/.bash/prompt ] && source $HOME/.bash/prompt
+[[ -r $HOME/.bash/prompt ]]    && source $HOME/.bash/prompt
+
+# Source private env vars and configs that aren't publicly version controlled
+[[ -r $HOME/.bash/env ]]       && source $HOME/.bash/env
 
 # ——————————————————————————————————————————————————————————
 
@@ -114,7 +119,7 @@ export HOMEBREW_NO_INSTALL_CLEANUP=1
 export HOMEBREW_NO_INSTALL_UPGRADE=1
 
 # Homebrew global bundle dump file location
-export HOMEBREW_BUNDLE_FILE="$HOME/.brewfile"
+export HOMEBREW_BUNDLE_FILE="$HOME/Archive/Installed/Brewfile-$(date +%y%m%d)"
 
 # OpenSSL Keg-Only Paths
 export PATH="/opt/homebrew/opt/openssl@1.1/bin:$PATH"
@@ -129,32 +134,16 @@ export PATH="/opt/homebrew/opt/curl/bin:$PATH"
 # backward's compatibility for older gems in macOS Catalina and later (10.15+)
 export SDKROOT=$(xcrun --show-sdk-path)
 
+# Python Environment Variables and Prioritize Unversion Python3 Execs
+export PATH="/opt/homebrew/opt/python@3.9/libexec/bin:$PATH"
+export PYTHONSTARTUP="$HOME/.config/pythonrc"
+
 # PHP & PHPBrew & Composer Environment Variables
 export COMPOSER_HOME="$HOME/.composer"
 export PATH="$COMPOSER_HOME/vendor/bin:$PATH"
     #export PATH="/opt/homebrew/opt/php@7.4/bin:$PATH"
     #export PATH="/opt/homebrew/opt/php@7.4/sbin:$PATH"
 [[ -e ~/.phpbrew/bashrc ]] && . $HOME/.phpbrew/bashrc
-
-# Python Versioning and PATH Priority
-if [[ -x /opt/homebrew/bin/python3 ]]; then
-    if [[ ! -L /usr/local/bin/python ]]; then
-        echo -e "Linking & prioritizing python3 over python2."
-        echo -e "Admin password may be requested below.\n"
-
-        sudo ln -s /opt/homebrew/bin/python3 /usr/local/bin/python &> /dev/null
-        sudo ln -s /opt/homebrew/bin/python3-config /usr/local/bin/python-config &> /dev/null
-        sudo ln -s /opt/homebrew/bin/pip3 /usr/local/bin/pip &> /dev/null
-    fi
-    export PATH="/usr/local/bin/python:/usr/local/bin/python-config:/usr/local/bin/pip:$PATH"
-else
-    echo -e "\n\e[1;33mWarning\e[0m: No python3 installation found in Homebrew bin."
-    echo -e "Defaulting to deprecated python2 version pre-installed on system.\n"
-    echo -e "To fix, run    \e[1;37mbrew install python3\e[0m    and then reload shell.\n"
-fi
-
-# Set env var for .pythonrc config file
-export PYTHONSTARTUP="$HOME/.config/pythonrc"
 
 # NVM - NodeJS & NPM Version Manager
 export NVM_DIR="$HOME/.nvm"

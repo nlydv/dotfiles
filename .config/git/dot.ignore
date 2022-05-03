@@ -2,26 +2,26 @@
 #
 #   Local gitignore for dotfiles repo.
 #
-#   Since the dotfiles repo is a special snowflake,
-#   it gets to have its very own gitignore alongside
-#   the global one!
+#     Since the dotfiles repo is a special snowflake,
+#     it gets to have its very own gitignore alongside
+#     the global one!
 #
-#   Previously, I had a ~/.gitignore acting as a
-#   local-level ignore file for the dotfile repo,
-#   but that also ends up doubling as a global/user
-#   level ignore file as far git is concerned. So
-#   now the dotfiles repo has a local "excludesFile"
-#   config value pointing to this file instead.
+#     Previously, I had a ~/.gitignore acting as a
+#     local-level ignore file for the dotfile repo,
+#     but that also ends up doubling as a global/user
+#     level ignore file as far git is concerned. So
+#     now the dotfiles repo has a local "excludesFile"
+#     config value pointing to this file instead.
 #
-#   However, this way of setting an ignore file seems
-#   to completely override the entire global ignore
-#   file (sibling of this file named "ignore") rather
-#   than having a cascading inheritance effect. So, I
-#   just copy/pasted the global ignore here and added
-#   on the dotfile repos local ignore patterns.
+#     However, this way of setting an ignore file seems
+#     to completely override the entire global ignore
+#     file (sibling of this file named "ignore") rather
+#     than having a cascading inheritance effect. So, I
+#     just copy/pasted the global ignore here and added
+#     on the dotfile repos local ignore patterns.
 #
-#     Neel Yadav
-#     04.07.2022
+#   Neel Yadav
+#   04.07.2022
 
 
 # ———————————————————————————————
@@ -70,6 +70,9 @@ projects/
 
 ## ———— Privacy & Security ——————
 
+.bash/env
+.config/**/*
+
 .atom/
 .gnupg/
 .history/
@@ -82,7 +85,6 @@ projects/
 
 ## ———— Vetted Configs ——————————
 
-.config/**/*
 !.config/pythonrc
 !.config/git/
 !.config/git/config

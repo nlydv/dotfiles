@@ -1,12 +1,12 @@
-#!/usr/bin/env bash
+#!/usr/bin/env/bash
 #
-# ~/.bash/aliases (macOS)
+#   ~/.bash/aliases (macOS)
 #
-#   Custom user defined aliases
-#   Sourced by ~/.bashrc
+#     Custom user defined aliases.
+#     Sourced by ~/.bashrc.
 #
-#     Neel Yadav
-#     06.29.2021
+#   Neel Yadav
+#   06.29.2021
 
 
 # Quick SSH locations specified on a per-user basis (don't want public here)

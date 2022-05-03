@@ -16,13 +16,43 @@
 #   added a bash shebang up top but haven't added +x bit to
 #   avoid accidental executions.
 #
+#   Note: I didn't realize that the concept of this kind of
+#   macos specific dotfile was sort of a niche thing until
+#   after learning that some folks have been documenting and
+#   uncovering a lot of these `defaults` and related swithes
+#   embedded in the OS. Credit and thanks to Mathias Bynens
+#   from whose dotfiles repo I discovered many of the below
+#   tricks and configs (see https://mths.be/macos for ref)!
+#
 #   Neel Yadav
 #   04.08.2022
 
 
-## ————————————————————————————————————————
-## ————— FINDER ———————————————————————————
-## ————————————————————————————————————————
+# ————————————————————————————————————————
+# ————— GLOBAL ———————————————————————————
+# ————————————————————————————————————————
+
+# Reveal IP address, hostname, OS version, etc. when clicking the clock in login screen
+sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
+
+# Turn off capitalization autocorrect in all native text editors cuz it's annoying
+defaults write -g NSAutomaticCapitalizationEnabled -bool false
+
+# Enable spring-loaded directory opening when hovering dragged file over folder
+defaults write -g com.apple.springing.enabled -bool true
+
+# Change delay for directory springing to half the default(?) delay time in seconds
+# The value was set to 0.5 as of writing, but I'm not sure if that is the system
+# default or I had previously set this, pretty sure it's system default though.
+defaults write -g com.apple.springing.delay -float 0.25
+
+# Set system-wide default web search provider
+# This config was changed in recent macOS updates it seems (?)
+#defaults write -g NSPreferredWebServices -dict NSDefaultDisplayName "Kagi" NSProviderIdentifier "com.kagi"
+
+# ————————————————————————————————————————d
+# ————— FINDER ———————————————————————————
+# ————————————————————————————————————————
 
 # Show dotfiles
 defaults write com.apple.finder AppleShowAllFiles -bool true
@@ -33,48 +63,59 @@ defaults write com.apple.finder PathBarRootAtHome -bool true
 # Search current folder by default
 defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
 
-# Always use Icon View (iconv) by default in Finder windows
-defaults write com.apple.finder FXPreferredViewStyle -string "iconv"
+# Always use Icon View (icnv) by default in Finder windows
+defaults write com.apple.finder FXPreferredViewStyle -string "icnv"
 
 
-## ————————————————————————————————————————
-## ————— SAFARI ———————————————————————————
-## ————————————————————————————————————————
+# ————————————————————————————————————————
+# ————— SAFARI ———————————————————————————
+# ————————————————————————————————————————
 
 # Enable sourcing locally installed fonts (if available) despite fingerprinting risks
-defaults write -app Safari WebKitPreferences.shouldAllowUserInstalledFonts -bool true
+# (doesn't seem to do what the name implies...)
+defaults write -app Safari "WebKitPreferences.shouldAllowUserInstalledFonts" -bool true
+
+# Prevent Safari from opening ‘safe’ files automatically after downloading
+defaults write -app Safari AutoOpenSafeDownloads -bool false
+
+# Enable “Do Not Track”
+defaults write -app Safari SendDoNotTrackHTTPHeader -bool true
+
+# Use custom user agent styles
+defaults write -app Safari UserStyleSheetEnabled -bool true
+defaults write -app Safari UserStyleSheetLocationURLString -string "$HOME/Archive/Web Browser/custom-agent.css"
 
 # Enable developer settings and things
 defaults write -app Safari IncludeDevelopMenu -bool true
 defaults write -app Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
-defaults write -app Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
+defaults write -app Safari "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled" -bool true
 
 # Access web inspector in non-Safari webkit renderings
-defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
+defaults write -g WebKitDeveloperExtras -bool true
 
 
-## ————————————————————————————————————————
-## ————— TERMINAL —————————————————————————
-## ————————————————————————————————————————
+# ————————————————————————————————————————
+# ————— TERMINAL —————————————————————————
+# ————————————————————————————————————————
 
 # I use iTerm2 but might as well
 defaults write -app Terminal FocusFollowsMouse -bool true
 
 
-## ————————————————————————————————————————
-## ————— TEXT EDIT ————————————————————————
-## ————————————————————————————————————————
+# ————————————————————————————————————————
+# ————— TEXT EDIT ————————————————————————
+# ————————————————————————————————————————
 
 # Open blank, untitled txt file on start instead of file chooser
 defaults write -app TextEdit NSShowAppCentricOpenPanelInsteadOfUntitledFile -bool false
 
 # Default to plain text format rather than rich text
-defaults write -app TextEdit RichText -bool true
+defaults write -app TextEdit RichText -bool false
 
 
-## ————————————————————————————————————————
-## ————— SCRIPT EDITOR ————————————————————
-## ————————————————————————————————————————
+# ————————————————————————————————————————
+# ————— SCRIPT EDITOR ————————————————————
+# ————————————————————————————————————————
 
 # Open blank, untitled scpt file on start instead of file chooser
 defaults write -app 'Script Editor' NSShowAppCentricOpenPanelInsteadOfUntitledFile -bool false
