@@ -107,12 +107,17 @@ fi
 [[ -r $HOME/go/bin ]] && export PATH="$HOME/go/bin:$PATH"
 
 # Homebrew Environment Variables (see `brew help shellenv`)
-export HOMEBREW_PREFIX="/opt/homebrew"
-export HOMEBREW_CELLAR="/opt/homebrew/Cellar"
-export HOMEBREW_REPOSITORY="/opt/homebrew"
-export PATH="/opt/homebrew/bin:/opt/homebrew/sbin${PATH+:$PATH}"
-export MANPATH="/opt/homebrew/share/man${MANPATH+:$MANPATH}:"
-export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}"
+if [[ $(arch) == "arm64" ]]; then
+    export BREW="/opt/homebrew"
+else
+    export BREW="/usr/local/homebrew"
+fi
+
+export BREW_CELLAR="$BREW/Cellar"
+export BREW_REPO="$BREW"
+export PATH="$BREW/bin:$BREW/sbin${PATH+:$PATH}"
+export MANPATH="$BREW/share/man${MANPATH+:$MANPATH}:"
+export INFOPATH="$BREW/share/info:${INFOPATH:-}"
 
 # Homebrew config env options
 export HOMEBREW_NO_INSTALL_CLEANUP=1
@@ -121,21 +126,28 @@ export HOMEBREW_NO_INSTALL_UPGRADE=1
 # Homebrew global bundle dump file location
 export HOMEBREW_BUNDLE_FILE="$HOME/Archive/Installed/Brewfile-$(date +%y%m%d)"
 
+# Homebrew "Command Not Found" CLI utility ( see: https://t.ly/2mPt )
+HB_CNF_HANDLER="$BREW_REPO/Library/Taps/homebrew/homebrew-command-not-found/handler.sh"
+if [ -f "$HB_CNF_HANDLER" ]; then
+    source "$HB_CNF_HANDLER";
+fi
+
 # OpenSSL Keg-Only Paths
-export PATH="/opt/homebrew/opt/openssl@1.1/bin:$PATH"
+export PATH="$BREW/opt/openssl@1.1/bin:$PATH"
 
 # cURL Keg-Only Paths
-export PATH="/opt/homebrew/opt/curl/bin:$PATH"
+export PATH="$BREW/opt/curl/bin:$PATH"
 
-# Ruby Gems Environment Variables
-export GEM_HOME="/opt/homebrew/lib/ruby/gems/3.1.0"
+# Ruby Keg-Only Paths
+export GEM_HOME="$BREW/lib/ruby/gems/3.1.0"
 export PATH="$GEM_HOME/bin:$PATH"
-export PATH="/opt/homebrew/opt/curl/bin:$PATH"
+export PATH="$BREW/opt/ruby/bin:$PATH"
+
 # backward's compatibility for older gems in macOS Catalina and later (10.15+)
 export SDKROOT=$(xcrun --show-sdk-path)
 
 # Python Environment Variables and Prioritize Unversion Python3 Execs
-export PATH="/opt/homebrew/opt/python@3.9/libexec/bin:$PATH"
+export PATH="$BREW/opt/python@3.9/libexec/bin:$PATH"
 export PYTHONSTARTUP="$HOME/.config/pythonrc"
 
 # PHP & PHPBrew & Composer Environment Variables
@@ -157,8 +169,14 @@ export NVM_DIR="$HOME/.nvm"
 # Add user's home bin if it exists
 [[ -r $HOME/bin ]] && export PATH="$HOME/bin:$PATH"
 
+# Mint - Swift CLI tool installer and dependency manager
+export PATH="$HOME/.mint/bin:$PATH"
+
+# Spicetify - Tools to customize/modify Spotify desktop client
+export PATH="$PATH:$HOME.spicetify"
+
 # Dedupe $PATH Directories
-export PATH="$(echo "$PATH" | sed -E -e 's/:([^:]*)(:.*):\1/:\1\2/' -e 's/^([^:]*)(:.*):\1/:\1\2/' -e 's/^:(\/.*)/\1/')"
+export PATH=$(echo $(echo $PATH | awk -v RS=: -v ORS=: '!($0 in a) {a[$0]; print}') | sed -E 's/ +:$//g')
 
 # ———————————————————————————————————————————————————————————————————————
 
@@ -185,21 +203,27 @@ export SQLITE_HISTORY="$HISTDIR/sqlite_history"
 alias wget='wget --hsts-file ~/.history/wget-hsts'
 alias alpine='alpine -p "$HOME/.config/alpine/pinerc" -pwdcertdir "$HOME/.config/alpine/smime"'
 
-# Bash env vars needed for stuff
-export COLUMNS
-export LINES
-
 # ———————————————————————————————
 
 
 # ————Other————————
 
 # Enable CLI completions via "bash-completion@2" Homebrew formula
-[[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
+#[[ -r "$BREW/etc/profile.d/bash_completion.sh" ]] && . "$BREW/etc/profile.d/bash_completion.sh"
+
+if type brew &> /dev/null; then
+    if [[ -r "${BREW_PREFIX}/etc/profile.d/bash_completion.sh" ]]; then
+        source "${BREW_PREFIX}/etc/profile.d/bash_completion.sh"
+    else
+        for COMPLETION in "${BREW_PREFIX}/etc/bash_completion.d/"*; do
+            [[ -r "${COMPLETION}" ]] && source "${COMPLETION}"
+        done
+    fi
+fi
 
 # Other Completions (manually save completion output from non-brew tools here)
-for c in /usr/local/etc/bash_completion.d/*; do
-    [[ -r "$c" ]] && . "$c"
+for COMPLETION in /usr/local/etc/bash_completion.d/*; do
+    [[ -r "${COMPLETION}" ]] && source "${COMPLETION}"
 done
 
 # GPG Pinentry Display (remote SSH, etc. pinentry redirect to orig local display)
@@ -210,6 +234,12 @@ export GREP_OPTIONS='--color=auto' GREP_COLOR='1;32'
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
 
-# Had a few programs lately complaining about this not being set
-export EDITOR=vim
+# For timezone consistency
+export TZ=America/Chicago
 
+# Miscellaneous env variables
+export LINES
+export COLUMNS
+export TZ=America/Chicago
+export EDITOR=vim
+export NODE_NO_WARNINGS=1

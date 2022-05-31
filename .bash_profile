@@ -62,3 +62,4 @@ echo ""
 
 # Source non-login startup commands as well
 [ -r ~/.bashrc ] && . ~/.bashrc
+
