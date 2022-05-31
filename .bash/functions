@@ -70,52 +70,81 @@ colortest () {
 
 # nvm-upgrade-lts: simple command to upgrade node/npm and transfer npm packages to new version via nvm
 # ———————————————
-nvm-upgrade-lts () {
+nvm-upgrade () {
+    current="$(nvm version current)"
+
     if [[ -z $(type -t nvm) ]]; then
         echo "error: nvm is not installed";
         return 1;
     else
         echo -e "Getting available versions...";
-        echo -e "Using:   $(nvm current)\n";
+        echo -e "Using:   $current\n";
     fi
 
-    current=$(nvm version default &> /dev/null && echo $(nvm version default) || echo $(nvm version current));
-    echo -e "${bold}Current${reset}: ${blue}${bold}$current${reset}";
+    if [[ $1 == "--lts" || $2 == "--lts" ]]; then
+        lts=true
+        installed="$(nvm version lts/*)"
+        latest="$(nvm version-remote lts/*)"
+    else
+        lts=false
+        installed="$(nvm version node)"
+        latest="$(nvm version-remote node)"
+    fi
+
+    [[ $1 =~ ^(\-d)|(\-\-default)$ || $2 =~ ^(\-d)|(\-\-default)$ || $(nvm version default) == "N/A" ]] && default=true || default=false
     
-    latest=$(nvm version-remote --lts);
+    #current=$(nvm version default &> /dev/null && echo $(nvm version default) || echo $(nvm version current));
+    echo -e "${bold}Current$($lts && echo " LTS")${reset}: ${blue}${bold}$installed${reset}";
     
     if [[ $latest == "N/A" ]]; then
-        echo -e "\n${red}${bold}Error${reset} - unable to pull remote LTS versions\n";
+        echo -e "\n${red}${bold}Error${reset} - unable to pull remote versions\n";
         return 2;
     else
-        echo -n -e "${bold}Latest${reset}:  ";
+        echo -n -e "${bold}Latest$($lts && echo " LTS")${reset}:  ";
     fi
     
-    if [[ $current == $latest ]]; then
+    if [[ $installed == $latest ]]; then
         echo -e "${blue}${bold}$latest${reset}\n";
-        echo -e "    Node.js is already up-to-date with the latest LTS release\n";
+        echo -e "    Node.js is already up-to-date with the latest $($lts && echo "LTS ")release\n";
         return 0;
     else
         echo -e "${magenta}${bold}$latest${reset}\n";
-        echo -e "    Updated LTS version is available.";
+        echo -e "    Newer $($lts && echo "LTS ")version is available.";
         read -e -r -t 60 -p "    Continue with upgrade? (y/N) - " input;
     
         case "$input" in 
             [yY][eE][sS] | [yY])
                 echo -e "\nOk. Upgrading to ${magenta}${bold}$latest${reset} ...\n"
-            ;;
+                if ! $default; then
+                    read -e -r -t 60 -p "    Set new version as default? (y/N) - " def;
+                    case "$def" in
+                        [yY][eE][sS] | [yY])
+                            default=true
+                            echo -e "\nGot it. Setting default alias to ${magenta}${bold}$latest${reset} ...\n"
+                            ;;
+                        *)
+                            default=false
+                            echo -e "\nGot it. Keeping existing default alias (set to: ${blue}${bold}$(nvm version default)${reset}) ...\n"
+                    esac
+                fi
+                ;;
             *)
-                echo -e "\nAborted upgrade.\n";
+                echo -e "\nAborted upgrade.\n"
                 return 3
-            ;;
+                ;;
         esac
     fi
 
-    nvm use $current > /dev/null;
-    nvm install --lts --default --reinstall-packages-from=current > /dev/null || return 4;
+    nvm use $installed > /dev/null;
+    nvm install $($lts && echo "--lts ")$latest --reinstall-packages-from=current $($default && echo "--default") || return 4;
+    nvm use $latest
     nvm install-latest-npm > /dev/null;
  
-    echo -e "\n${bold}Node.js successfully upgraded ${reset} ${blue}${bold}$current${reset} → ${magenta}${bold}$latest${reset}\n"
+    echo -e "\n${bold}Node.js successfully upgraded ${reset} ${blue}${bold}$installed${reset} → ${magenta}${bold}$latest${reset}\n"
+}
+
+nvm-upgrade-lts() {
+    nvm-upgrade --lts
 }
 
 # extract: no more randomly guessing option combos
