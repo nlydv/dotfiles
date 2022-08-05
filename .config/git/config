@@ -2,12 +2,12 @@
 #
 #   Global git config.
 #
-#     Per-repo configs will override any parameters set
-#     here. This config overrides paramaters in system
-#     config (whereever that may or may not be located).
-#     According to git manpage, that order of precedence
-#     now also searches for a global/user config file at
-#     ~/.config/git/config in addition to ~/.gitconfig
+#   Per-repo configs will override any parameters set
+#   here. This config overrides paramaters in system
+#   config (whereever that may or may not be located).
+#   According to git manpage, that order of precedence
+#   now also searches for a global/user config file at
+#   ~/.config/git/config in addition to ~/.gitconfig
 #
 #   Neel Yadav
 #   07.04.2021
@@ -54,8 +54,8 @@
 
 [format]
     pretty = "format:%C(auto)%h%d%n%nAuthor:  %Cblue%an%C(auto) <%ae>%nTime:    %Cblue%ad%C(auto) (%ar)%nSigner: %C(always,green)% GK%C(auto)%n%n%>(4)%>|(4)%s%n%n%-N%n"
+# ————— Include for dotfiles repo ————————
+# (see "dot.config" file header)
 
-# Special include for dotfiles repo.
-# More info in sibling "dot.config" file header
 [includeIf "gitdir/i:~/Git/dotfiles.git"]
     path = dot.config

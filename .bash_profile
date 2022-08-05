@@ -2,11 +2,11 @@
 #
 #   ~/.bash_profile (macOS)
 #
-#     Bash startup file for interactive login shells.
-#     So basically I gather that you ought to use this startup
-#     script to hold extra commands that you'd want only login
-#     shells specifically to run in addition to everything in
-#     ~/.bashrc (by sourcing .bashrc from here also).
+#   Bash startup file for interactive login shells.
+#   So basically I gather that you ought to use this startup
+#   script to hold extra commands that you'd want only login
+#   shells specifically to run in addition to everything in
+#   .bashrc (by sourcing ~/.bashrc from here also).
 #
 #   Neel Yadav
 #   06.29.2021

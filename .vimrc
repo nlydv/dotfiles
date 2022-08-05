@@ -3,8 +3,8 @@
 "   Compatibility of functionality with my terminal
 "   app and keymap settings.
 "
-"     Neel Yadav
-"     06.29.2021
+"   Neel Yadav
+"   06.29.2021
 
 
 " Vim startup and file remapping
@@ -22,9 +22,9 @@ Plugin 'nathangrigg/vim-beancount'   " beancount file syntax
 call vundle#end()                    " required
 filetype plugin indent on            " required
 
-" Tell Vim to use sane tab/spacing rules 
-set tabstop=4 
-set shiftwidth=4 
+" Tell Vim to use sane tab/spacing rules
+set tabstop=4
+set shiftwidth=4
 set expandtab
 
 " —————————————————————————————————————————————— "

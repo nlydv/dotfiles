@@ -1,4 +1,4 @@
-# ~/.pythonrc (macOS)
+# ~/.config/pythonrc (macOS)
 #
 #   A simple python interpreter config file that enables
 #   tab completion and moves the interactive REPL command
@@ -12,8 +12,8 @@
 #   commands seemed to be commonly recommended based off a
 #   quick google search.
 #
-#     Neel Yadav
-#     04.07.2022
+#   Neel Yadav
+#   04.07.2022
 
 
 import os

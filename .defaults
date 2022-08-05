@@ -56,17 +56,17 @@ $global com.apple.springing.enabled -bool true
 # default or I had previously set this, pretty sure it's system default though.
 $global com.apple.springing.delay -float 0.25
 
-# Automatically hide and show the menu bar for full-screen windows (by defualt, can be
-# override on a per-app basis; see Nova)
+# Automatically hide and show the menu bar for full-screen windows (by defualt; can be
+# overriden on a per-app basis, see Nova setting further down for example)
 $global AppleMenuBarVisibleInFullscreen -bool false
 
 
 # ————— FINDER ———————————————————————————
 
-# Show dotfiles
+# Show hidden dotfiles and OS-specific files
 $write com.apple.finder AppleShowAllFiles -bool true
 
-# For visible path bar, start from $HOME
+# For visible path bar, show path relative to $HOME dir, if applicable
 $write com.apple.finder PathBarRootAtHome -bool true
 
 # Search current folder by default
@@ -84,7 +84,7 @@ $app Safari ShowOverlayStatusBar -bool true
 # Prevent Safari from opening ‘safe’ files automatically after downloading
 $app Safari AutoOpenSafeDownloads -bool false
 
-# Enable “Do Not Track”
+# Send “Do Not Track” HTTP headers... as if sites even notice; see: Evil Bit (w.wiki/3Dhd)
 $app Safari SendDoNotTrackHTTPHeader -bool true
 
 # Use custom user agent styles
@@ -92,7 +92,7 @@ $app Safari UserStyleSheetEnabled -bool true
 $app Safari UserStyleSheetLocationURLString -string "$HOME/Archive/Web Browser/custom-agent.css"
 
 # Enable sourcing locally installed fonts (if available) despite fingerprinting risks
-# (doesn't seem to do what the name implies...)
+# (doesn't work as implied... might req. disabling local file restrictions in Develop menu)
 $app Safari WebKitPreferences.shouldAllowUserInstalledFonts -bool true
 
 # Enable developer settings and things
@@ -100,7 +100,7 @@ $app Safari IncludeDevelopMenu -bool true
 $app Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
 $app Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
 
-# Access web inspector in non-Safari webkit renderings
+# Access web inspector in non-Safari webkit renderings (e.g. web views in native mac apps)
 $global WebKitDeveloperExtras -bool true
 
 
@@ -115,7 +115,7 @@ $app Terminal FocusFollowsMouse -bool true
 # Open blank, untitled txt file on start instead of file chooser
 $app TextEdit NSShowAppCentricOpenPanelInsteadOfUntitledFile -bool false
 
-# Default to plain text format rather than rich text
+# Default to using plain text format instead of rich text in new documents
 $app TextEdit RichText -bool false
 
 
@@ -152,6 +152,8 @@ $write org.gpgtools.gpgservices RecipientWindowControllerSymetricEncryption -boo
 
 # ————— NOVA —————————————————————————————
 
-# Make menu bar always visible in fullscreen. Nova is one of the few apps that I actually use in fullscreen mode and its dense menu options are more frequently accessed. Moreover, it just kinda looks "wrong" when its not visible for this app.
+# Make menu bar always visible in fullscreen. Nova is one of the few apps that I actually
+# use in fullscreen mode and its dense menu options are more frequently accessed. Moreover,
+# it just kinda looks "wrong" when its not visible for this app.
 $app Nova AppleMenuBarVisibleInFullscreen -bool true
 

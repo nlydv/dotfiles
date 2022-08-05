@@ -1,18 +1,20 @@
-# shellcheck shell=bash
+# shellcheck shell=bash disable=SC2155,SC1090,SC1091
 #
 #   ~/.bashrc (macOS)
 #
-#     Startup bash file for interactive non-login shells.
-#     Apparently some OS' will run ~/.bash_profile for all login
-#     shells. This is sourced by ~/.bash_profile anyways but is
-#     otherwise run automatically by the system on interactive
-#     shell invocation. So most stuff goes (or is sourced) here.
+#   Startup bash file for interactive non-login shells.
+#   Apparently some OS' will run ~/.bash_profile for all login
+#   shells. This is sourced by ~/.bash_profile anyways but is
+#   otherwise run automatically by the system on interactive
+#   shell invocation. So most stuff goes (or is sourced) here.
 #
 #   Neel Yadav
 #   06.29.2021
 
 
-# ————Basic startup checks & sourcing other dotfiles————————
+
+# ————— Basic Startup Checks, Sourcing Other Dotfiles ————————————————
+# ————————————————————————————————————————————————————————————————————
 
 # If not running interactively, don't do anything
 if [[ -z "$PS1" ]]; then
@@ -34,13 +36,13 @@ shopt -s checkwinsize
 # Source dedicated file for custom command prompt
 [[ -r $HOME/.bash/prompt ]]    && source $HOME/.bash/prompt
 
-# Source private env vars and configs that aren't publicly version controlled
 [[ -r $HOME/.bash/env ]]       && source $HOME/.bash/env
+# Source private env vars and configs that aren't version controlled
 
-# ——————————————————————————————————————————————————————————
 
 
-# ————SSH-Agent startup connection————————
+# ————— SSH-Agent Startup Connection —————————————————————————————————
+# ————————————————————————————————————————————————————————————————————
 
 export APPLE_SSH_ADD_BEHAVIOR="macos"
 
@@ -78,6 +80,7 @@ live_agent () {
     fi
 }
 
+# shellcheck disable=SC2086
 if ! live_agent &> /dev/null; then
     ssh_env="$HOME/.ssh/agent.env"
     [[ -e $ssh_env ]] || touch $ssh_env
@@ -90,6 +93,7 @@ if ! live_agent &> /dev/null; then
     unset _status
 fi
 
+
 # reference material:
 #   https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh
 #   https://github.com/mattbostock/dotfiles/blob/master/ssh-agent-setup.sh
@@ -98,15 +102,16 @@ fi
 #   1 = agent running, no keys
 #   2 = agent not running
 
-# ————————————————————————————————————————
 
 
-# ————Setting PATH locations & priortizing non-system executables————————
+# ————— $PATH Locations, Prioritize Non-System Executables ———————————
+# ————————————————————————————————————————————————————————————————————
+# @TODO split up and organize this section into relevant parts
 
 # Include GO bin
 [[ -r $HOME/go/bin ]] && export PATH="$HOME/go/bin:$PATH"
 
-# Homebrew Environment Variables (see `brew help shellenv`)
+# Homebrew environment variables (see `brew help shellenv`)
 if [[ $(arch) == "arm64" ]]; then
     export BREW="/opt/homebrew"
 else
@@ -143,14 +148,14 @@ export GEM_HOME="$BREW/lib/ruby/gems/3.1.0"
 export PATH="$GEM_HOME/bin:$PATH"
 export PATH="$BREW/opt/ruby/bin:$PATH"
 
-# backward's compatibility for older gems in macOS Catalina and later (10.15+)
 export SDKROOT=$(xcrun --show-sdk-path)
+# Backward's compatibility for older gems in macOS Catalina and later (10.15+)
 
-# Python Environment Variables and Prioritize Unversion Python3 Execs
+# Python environment variables and prioritize unversioned Python3 execs
 export PATH="$BREW/opt/python@3.9/libexec/bin:$PATH"
 export PYTHONSTARTUP="$HOME/.config/pythonrc"
 
-# PHP & PHPBrew & Composer Environment Variables
+# PHP & PHPBrew & Composer environment variables
 export COMPOSER_HOME="$HOME/.composer"
 export PATH="$COMPOSER_HOME/vendor/bin:$PATH"
     #export PATH="/opt/homebrew/opt/php@7.4/bin:$PATH"
@@ -176,14 +181,15 @@ export PATH="$HOME/.mint/bin:$PATH"
 export PATH="$PATH:$HOME.spicetify"
 
 # Dedupe $PATH Directories
+# shellcheck disable=SC2155,SC2046,SC2005,SC2086
 export PATH=$(echo $(echo $PATH | awk -v RS=: -v ORS=: '!($0 in a) {a[$0]; print}') | sed -E 's/ +:$//g')
 
-# ———————————————————————————————————————————————————————————————————————
 
 
-# ————Shell Optimizations————————
+# ————— Clean $HOME == Happy $HOME ———————————————————————————————————
+# ————————————————————————————————————————————————————————————————————
 
-# Reduce auto-generated dotfile clutter in $HOME + related opts
+# Reducing auto-generated $HOME clutter from Bash itself
 shopt -s cmdhist
 shopt -s lithist
 
@@ -195,6 +201,7 @@ export SHELL_SESSION_DIR="$HISTDIR/bash_sessions"
 export SHELL_SESSION_FILE="$SHELL_SESSION_DIR/$TERM_SESSION_ID.session"
 [[ ! -e $SHELL_SESSION_DIR ]] && mkdir -p $SHELL_SESSION_DIR
 
+# Redirect external programs' $HOME clutter
 export LESSHISTFILE="$HISTDIR/lesshist"
 export NODE_REPL_HISTORY="$HISTDIR/node_repl_history"
 export SQLITE_HISTORY="$HISTDIR/sqlite_history"
@@ -203,10 +210,10 @@ export SQLITE_HISTORY="$HISTDIR/sqlite_history"
 alias wget='wget --hsts-file ~/.history/wget-hsts'
 alias alpine='alpine -p "$HOME/.config/alpine/pinerc" -pwdcertdir "$HOME/.config/alpine/smime"'
 
-# ———————————————————————————————
 
 
-# ————Other————————
+# ————— Other/Misc ———————————————————————————————————————————————————
+# ————————————————————————————————————————————————————————————————————
 
 # Enable CLI completions via "bash-completion@2" Homebrew formula
 #[[ -r "$BREW/etc/profile.d/bash_completion.sh" ]] && . "$BREW/etc/profile.d/bash_completion.sh"

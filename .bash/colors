@@ -2,16 +2,16 @@
 #
 #   ~/.bash/colors
 #
-#     ANSI color code variables.
-#     Convenient escape characters for applying color/styling to
-#     output text in the terminal. Used in ~/.bash/prompt and
-#     else where; sourced by ~/.bashrc.
+#   ANSI color code variables.
+#   Convenient escape characters for applying color/styling to
+#   output text in the terminal. Used in ~/.bash/prompt and
+#   else where; sourced by ~/.bashrc.
 #
 #   Neel Yadav
 #   07.03.2021
 
 
-# Basic escape code guide:
+# ————— BASIC ESCAPE CODE GUIDE ——————————
 #       30's  =>  foreground normal
 #       90's  =>  foreground bright
 #       40's  =>  background normal
@@ -21,67 +21,72 @@
 #   [y];[x]m  =>  use prior, apply both x & y
 
 
-reset="\e[0m"
+# ————— TEXT STYLES ——————————————————————
 
-# TEXT STYLES
+export reset="\e[0m"
+export bold="\e[1m"
+export dim="\e[2m"
+export italic="\e[3m"
+export under="\e[4m"
+export blink="\e[5m"
+export reverse="\e[7m"
+export invisible="\e[8m"
+export strike="\e[9m"
 
-bold="\e[1m"
-dim="\e[2m"
-italic="\e[3m"
-under="\e[4m"
-blink="\e[5m"
-reverse="\e[7m"
-invisible="\e[8m"
-strike="\e[9m"
+# ————— FOREGROUND ———————————————————————
 
-# FOREGROUND COLORS
+export black="\e[0;30m"
+export red="\e[0;31m"
+export green="\e[0;32m"
+export yellow="\e[0;33m"
+export blue="\e[0;34m"
+export magenta="\e[0;35m"
+export cyan="\e[0;36m"
+export white="\e[0;37m"
 
-black="\e[0;30m"
-red="\e[0;31m"
-green="\e[0;32m"
-yellow="\e[0;33m"
-blue="\e[0;34m"
-magenta="\e[0;35m"
-cyan="\e[0;36m"
-white="\e[0;37m"
+# ————— BRIGHT FOREGROUND ————————————————
+#   The terms light & bright are used interchangably and the l-color
+#   variables (lblue, lred, etc.) use l for "light" as a prefix instead
+#   of b for "bright" because it's easier to distinguish.
 
-# BRIGHT FOREGROUND COLORS
-# The terms light & bright are used interchangably and the l-color
-# variables (lblue, lred, etc.) use l for "light" as a prefix instead
-# of b for "bright" because it's easier to distinguish.
+export lblack="\e[0;90m"
+export lred="\e[0;91m"
+export lgreen="\e[0;92m"
+export lyellow="\e[0;93m"
+export lblue="\e[0;94m"
+export lmagenta="\e[0;95m"
+export lcyan="\e[0;96m"
+export lwhite="\e[0;97m"
 
-lblack="\e[0;90m"
-lred="\e[0;91m"
-lgreen="\e[0;92m"
-lyellow="\e[0;93m"
-lblue="\e[0;94m"
-lmagenta="\e[0;95m"
-lcyan="\e[0;96m"
-lwhite="\e[0;97m"
+# ————— BACKGROUND ———————————————————————
 
-# BACKGROUND COLORS
+export black_bg="\e[40m"
+export red_bg="\e[41m"
+export green_bg="\e[42m"
+export yellow_bg="\e[43m"
+export blue_bg="\e[44m"
+export magenta_bg="\e[45m"
+export cyan_bg="\e[46m"
+export white_bg="\e[47m"
 
-black_bg="\e[40m"
-red_bg="\e[41m"
-green_bg="\e[42m"
-yellow_bg="\e[43m"
-blue_bg="\e[44m"
-magenta_bg="\e[45m"
-cyan_bg="\e[46m"
-white_bg="\e[47m"
+# ————— BRIGHT BACKGROUND ————————————————
 
-# BRIGHT BACKGROUND COLORS
+export lblack_bg="\e[100m"
+export lred_bg="\e[101m"
+export lgreen_bg="\e[102m"
+export lyellow_bg="\e[103m"
+export lblue_bg="\e[104m"
+export lmagenta_bg="\e[105m"
+export lcyan_bg="\e[106m"
+export lwhite_bg="\e[107m"
 
-lblack_bg="\e[100m"
-lred_bg="\e[101m"
-lgreen_bg="\e[102m"
-lyellow_bg="\e[103m"
-lblue_bg="\e[104m"
-lmagenta_bg="\e[105m"
-lcyan_bg="\e[106m"
-lwhite_bg="\e[107m"
 
-### TEXT STYLE EXAMPLES ###
+# ———————————————————————————————————————————————————————————————————— #
+# ————— COLOR/STYLE USAGE EXAMPLES ——————————————————————————————————— #
+# ———————————————————————————————————————————————————————————————————— #
+
+
+# ————— BASIC ————————————————————————————
 
 ## Bold Text
 # echo -e "${red}${bold}Such red, much bold.${reset}"
@@ -93,7 +98,7 @@ lwhite_bg="\e[107m"
 # echo -e "${blue}${blink}Such blue, much blink.${reset}"
 
 
-### FORE/BACKGROUND & STYLE COMBOS ###
+# ————— FORE/BACKGROUND COMBOS ———————————
 
 ## Black text, no style, white background
 # echo -e "${black}${white_bg}Black on white${reset}"
@@ -105,7 +110,7 @@ lwhite_bg="\e[107m"
 # echo -e "${yellow}${bold}${italic}${blink}${strike}${lgreen_bg}Turn the dial up to 'information overload'.${reset}"
 
 
-### SEGMENTED EXAMPLES ###
+# ————— SEGMENTED RESETS —————————————————
 
 ## Italics red text, emphasis with underline and bold
 # echo -e "${red}${italic}Italics red text, ${reverse}${bold}emphasis${reset} ${red}${italic}with ${bold}bold${reset} ${red}${italic}and ${reverse}highlight${reset}"
