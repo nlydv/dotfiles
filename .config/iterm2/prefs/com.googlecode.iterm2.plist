@@ -1148,6 +1148,8 @@
 	<true/>
 	<key>DisableFullscreenTransparency</key>
 	<true/>
+	<key>DisableMetalWhenIdle</key>
+	<true/>
 	<key>DoubleClickPerformsSmartSelection</key>
 	<true/>
 	<key>DrawBottomLineForHorizontalTabBar</key>
@@ -1324,7 +1326,9 @@ Marks and Annotations.Next Mark</string>
 	<key>IRMemory</key>
 	<integer>4</integer>
 	<key>MetalRedrawPeriod</key>
-	<real>0.5</real>
+	<real>120</real>
+	<key>MetalSlowFrameRate</key>
+	<real>60</real>
 	<key>MinimalEdgeDragSize</key>
 	<real>10</real>
 	<key>MinimalSplitPaneDividerProminence</key>
@@ -8007,6 +8011,8 @@ Marks and Annotations.Next Mark</string>
 	<false/>
 	<key>ShowFullScreenTabBar</key>
 	<true/>
+	<key>ShowMetalFPSmeter</key>
+	<false/>
 	<key>ShowWindowTitleWhenTabBarInvisible</key>
 	<false/>
 	<key>SmartPlacement</key>

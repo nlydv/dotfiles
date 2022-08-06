@@ -60,6 +60,13 @@ $global com.apple.springing.delay -float 0.25
 # overriden on a per-app basis, see Nova setting further down for example)
 $global AppleMenuBarVisibleInFullscreen -bool false
 
+# Open each app's little manual booklet (Help Viewer), as non-floating windows (i.e.
+# normal window behavior when not focused by being displayed behind active window)
+$write com.apple.helpviewer DevMode -bool true
+
+# Automatically turn on keyboard backlight in dimly lit surroundings
+$write com.apple.BezelServices kDim -bool true
+
 
 # ————— FINDER ———————————————————————————
 
@@ -76,7 +83,20 @@ $write com.apple.finder FXDefaultSearchScope -string "SCcf"
 $write com.apple.finder FXPreferredViewStyle -string "icnv"
 
 
+# ————— QUICK LOOK ———————————————————————
+
+# Close an open quick look window when switching focus to different app
+$write com.apple.finder QLHidePanelOnDeactivate -bool true
+
+# Make selected text in quick look windows to behave as expected (e.g. ⌘C actually copies)
+$write com.apple.finder QLEnableTextSelection -bool true
+
+
 # ————— SAFARI ———————————————————————————
+
+# Set homepage to the Safari's default New Tab Page (or "Start Page" as Apple calls it),
+# for some reason this isn't an explicit option in Safari's preferences
+$app Safari HomePage -string "favorites://"
 
 # Display the small floating link preview bar in the bottom left when hovering on link
 $app Safari ShowOverlayStatusBar -bool true
@@ -84,12 +104,15 @@ $app Safari ShowOverlayStatusBar -bool true
 # Prevent Safari from opening ‘safe’ files automatically after downloading
 $app Safari AutoOpenSafeDownloads -bool false
 
+# Make Safari's find bar (⌘F) default to matching as "Contains" rather than "Starts with"
+$app Safari FindOnPageMatchesWordStartsOnly -bool false
+
 # Send “Do Not Track” HTTP headers... as if sites even notice; see: Evil Bit (w.wiki/3Dhd)
 $app Safari SendDoNotTrackHTTPHeader -bool true
 
 # Use custom user agent styles
 $app Safari UserStyleSheetEnabled -bool true
-$app Safari UserStyleSheetLocationURLString -string "$HOME/Archive/Web Browser/custom-agent.css"
+# $app Safari UserStyleSheetLocationURLString -string "$HOME/Archive/Web Browser/custom-agent.css"
 
 # Enable sourcing locally installed fonts (if available) despite fingerprinting risks
 # (doesn't work as implied... might req. disabling local file restrictions in Develop menu)

@@ -52,10 +52,46 @@
     abbrevCommit = true
     date = "format:%b %d, %Y  %-l:%M %p %Z"
 
-[format]
-    pretty = "format:%C(auto)%h%d%n%nAuthor:  %Cblue%an%C(auto) <%ae>%nTime:    %Cblue%ad%C(auto) (%ar)%nSigner: %C(always,green)% GK%C(auto)%n%n%>(4)%>|(4)%s%n%n%-N%n"
 # ————— Include for dotfiles repo ————————
 # (see "dot.config" file header)
 
 [includeIf "gitdir/i:~/Git/dotfiles.git"]
     path = dot.config
+
+# ————— External diff tool ———————————————
+
+[core]
+   pager = diff-so-fancy | less --tabs=4 -RFX
+
+[interactive]
+   diffFilter = diff-so-fancy --patch
+
+# ————— Custom UI & color configs ————————
+
+[format]
+    pretty = "format:%C(auto)%h%d%n%nAuthor:  %Cblue%an%C(auto) <%ae>%nTime:    %Cblue%ad%C(auto) (%ar)%nSigner: %C(always,green)% GK%C(auto)%n%n%w(80,4)%B%n%n%-N%n"
+
+[color]
+    ui = auto
+
+[diff-so-fancy]
+    markEmptyLines = false
+
+[color "diff-highlight"]
+	oldNormal = red
+	oldHighlight = red bold 52
+	newNormal = green
+	newHighlight = green bold 22
+
+[color "diff"]
+	meta = 0 reverse white bold
+	frag = blue bold
+	func = magenta bold
+	commit = yellow
+	old = red
+	new = green
+    whitespace = red reverse
+
+[add "interactive"]
+    useBuiltin = false
+

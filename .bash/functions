@@ -142,11 +142,18 @@ nvm-upgrade () {
         esac
     fi
 
-    nvm use $installed > /dev/null;
-    nvm install $($lts && echo "--lts ")$latest --reinstall-packages-from=current $($default && echo "--default") || return 4;
-    nvm use $latest
-    nvm install-latest-npm > /dev/null;
- 
+    $lts && alias="lts/*" || alias="node"
+    [[ $installed == "N/A" ]] && reinstall="default" || reinstall=$installed
+
+    nvm install $($lts && echo "--lts ")$alias --reinstall-packages-from=$reinstall --latest-npm || return 4
+    $default && nvm alias default $alias
+    nvm use $alias || return 5
+    nvm install-latest-npm || return 6
+
+    if ! $default; then
+        nvm use $current || return 7
+    fi
+
     echo -e "\n${bold}Node.js successfully upgraded ${reset} ${blue}${bold}$installed${reset} → ${magenta}${bold}$latest${reset}\n"
 }
 
@@ -190,10 +197,21 @@ extract () {
 # Shortcut command for using `du` to get real sizes of files/directories. orig an alias
 
 sizes () {
-    if [[ $# -eq 0 ]]; then
-        sudo du -h -s "$PWD"
+    if [[ $# -lt 2 ]]; then
+        if [[ $1 == "." ]]; then
+            sudo du -h -s "$PWD" | sort -h
+        elif [[ $# -eq 0 ]]; then
+            echo -e "${bold}${under}${PWD}${reset}"
+            sudo du -h -s -c {,.[^.]}* 2> /dev/null | sort -h
+        elif [[ -d "$1" ]]; then
+            echo -e "${bold}${under}$(readlink -f $1)${reset}"
+            sudo du -h -s -c "$1"/{,.[^.]}* 2> /dev/null | sort -h
+        else
+            sudo du -h -s "$1" | sort -h
+        fi
     else
-        sudo du -h -s "$@" | sort -h
+        #echo -e "${bold}${under}${PWD}${reset}"
+        sudo du -h -s -c "$@" | sort -h
     fi
 }
 

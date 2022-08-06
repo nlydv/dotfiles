@@ -131,12 +131,6 @@ export HOMEBREW_NO_INSTALL_UPGRADE=1
 # Homebrew global bundle dump file location
 export HOMEBREW_BUNDLE_FILE="$HOME/Archive/Installed/Brewfile-$(date +%y%m%d)"
 
-# Homebrew "Command Not Found" CLI utility ( see: https://t.ly/2mPt )
-HB_CNF_HANDLER="$BREW_REPO/Library/Taps/homebrew/homebrew-command-not-found/handler.sh"
-if [ -f "$HB_CNF_HANDLER" ]; then
-    source "$HB_CNF_HANDLER";
-fi
-
 # OpenSSL Keg-Only Paths
 export PATH="$BREW/opt/openssl@1.1/bin:$PATH"
 
@@ -180,6 +174,10 @@ export PATH="$HOME/.mint/bin:$PATH"
 # Spicetify - Tools to customize/modify Spotify desktop client
 export PATH="$PATH:$HOME.spicetify"
 
+# Bun [https://bun.sh] - Promising new JS runtime/npm client using JavaScriptCore (WebKit)
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
 # Dedupe $PATH Directories
 # shellcheck disable=SC2155,SC2046,SC2005,SC2086
 export PATH=$(echo $(echo $PATH | awk -v RS=: -v ORS=: '!($0 in a) {a[$0]; print}') | sed -E 's/ +:$//g')
@@ -188,6 +186,15 @@ export PATH=$(echo $(echo $PATH | awk -v RS=: -v ORS=: '!($0 in a) {a[$0]; print
 
 # ————— Clean $HOME == Happy $HOME ———————————————————————————————————
 # ————————————————————————————————————————————————————————————————————
+
+# Asserting default XDG spec for thoroughness
+## for a practical TL;DR of XDG_BASEDIRs, check this brief blog
+## post by ... *checks about page* ... Max from Hamburg, Germany:
+## https://maex.me/2019/12/the-power-of-the-xdg-base-directory-specification/
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
 
 # Reducing auto-generated $HOME clutter from Bash itself
 shopt -s cmdhist
@@ -216,8 +223,6 @@ alias alpine='alpine -p "$HOME/.config/alpine/pinerc" -pwdcertdir "$HOME/.config
 # ————————————————————————————————————————————————————————————————————
 
 # Enable CLI completions via "bash-completion@2" Homebrew formula
-#[[ -r "$BREW/etc/profile.d/bash_completion.sh" ]] && . "$BREW/etc/profile.d/bash_completion.sh"
-
 if type brew &> /dev/null; then
     if [[ -r "$BREW/etc/profile.d/bash_completion.sh" ]]; then
         source "$BREW/etc/profile.d/bash_completion.sh"

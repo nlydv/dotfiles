@@ -19,7 +19,7 @@ alias tth='terminal-to-html'
 
 # Aliases 2 small 2 function
 alias reload-shell='clear;[[ -r ~/.bash_profile ]] && . ~/.bash_profile || echo "err"'
-alias fresh-brew='sudo -v && brew update && brew upgrade && brew upgrade --cask && brew autoremove && brew cleanup --prune 0'
+alias fresh-brew='sudo -v && brew update && brew upgrade && brew upgrade --cask; brew autoremove && brew cleanup --prune 0'
 alias path-list='echo $PATH | sed -E "s/:/\n/g"'
 
 # El-iases
