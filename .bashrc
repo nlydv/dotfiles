@@ -25,19 +25,19 @@ fi
 shopt -s checkwinsize
 
 # Source personal bash aliases
-[[ -r $HOME/.bash/aliases ]]   && source $HOME/.bash/aliases
+[[ -r "$HOME/.bash/aliases" ]]   && source "$HOME/.bash/aliases"
 
 # Source personal bash functions
-[[ -r $HOME/.bash/functions ]] && source $HOME/.bash/functions
+[[ -r "$HOME/.bash/functions" ]] && source "$HOME/.bash/functions"
 
 # Source my ANSI color/style escape code vars (used in .bash/prompt)
-[[ -r $HOME/.bash/colors ]]    && source $HOME/.bash/colors
+[[ -r "$HOME/.bash/colors" ]]    && source "$HOME/.bash/colors"
 
 # Source dedicated file for custom command prompt
-[[ -r $HOME/.bash/prompt ]]    && source $HOME/.bash/prompt
+[[ -r "$HOME/.bash/prompt" ]]    && source "$HOME/.bash/prompt"
 
-[[ -r $HOME/.bash/env ]]       && source $HOME/.bash/env
 # Source private env vars and configs that aren't version controlled
+[[ -r "$HOME/.bash/env" ]]       && source "$HOME/.bash/env"
 
 
 
@@ -148,8 +148,8 @@ export GEM_HOME="$BREW/lib/ruby/gems/3.1.0"
 export PATH="$GEM_HOME/bin:$PATH"
 export PATH="$BREW/opt/ruby/bin:$PATH"
 
-export SDKROOT=$(xcrun --show-sdk-path)
 # Backward's compatibility for older gems in macOS Catalina and later (10.15+)
+export SDKROOT="$(xcrun --show-sdk-path)"
 
 # Python environment variables and prioritize unversioned Python3 execs
 export PATH="$BREW/opt/python@3.9/libexec/bin:$PATH"
@@ -160,7 +160,7 @@ export COMPOSER_HOME="$HOME/.composer"
 export PATH="$COMPOSER_HOME/vendor/bin:$PATH"
     #export PATH="/opt/homebrew/opt/php@7.4/bin:$PATH"
     #export PATH="/opt/homebrew/opt/php@7.4/sbin:$PATH"
-[[ -e ~/.phpbrew/bashrc ]] && . $HOME/.phpbrew/bashrc
+[[ -e "$HOME/.phpbrew/bashrc" ]] && . "$HOME/.phpbrew/bashrc"
 
 # NVM - NodeJS & NPM Version Manager
 export NVM_DIR="$HOME/.nvm"
@@ -199,7 +199,7 @@ export HISTFILE="$HISTDIR/bash_history"
 
 export SHELL_SESSION_DIR="$HISTDIR/bash_sessions"
 export SHELL_SESSION_FILE="$SHELL_SESSION_DIR/$TERM_SESSION_ID.session"
-[[ ! -e $SHELL_SESSION_DIR ]] && mkdir -p $SHELL_SESSION_DIR
+[[ ! -e "$SHELL_SESSION_DIR" ]] && mkdir -p "$SHELL_SESSION_DIR"
 
 # Redirect external programs' $HOME clutter
 export LESSHISTFILE="$HISTDIR/lesshist"
@@ -219,18 +219,18 @@ alias alpine='alpine -p "$HOME/.config/alpine/pinerc" -pwdcertdir "$HOME/.config
 #[[ -r "$BREW/etc/profile.d/bash_completion.sh" ]] && . "$BREW/etc/profile.d/bash_completion.sh"
 
 if type brew &> /dev/null; then
-    if [[ -r "${BREW_PREFIX}/etc/profile.d/bash_completion.sh" ]]; then
-        source "${BREW_PREFIX}/etc/profile.d/bash_completion.sh"
+    if [[ -r "$BREW/etc/profile.d/bash_completion.sh" ]]; then
+        source "$BREW/etc/profile.d/bash_completion.sh"
     else
-        for COMPLETION in "${BREW_PREFIX}/etc/bash_completion.d/"*; do
-            [[ -r "${COMPLETION}" ]] && source "${COMPLETION}"
+        for COMPLETION in "$BREW/etc/bash_completion.d/"*; do
+            [[ -r "$COMPLETION" ]] && source "$COMPLETION"
         done
     fi
 fi
 
 # Other Completions (manually save completion output from non-brew tools here)
 for COMPLETION in /usr/local/etc/bash_completion.d/*; do
-    [[ -r "${COMPLETION}" ]] && source "${COMPLETION}"
+    [[ -r "$COMPLETION" ]] && source "$COMPLETION"
 done
 
 # GPG Pinentry Display (remote SSH, etc. pinentry redirect to orig local display)
@@ -247,6 +247,5 @@ export TZ=America/Chicago
 # Miscellaneous env variables
 export LINES
 export COLUMNS
-export TZ=America/Chicago
 export EDITOR=vim
 export NODE_NO_WARNINGS=1
