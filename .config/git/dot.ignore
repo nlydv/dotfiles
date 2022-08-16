@@ -80,6 +80,7 @@ projects/
 .npm/
 .nvm/
 .ssh/
+.vim/
 
 .brewfile
 

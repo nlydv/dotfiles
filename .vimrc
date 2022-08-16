@@ -17,6 +17,7 @@ set rtp+=~/.vim/bundle/Vundle.vim    " set the runtime path to include Vundle
 call vundle#begin()                  " and initialize
 
 Plugin 'VundleVim/Vundle.vim'        " let Vundle manage Vundle, required
+Plugin 'chriskempson/base16-vim'     " to use base16-tomorrow-night theme
 Plugin 'nathangrigg/vim-beancount'   " beancount file syntax
 
 call vundle#end()                    " required
