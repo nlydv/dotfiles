@@ -44,3 +44,6 @@ alias paste='echo "$(pbpaste)"'
 #alias wget='wget --hsts-file ~/.history/wget-hsts'
 #alias alpine='alpine -p "$HOME/.config/alpine/pinerc" -pwdcertdir "$HOME/.config/alpine/smime"'
 
+# Misc. shortcut commands
+alias npm-scripts='cat "$(dirname "$(npm root)")/package.json" 2> /dev/null | jq .scripts'
+
