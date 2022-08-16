@@ -47,6 +47,7 @@
     recent = show --compact-summary --name-status
     uncommit = reset --soft HEAD~1
     delcommit = reset --hard HEAD~1
+    hardreset = reset --hard HEAD
 
 [log]
     abbrevCommit = true
@@ -58,7 +59,8 @@
 [includeIf "gitdir/i:~/Git/dotfiles.git"]
     path = dot.config
 
-# ————— External diff tool ———————————————
+# ————— External TUI formatting tool —————
+# diff-so-fancy
 
 [core]
    pager = diff-so-fancy | less --tabs=4 -RFX
@@ -66,16 +68,45 @@
 [interactive]
    diffFilter = diff-so-fancy --patch
 
+[diff-so-fancy]
+   markEmptyLines = false
+
+# temp setting to workaround bug with diff-so-fancy and Git v2.37
+# (see github issue "so-fancy/diff-so-fancy#437")
+[add "interactive"]
+    useBuiltin = false
+
+# ————— External GUI diff/merge tool —————
+# Kaleidoscope (for itegration with Tower, my main GUI git client)
+
+[diff]
+   tool = Kaleidoscope
+
+[difftool]
+   prompt = false
+
+[difftool "Kaleidoscope"]
+   cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+
+[merge]
+   tool = Kaleidoscope
+
+[mergetool]
+   keepBackup = true
+   prompt = false
+
+[mergetool "Kaleidoscope"]
+   cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+   trustExitCode = true
+
 # ————— Custom UI & color configs ————————
+# personal prefs for built-in git cmds, also effects diff-so-fancy
 
 [format]
     pretty = "format:%C(auto)%h%d%n%nAuthor:  %Cblue%an%C(auto) <%ae>%nTime:    %Cblue%ad%C(auto) (%ar)%nSigner: %C(always,green)% GK%C(auto)%n%n%w(80,4)%B%n%n%-N%n"
 
 [color]
     ui = auto
-
-[diff-so-fancy]
-    markEmptyLines = false
 
 [color "diff-highlight"]
 	oldNormal = red
@@ -91,7 +122,3 @@
 	old = red
 	new = green
     whitespace = red reverse
-
-[add "interactive"]
-    useBuiltin = false
-
