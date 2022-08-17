@@ -1,0 +1,182 @@
+#!/usr/bin/env bash
+#
+# ~/.defaults (macOS)
+#
+#   Store of macOS' settings hidden behind "defaults" CLI
+#
+#   These "non-default defaults" configs aren't really here to
+#   be used or accessed programatically, but rather just for
+#   documentation and reference purposes. I figured I should
+#   start writing down all the minor little switches I have, or
+#   in the future, will flip here and there so I know what my
+#   personal "defaults" are that I've come to expect.
+#
+#   I guess these are just shell commands and executing this
+#   file would just revert back any deviated settings. So I
+#   added a bash shebang up top but haven't added +x bit to
+#   avoid accidental executions.
+#
+#   Note: I didn't realize that the concept of this kind of
+#   macos specific dotfile was sort of a niche thing until
+#   after learning that some folks have been documenting and
+#   uncovering a lot of these `defaults` and related swithes
+#   embedded in the OS. Credit and thanks to Mathias Bynens
+#   from whose dotfiles repo I discovered many of the below
+#   tricks and configs (see https://mths.be/macos for ref)!
+#
+#   Neel Yadav
+#   04.08.2022
+
+
+write="defaults write"
+system="sudo $write"
+global="$write -g"
+app="$write -app"
+
+
+
+# ————————————————————————————————————————
+# ————— A P P L E ————————————————————————
+# ————————————————————————————————————————
+
+
+# ————— GLOBAL ———————————————————————————
+
+# Reveal IP address, hostname, OS version, etc. when clicking the clock in login screen
+$system /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
+
+# Turn off capitalization autocorrect in all native text editors cuz it's annoying
+$global NSAutomaticCapitalizationEnabled -bool false
+
+# Enable spring-loaded directory opening when hovering dragged file over folder
+$global com.apple.springing.enabled -bool true
+
+# Change delay for directory springing to half the default(?) delay time in seconds
+# The value was set to 0.5 as of writing, but I'm not sure if that is the system
+# default or I had previously set this, pretty sure it's system default though.
+$global com.apple.springing.delay -float 0.25
+
+# Automatically hide and show the menu bar for full-screen windows (by defualt; can be
+# overriden on a per-app basis, see Nova setting further down for example)
+$global AppleMenuBarVisibleInFullscreen -bool false
+
+# Open each app's little manual booklet (Help Viewer), as non-floating windows (i.e.
+# normal window behavior when not focused by being displayed behind active window)
+$write com.apple.helpviewer DevMode -bool true
+
+# Automatically turn on keyboard backlight in dimly lit surroundings
+$write com.apple.BezelServices kDim -bool true
+
+
+# ————— FINDER ———————————————————————————
+
+# Show hidden dotfiles and OS-specific files
+$write com.apple.finder AppleShowAllFiles -bool true
+
+# For visible path bar, show path relative to $HOME dir, if applicable
+$write com.apple.finder PathBarRootAtHome -bool true
+
+# Search current folder by default
+$write com.apple.finder FXDefaultSearchScope -string "SCcf"
+
+# Always use Icon View (icnv) by default in Finder windows
+$write com.apple.finder FXPreferredViewStyle -string "icnv"
+
+
+# ————— QUICK LOOK ———————————————————————
+
+# Close an open quick look window when switching focus to different app
+$write com.apple.finder QLHidePanelOnDeactivate -bool true
+
+# Make selected text in quick look windows to behave as expected (e.g. ⌘C actually copies)
+$write com.apple.finder QLEnableTextSelection -bool true
+
+
+# ————— SAFARI ———————————————————————————
+
+# Set homepage to the Safari's default New Tab Page (or "Start Page" as Apple calls it),
+# for some reason this isn't an explicit option in Safari's preferences
+$app Safari HomePage -string "favorites://"
+
+# Display the small floating link preview bar in the bottom left when hovering on link
+$app Safari ShowOverlayStatusBar -bool true
+
+# Prevent Safari from opening ‘safe’ files automatically after downloading
+$app Safari AutoOpenSafeDownloads -bool false
+
+# Make Safari's find bar (⌘F) default to matching as "Contains" rather than "Starts with"
+$app Safari FindOnPageMatchesWordStartsOnly -bool false
+
+# Send “Do Not Track” HTTP headers... as if sites even notice; see: Evil Bit (w.wiki/3Dhd)
+$app Safari SendDoNotTrackHTTPHeader -bool true
+
+# Use custom user agent styles
+$app Safari UserStyleSheetEnabled -bool true
+# $app Safari UserStyleSheetLocationURLString -string "$HOME/Archive/Web Browser/custom-agent.css"
+
+# Enable sourcing locally installed fonts (if available) despite fingerprinting risks
+# (doesn't work as implied... might req. disabling local file restrictions in Develop menu)
+$app Safari WebKitPreferences.shouldAllowUserInstalledFonts -bool true
+
+# Enable developer settings and things
+$app Safari IncludeDevelopMenu -bool true
+$app Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+$app Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
+
+# Access web inspector in non-Safari webkit renderings (e.g. web views in native mac apps)
+$global WebKitDeveloperExtras -bool true
+
+
+# ————— TERMINAL —————————————————————————
+
+# I use iTerm2 but might as well
+$app Terminal FocusFollowsMouse -bool true
+
+
+# ————— TEXT EDIT ————————————————————————
+
+# Open blank, untitled txt file on start instead of file chooser
+$app TextEdit NSShowAppCentricOpenPanelInsteadOfUntitledFile -bool false
+
+# Default to using plain text format instead of rich text in new documents
+$app TextEdit RichText -bool false
+
+
+# ————— SCRIPT EDITOR ————————————————————
+
+# Open blank, untitled scpt file on start instead of file chooser
+$app 'Script Editor' NSShowAppCentricOpenPanelInsteadOfUntitledFile -bool false
+
+
+
+# ————————————————————————————————————————
+# ————— T H I R D  P A R T Y —————————————
+# ————————————————————————————————————————
+
+
+# ————— GPGTOOLS —————————————————————————
+
+# Expose advanced settings in GUI (shouldn't need this level of control, but make available in case)
+$write org.gpgtools.gpgkeychain showExpertSettings -bool true
+
+# Change default output of encoding operations to ASCII format (plain text parseable)
+$write org.gpgtools.gpgservices UseASCIIOutput -bool true
+
+# Also sign messages/files when encrypting by default
+$write org.gpgtools.gpgservices RecipientWindowControllerSign -bool true
+
+# Default to including own PGP key in recipients list when encrypting items (so items you encrypt are decryptable)
+$write org.gpgtools.gpgservices RecipientWindowControllerEncryptForOwnKeyToo -bool true
+
+# Disable symmetric encryption by default (i.e. password-based encryption)
+# [sic]: Property name includes misspelling of "Symmetric"
+$write org.gpgtools.gpgservices RecipientWindowControllerSymetricEncryption -bool false
+
+
+# ————— NOVA —————————————————————————————
+
+# Make menu bar always visible in fullscreen. Nova is one of the few apps that I actually
+# use in fullscreen mode and its dense menu options are more frequently accessed. Moreover,
+# it just kinda looks "wrong" when its not visible for this app.
+$app Nova AppleMenuBarVisibleInFullscreen -bool true
+

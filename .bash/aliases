@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 #
-# ~/.bash_aliases (Linux server)
+#   ~/.bash_aliases (Linux server)
 #
-#   Custom user defined aliases
-#   Sourced by ~/.bashrc
+#   Custom user defined aliases.
+#   Sourced by ~/.bashrc.
 #
-#     Neel Yadav
-#     07.06.2021
+#   Neel Yadav
+#   07.06.2021
 
 
-# Quick SSH locations specified on a per-host basis
+# Quick SSH locations specified on a per-user basis (don't want public here)
 [ -r ~/.ssh/host_aliases ] && . $HOME/.ssh/host_aliases
 
 # Shorthand aliases
@@ -18,8 +18,9 @@ alias up='cd ..'
 
 # Aliases 2 small 2 function
 alias reload-nginx='sudo nginx -t && sudo systemctl reload nginx'
-alias reload-shell='_path=$PATH;clear;[[ -r ~/.bash_profile ]] && . ~/.bash_profile || echo "err";PATH=$_path;unset _path'
-alias path-list='printf $PATH | awk -v RS=: "{print}"'
+alias reload-shell='clear;[[ -r ~/.bash_profile ]] && . ~/.bash_profile || echo "err"'
+alias fresh-apt='sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get check && sudo apt-get autoremove && sudo apt-get autoclean'
+alias path-list='echo $PATH | sed -E "s/:/\n/g"'
 
 # El-iases
 alias lss='ls -Alth'
@@ -35,9 +36,12 @@ alias commit='f() { git commit -m "$*" 1> /dev/null && recent; unset f; }; f'
 alias uncommit='git reset --soft HEAD~1'    # undo last commit; keep changes
 alias delcommit='git reset --hard HEAD~1'   # undo last commit; discard changes
 
-# Python version aliases
-[[ -d /usr/local/lib/mailinabox ]] && alias mpython='/usr/local/lib/mailinabox/env/bin/python3'
-[[ -d /usr/local/lib/mailinabox ]] && alias mpip='/usr/local/lib/mailinabox/env/bin/pip'
-
-# Misc.
+# Misc. shortcut commands
+alias npm-scripts='cat "$(dirname "$(npm root)")/package.json" 2> /dev/null | jq .scripts'
 alias gpg='gpg --no-autostart'
+
+# Other/Temp
+if [[ -d /usr/local/lib/mailinabox ]]; then
+    alias mpython='/usr/local/lib/mailinabox/env/bin/python3'
+    alias mpip='/usr/local/lib/mailinabox/env/bin/pip'
+fi

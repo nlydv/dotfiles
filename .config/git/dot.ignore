@@ -21,8 +21,8 @@
 #   on the dotfile repos local ignore patterns.
 #   (cloned from macOS branch)
 #
-#     Neel Yadav
-#     04.07.2022
+#   Neel Yadav
+#   04.07.2022
 
 
 # ———————————————————————————————
@@ -71,31 +71,26 @@ projects/
 
 ## ———— Privacy & Security ——————
 
+.bash/env
+.config/**/*
+
 .atom/
+.cache/
 .gnupg/
 .history/
 .local/
 .npm/
 .nvm/
 .ssh/
+.vim/
 
 .brewfile
 
 ## ———— Vetted Configs ——————————
 
-.config/**/*
 !.config/pythonrc
 !.config/git/
 !.config/git/config
 !.config/git/ignore
 !.config/git/dot.config
 !.config/git/dot.ignore
-!.config/iterm2/
-!.config/iterm2/*.itermkeymap
-!.config/iterm2/colors/
-!.config/iterm2/colors/*.itermcolors
-!.config/iterm2/prefs/
-!.config/iterm2/prefs/*iterm2.plist
-!.config/iterm2/profiles/
-!.config/iterm2/profiles/*.json
-

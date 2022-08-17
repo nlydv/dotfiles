@@ -1,18 +1,20 @@
 #!/usr/bin/env bash
 #
-# ~/.command_prompt (Linux server)
+#   ~/.bash/prompt (Linux server)
 #
 #   Dedicated file for setting prompt.
 #   For bulky customizations. Sourced by ~/.bashrc.
 #
-#     Neel Yadav
-#     07.06.2021
+#   Neel Yadav
+#   07.06.2021
 
 
-# ————Git——————————————————————————————————————————————————————————————
-# Copied these two functions from a website guide or something.
+# ————— GIT REPO DETAILS —————————————————————————————————————————————
+# Credit for these two functions goes to a website guide I copied them
+# from or something, don't remember which one exactly though, but I'm
+# pretty sure I modified them for my use anyways.
 
-# get current branch in git repo
+# get branch
 get_git () {
 	BRANCH=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')
 	if [ ! "${BRANCH}" == "" ]
@@ -24,7 +26,7 @@ get_git () {
 	fi
 }
 
-# get current status of git repo
+# get status
 stat_git () {
 	status=$(git status 2>&1 | tee)
 	dirty=$(echo -n "${status}" 2> /dev/null | grep "modified:" &> /dev/null; echo "$?")
@@ -59,11 +61,15 @@ stat_git () {
 	fi
 }
 
-# ————iTerm2———————————————————————————————————————————————————————————
-# Since the only thing I really want from iTerm2's shell integration is
-# the ability to use keyboard shortcuts to jump through command history
-# these 3 functions are copied from their script and wrapped around the
-# actual prompt in the same manner
+
+# ————— ITERM2 ———————————————————————————————————————————————————————
+# The only feature of iTerm2's shell integration that I really need is
+# the ability to use keyboard shortcuts to jump up & down through the
+# command history by automatically moving the window scroll to show
+# the line where the prev/next command was entered (skipping over any
+# intermediate console output). So in order to use that feature on its
+# own, I've copied these 3 functions from iTerm's shell integration
+# script in order to directly integrate them into my custom prompt.
 
 # Prefix: before everything else
 iterm2_prompt_prefix () {
@@ -86,7 +92,8 @@ iterm2_prompt_suffix () {
     printf "\007" # iterm2_end_osc
 }
 
-# ————Custom———————————————————————————————————————————————————————————
+
+# ————— CUSTOM ———————————————————————————————————————————————————————
 # Additional custom-made prompt functionality
 
 # outputs a superscript number indicating how many shells deep you are (if > 1)
@@ -96,13 +103,15 @@ sh_depth () {
     fi
 }
 
-# ————Prompt———————————————————————————————————————————————————————————
+
+# ————— PROMPT ———————————————————————————————————————————————————————
 # Finally putting all the pieces together into the actual prompt
 
 # assemble the prompt
 [[ ! $(logname) == $(id -u -n) ]] && cmd_user="$(logname)" || cmd_user=$(id -u -n)
 which hostname &> /dev/null && cmd_host=$(hostname) || cmd_host=$HOSTNAME
 
+# conditional styling for user/host text
 if [[ $cmd_host == *"neelyadav.com" ]]; then
     _PS1="\[${lwhite}${bold}${italic}\e[48;5;235m\]"
     if [[ $cmd_user == "neel" ]]; then
@@ -130,7 +139,3 @@ PS1="\[${prompt_prefix}\]${_PS1}\[${prompt_suffix}\]"
 
 # buy one get one free prompt
 PS2='\[\e[2m\]⑊\[\e[0m\] '
-
-
-# previous prompt backup
-# PS1="\[${white}${bold}\]$(prompt_host)\[${blue}${bold}\]$(prompt_dir)\[${white}${dim}\]$(get_git)\[${magenta}${bold}\]$(prompt_symbol)\[${reset}\]"

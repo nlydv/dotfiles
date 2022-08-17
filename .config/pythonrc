@@ -1,0 +1,39 @@
+# ~/.config/pythonrc (macOS)
+#
+#   A simple python interpreter config file that enables
+#   tab completion and moves the interactive REPL command
+#   history file from the default location ~/.python_history
+#   to a dedicated history directory I started using at
+#   ~/.history/python_history. This file's path needs to be
+#   exported in the $PYTHONSTARTUP env var (e.g in ~/.bashrc
+#   or similar shell startup file).
+#
+#   I don't actually use or know much python myself and these
+#   commands seemed to be commonly recommended based off a
+#   quick google search.
+#
+#   Neel Yadav
+#   04.07.2022
+
+
+import os
+import readline
+import rlcompleter
+import atexit
+
+# tab completion
+readline.parse_and_bind('tab: complete')
+
+# alternate history file
+histfile = os.path.join(os.environ['HOME'], '.history', 'python_history')
+
+try:
+    readline.read_history_file(histfile)
+except IOError:
+    pass
+
+readline.set_history_length(1000)
+atexit.register(readline.write_history_file, histfile)
+
+del os, histfile, readline, rlcompleter
+

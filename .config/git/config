@@ -1,39 +1,126 @@
-# ~/.gitconfig (Linux server)
+# ~/.config/git/config (Linux Server)
 #
-#   This is Git's per-user configuration file.
+#   Global git config.
 #
-#     Neel Yadav
-#	  07.07.2021
+#   Per-repo configs will override any parameters set
+#   here. This config overrides paramaters in system
+#   config (whereever that may or may not be located).
+#   According to git manpage, that order of precedence
+#   now also searches for a global/user config file at
+#   ~/.config/git/config in addition to ~/.gitconfig
+#
+#   Neel Yadav
+#	07.07.2021
 
 
-[core]
-	excludesFile = ~/.config/git/ignore
 [user]
 	name = Neel Yadav
 	email = mail@neelyadav.com
-	signingkey = ED84CBAAA8A7B576
-[pull]
-	rebase = false
-[init]
-	defaultBranch = master
+	signingkey = 2EE08C445EE9CB7F47774138ED84CBAAA8A7B576
+
 [commit]
 	gpgsign = true
+
+[init]
+	defaultBranch = master
+
+[pull]
+    rebase = false
+
+[push]
+    default = simple
+
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+
 [submodule]
 	recurse = true
+
 [alias]
     adog = log --all --decorate --oneline --graph
     recent = show --compact-summary --name-status
     uncommit = reset --soft HEAD~1
     delcommit = reset --hard HEAD~1
+    hardreset = reset --hard HEAD
+
+# ————— Include for dotfiles repo ————————
+# (see "dot.config" file header)
+
+[includeIf "gitdir/i:~/Git/dotfiles.git"]
+    path = dot.config
+
+# ————— External TUI formatting tool —————
+# diff-so-fancy
+
+[core]
+   pager = diff-so-fancy | less --tabs=4 -RFX
+
+[interactive]
+   diffFilter = diff-so-fancy --patch
+
+[diff-so-fancy]
+   markEmptyLines = false
+
+# temp setting to workaround bug with diff-so-fancy and Git v2.37
+# (see github issue "so-fancy/diff-so-fancy#437")
+[add "interactive"]
+    useBuiltin = false
+
+# ————— External GUI diff/merge tool —————
+# Kaleidoscope (for itegration with Tower, my main GUI git client)
+
+# NOTE: cloned from macos. actually using these on remote linux server
+#       obvs gonna error but there's probably some method to "phone home"
+#       and launch locally, though unlikely to need that; if you really
+#       get deep into git merging/diffing on remote... just make a local copy
+
+; [diff]
+;    tool = Kaleidoscope
+
+; [difftool]
+;    prompt = false
+
+; [difftool "Kaleidoscope"]
+;    cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+
+; [merge]
+;    tool = Kaleidoscope
+
+; [mergetool]
+;    keepBackup = true
+;    prompt = false
+
+; [mergetool "Kaleidoscope"]
+;    cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+;    trustExitCode = true
+
+# ————— Custom UI & color configs ————————
+# personal prefs for built-in git cmds, also effects diff-so-fancy
 
 [log]
     abbrevCommit = true
     date = "format:%b %d, %Y  %-l:%M %p %Z"
 
 [format]
-    pretty = "format:%C(auto)%h%d%n%nAuthor:  %Cblue%an%C(auto) <%ae>%nTime:    %Cblue%ad%C(auto) (%ar)%nSigner: %C(always,green)% GK%C(auto)%n%n%>(4)%>|(4)%s%n%n%-N%n"
+    pretty = "format:%C(auto)%h%d%n%nAuthor:  %Cblue%an%C(auto) <%ae>%nTime:    %Cblue%ad%C(auto) (%ar)%nSigner: %C(always,green)% GK%C(auto)%n%n%w(80,4)%B%n%n%-N%n"
 
-# Special include for dotfiles repo.
-# More info in sibling "dot.config" file header
-[includeIf "gitdir/i:~/Git/dotfiles.git"]
-	path = dot.config
+[color]
+    ui = auto
+
+[color "diff-highlight"]
+	oldNormal = red
+	oldHighlight = red bold 52
+	newNormal = green
+	newHighlight = green bold 22
+
+[color "diff"]
+	meta = 0 reverse white bold
+	frag = blue bold
+	func = magenta bold
+	commit = yellow
+	old = red
+	new = green
+    whitespace = red reverse

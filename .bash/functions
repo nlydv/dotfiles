@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
 #
-# ~/.bash_functions
+#   ~/.bash/functions (Linux server)
 #
-#   Custom user functions loaded on startup
+#   Custom user functions loaded on startup.
 #   Sourced by ~/.bashrc
 #
-#     Neel Yadav
-#     06.29.2019
+#   Neel Yadav
+#   06.29.2019
 
 
-# submod: git submodule pull/push function
-# ——————
+# ————— SUBMOD ———————————————————————————
+# Git submodule pull/push function
+
 submod () {
     exist=$(git submodule 2> /tmp/submod.err)
     git=$(cat /tmp/submod.err)
@@ -27,8 +28,10 @@ submod () {
     fi
 }
 
-# realx: get real underlying executable path
-# —————
+
+# ————— REALX ————————————————————————————
+# Returns the real underlying executable path
+
 realx () {
     [[ -n $2 ]] && local name=$2 || local name=$1
 
@@ -59,8 +62,10 @@ realx () {
     fi
 }
 
-# colortest: output 8 ANSI Colors in normal & bold
-# —————————
+
+# ————— COLORTEST ————————————————————————
+# Outputs 8 ANSI Colors in normal & bold
+
 colortest () {
     for i in {0..7}; do
         color_output="Testing color $i\n\e[0;3${i}mnormal${reset} | \e[1;3${i}mbold${reset}\n\e[0;9${i}mlight ${reset} | \e[1;9${i}mlight bold${reset}\n"
@@ -68,59 +73,103 @@ colortest () {
     done
 }
 
-# nvm-upgrade-lts: simple command to upgrade node/npm and transfer npm packages to new version via nvm
-# ———————————————
-nvm-upgrade-lts () {
+
+# ————— NVM-UPGRADE ——————————————————————
+# Simple command to upgrade node/npm and transfer npm packages to new version via nvm
+
+nvm-upgrade () {
+    current="$(nvm version current)"
+
     if [[ -z $(type -t nvm) ]]; then
         echo "error: nvm is not installed";
         return 1;
     else
         echo -e "Getting available versions...";
-        echo -e "Using:   $(nvm current)\n";
+        echo -e "Using:   $current\n";
     fi
 
-    current=$(nvm version default &> /dev/null && echo $(nvm version default) || echo $(nvm version current));
-    echo -e "${bold}Current${reset}: ${blue}${bold}$current${reset}";
-    
-    latest=$(nvm version-remote --lts);
-    
+    if [[ $1 == "--lts" || $2 == "--lts" ]]; then
+        lts=true
+        installed="$(nvm version lts/*)"
+        latest="$(nvm version-remote lts/*)"
+    else
+        lts=false
+        installed="$(nvm version node)"
+        latest="$(nvm version-remote node)"
+    fi
+
+    [[ $1 =~ ^(\-d)|(\-\-default)$ || $2 =~ ^(\-d)|(\-\-default)$ || $(nvm version default) == "N/A" ]] && default=true || default=false
+
+    #current=$(nvm version default &> /dev/null && echo $(nvm version default) || echo $(nvm version current));
+    echo -e "${bold}Current$($lts && echo " LTS")${reset}: ${blue}${bold}$installed${reset}";
+
     if [[ $latest == "N/A" ]]; then
-        echo -e "\n${red}${bold}Error${reset} - unable to pull remote LTS versions\n";
+        echo -e "\n${red}${bold}Error${reset} - unable to pull remote versions\n";
         return 2;
     else
-        echo -n -e "${bold}Latest${reset}:  ";
+        echo -n -e "${bold}Latest$($lts && echo " LTS")${reset}:  ";
     fi
-    
-    if [[ $current == $latest ]]; then
+
+    if [[ $installed == $latest ]]; then
         echo -e "${blue}${bold}$latest${reset}\n";
-        echo -e "    Node.js is already up-to-date with the latest LTS release\n";
+        echo -e "    Node.js is already up-to-date with the latest $($lts && echo "LTS ")release\n";
         return 0;
     else
         echo -e "${magenta}${bold}$latest${reset}\n";
-        echo -e "    Updated LTS version is available.";
+        echo -e "    Newer $($lts && echo "LTS ")version is available.";
         read -e -r -t 60 -p "    Continue with upgrade? (y/N) - " input;
-    
-        case "$input" in 
+
+        case "$input" in
             [yY][eE][sS] | [yY])
                 echo -e "\nOk. Upgrading to ${magenta}${bold}$latest${reset} ...\n"
-            ;;
+                if ! $default; then
+                    read -e -r -t 60 -p "    Set new version as default? (y/N) - " def;
+                    case "$def" in
+                        [yY][eE][sS] | [yY])
+                            default=true
+                            echo -e "\nGot it. Setting default alias to ${magenta}${bold}$latest${reset} ...\n"
+                            ;;
+                        *)
+                            default=false
+                            echo -e "\nGot it. Keeping existing default alias (set to: ${blue}${bold}$(nvm version default)${reset}) ...\n"
+                    esac
+                fi
+                ;;
             *)
-                echo -e "\nAborted upgrade.\n";
+                echo -e "\nAborted upgrade.\n"
                 return 3
-            ;;
+                ;;
         esac
     fi
 
-    nvm use $current > /dev/null;
-    nvm install --lts --default --reinstall-packages-from=current > /dev/null || return 4;
-    nvm install-latest-npm > /dev/null;
- 
-    echo -e "\n${bold}Node.js successfully upgraded ${reset} ${blue}${bold}$current${reset} → ${magenta}${bold}$latest${reset}\n"
+    $lts && alias="lts/*" || alias="node"
+    [[ $installed == "N/A" ]] && reinstall="default" || reinstall=$installed
+
+    nvm install $($lts && echo "--lts ")$alias --reinstall-packages-from=$reinstall --latest-npm || return 4
+    $default && nvm alias default $alias
+    nvm use $alias || return 5
+    nvm install-latest-npm || return 6
+
+    if ! $default; then
+        nvm use $current || return 7
+    fi
+
+    echo -e "\n${bold}Node.js successfully upgraded ${reset} ${blue}${bold}$installed${reset} → ${magenta}${bold}$latest${reset}\n"
 }
 
 
-# extract: no more randomly guessing option combos
-# ———————  credit: Mpho Mphego (https://dev.to/mmphego/share-your-bashrc-251n)
+# ————— NVM-UPGRADE-LTS ——————————————————
+# Shortcut command for above function but for LTS version
+
+nvm-upgrade-lts() {
+    nvm-upgrade --lts
+}
+
+
+# ————— EXTRACT ——————————————————————————
+# No more randomly guessing option combos!
+# credit: Mpho Mphego (https://dev.to/mmphego/share-your-bashrc-251n)
+
 extract () {
      if [ -f $1 ] ; then
          case $1 in
@@ -143,8 +192,10 @@ extract () {
      fi
 }
 
-# entropy: informational display of entropy avail in sys, updates every second
-# ———————
+
+# ————— ENTROPY ——————————————————————————
+# Informational display of entropy avail in sys, updates every second
+
 entropy () {
     printf "\nAvailable entropy:\e[0;2m (press any key to exit)\e[0m\n"
     while true; do
@@ -154,12 +205,25 @@ entropy () {
     done
 }
 
-# sizes: shortcut command for using `du` to get real sizes of files/directories. orig an alias
-# —————
+
+# ————— SIZES ————————————————————————————
+# Shortcut command for using `du` to get real sizes of files/directories. orig an alias
+
 sizes () {
-    if [[ $# -eq 0 ]]; then
-        sudo du -h -s "$PWD"
+    if [[ $# -lt 2 ]]; then
+        if [[ $1 == "." ]]; then
+            sudo du -h -s "$PWD" | sort -h
+        elif [[ $# -eq 0 ]]; then
+            echo -e "${bold}${under}${PWD}${reset}"
+            sudo du -h -s -c {,.[^.]}* 2> /dev/null | sort -h
+        elif [[ -d "$1" ]]; then
+            echo -e "${bold}${under}$(readlink -f $1)${reset}"
+            sudo du -h -s -c "$1"/{,.[^.]}* 2> /dev/null | sort -h
+        else
+            sudo du -h -s "$1" | sort -h
+        fi
     else
-        sudo du -h -s "$@" | sort -h
+        #echo -e "${bold}${under}${PWD}${reset}"
+        sudo du -h -s -c "$@" | sort -h
     fi
 }

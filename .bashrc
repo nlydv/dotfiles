@@ -1,6 +1,6 @@
-# shellcheck shell=bash
+# shellcheck shell=bash disable=SC2155,SC1090,SC1091
 #
-# ~/.bashrc (Linux server)
+#   ~/.bashrc (Linux server)
 #
 #   Startup bash file for interactive non-login shells.
 #   Apparently some OS' will run ~/.bash_profile for all login
@@ -8,34 +8,39 @@
 #   otherwise run automatically by the system on interactive
 #   shell invocation. So most stuff goes (or is sourced) here.
 #
-#     Neel Yadav
-#     07.06.2021
+#   Neel Yadav
+#   07.06.2021
 
 
-# ————Basic startup checks & sourcing other dotfiles————————
+
+# ————— Basic Startup Checks, Sourcing Other Dotfiles ————————————————
+# ————————————————————————————————————————————————————————————————————
 
 # If not running interactively, don't do anything
-if [ -z "$PS1" ]; then
+if [[ -z "$PS1" ]]; then
    return
 fi
 
 # Make bash check its window size after a process completes
 shopt -s checkwinsize
 
-# Source personal aliases and functions
-[ -r ~/.bash_aliases ] && . $HOME/.bash_aliases
-[ -r ~/.bash_functions ] && . $HOME/.bash_functions
+# Source personal bash aliases
+[[ -r "$HOME/.bash/aliases" ]]   && source "$HOME/.bash/aliases"
 
-# Pull in my ANSI color/style escape code vars (used in command prompt)
-[ -r ~/.bash_colors ] && . $HOME/.bash_colors
+# Source personal bash functions
+[[ -r "$HOME/.bash/functions" ]] && source "$HOME/.bash/functions"
+
+# Source my ANSI color/style escape code vars (used in .bash/prompt)
+[[ -r "$HOME/.bash/colors" ]]    && source "$HOME/.bash/colors"
 
 # Source dedicated file for custom command prompt
-[ -r ~/.command_prompt ] && . $HOME/.command_prompt
+[[ -r "$HOME/.bash/prompt" ]]    && source "$HOME/.bash/prompt"
 
-# ——————————————————————————————————————————————————————————
+# Source private env vars and configs that aren't version controlled
+[[ -r "$HOME/.bash/env" ]]       && source "$HOME/.bash/env"
 
-
-# ————Defaults from /etc/skel that're fine as is————————
+# ————— Unchanged Defaults from /etc/skel ————————————————————————————
+# ————————————————————————————————————————————————————————————————————
 
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
@@ -64,10 +69,10 @@ fi
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-# ——————————————————————————————————————————————————————
 
 
-# ————SSH-Agent startup connection————————
+# ————— SSH-Agent Startup Connection —————————————————————————————————
+# ————————————————————————————————————————————————————————————————————
 
 live_agent () {
     if [[ -S "$SSH_AUTH_SOCK" ]]; then
@@ -87,6 +92,7 @@ live_agent () {
     fi
 }
 
+# shellcheck disable=SC2086
 if ! live_agent &> /dev/null; then
     ssh_env="$HOME/.ssh/agent.env"
     [[ -e $ssh_env ]] || touch $ssh_env
@@ -99,7 +105,6 @@ if ! live_agent &> /dev/null; then
     unset _status
 fi
 
-# Note: make sure macOS' default openssh tools (/usr/bin/ssh-*) used first in $PATH to use Keychain passwords
 
 # reference material:
 #   https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh
@@ -109,15 +114,10 @@ fi
 #   1 = agent running, no keys
 #   2 = agent not running
 
-# ————————————————————————————————————————
 
 
-# ————PATH & Bash Completions————————
-
-# Add user's private bins if they exist
-[ -d ~/.local/bin ] && export PATH="$HOME/.local/bin:$PATH"
-[ -d ~/bin ] && export PATH="$HOME/bin:$PATH"
-
+# ————— $PATH Locations, Prioritize Non-System Executables ———————————
+# ————————————————————————————————————————————————————————————————————
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
@@ -132,10 +132,17 @@ fi
 # Bash Completion
 [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
 
-# NVM: node/npm version manager
+# NVM - NodeJS & NPM Version Manager
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+## this loads nvm
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+## this loads nvm bash_completion
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+## optional nvm script to detect and switch to config'd version when in dir with .nvmrc
+[[ -s "$NVM_DIR/auto_nvm_use.sh" ]] && source "$NVM_DIR/auto_nvm_use.sh"
+
+# Add user's home bin if it exists
+[[ -r $HOME/bin ]] && export PATH="$HOME/bin:$PATH"
 
 # PM2: node process manager
 if [[ -n $(which pm2) ]]; then
@@ -150,14 +157,24 @@ if [[ -n $(which pm2) ]]; then
 fi
 
 # Dedupe $PATH Directories
-#export PATH="$(echo "$PATH" | sed -E -e 's/:([^:]*)(:.*):\1/:\1\2/' -e 's/^([^:]*)(:.*):\1/:\1\2/' -e 's/^:(\/.*)/\1/')"
+# shellcheck disable=SC2155,SC2046,SC2005,SC2086
+export PATH=$(echo $(echo $PATH | awk -v RS=: -v ORS=: '!($0 in a) {a[$0]; print}') | sed -E 's/ +:$//g')
 
-# ———————————————————————————————————
 
 
-# ————Shell Optimizations————————
+# ————— Clean $HOME == Happy $HOME ———————————————————————————————————
+# ————————————————————————————————————————————————————————————————————
 
-# Reduce auto-generated dotfile clutter in $HOME + related opts
+# Asserting default XDG spec for thoroughness
+## for a practical TL;DR of XDG_BASEDIRs, check this brief blog
+## post by ... *checks about page* ... Max from Hamburg, Germany:
+## https://maex.me/2019/12/the-power-of-the-xdg-base-directory-specification/
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
+
+# Reducing auto-generated $HOME clutter from Bash itself
 shopt -s cmdhist
 shopt -s lithist
 
@@ -167,8 +184,9 @@ export HISTFILE="$HISTDIR/bash_history"
 
 export SHELL_SESSION_DIR="$HISTDIR/bash_sessions"
 export SHELL_SESSION_FILE="$SHELL_SESSION_DIR/$TERM_SESSION_ID.session"
-[[ ! -e $SHELL_SESSION_DIR ]] && mkdir -p $SHELL_SESSION_DIR
+[[ ! -e "$SHELL_SESSION_DIR" ]] && mkdir -p "$SHELL_SESSION_DIR"
 
+# Redirect external programs' $HOME clutter
 export LESSHISTFILE="$HISTDIR/lesshist"
 export NODE_REPL_HISTORY="$HISTDIR/node_repl_history"
 export SQLITE_HISTORY="$HISTDIR/sqlite_history"
@@ -176,14 +194,15 @@ export SQLITE_HISTORY="$HISTDIR/sqlite_history"
 # Defined here instead of in .bash/aliases for logical grouping
 alias wget='wget --hsts-file ~/.history/wget-hsts'
 
-# Bash env vars needed for stuff
-export COLUMNS
-export LINES
 
-# ———————————————————————————————
+# ————— Other/Misc ———————————————————————————————————————————————————
+# ————————————————————————————————————————————————————————————————————
 
 
-# ————Other————————
+# Other Completions (manually save completion output from non-brew tools here)
+for COMPLETION in /usr/local/etc/bash_completion.d/*; do
+    [[ -r "$COMPLETION" ]] && source "$COMPLETION"
+done
 
 # PGP stuff
 if [[ -d "$HOME/.gnupg" ]] && which gpg &> /dev/null; then
@@ -200,10 +219,14 @@ export LS_COLORS="di=1;34:ln=1;35:so=1;32:pi=1;33:ex=1;31:bd=34;46:cd=34;43:su=3
 alias ls='ls --color=auto'
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
+# For timezone consistency
+export TZ=America/Chicago
+
 # Prefer C-style alphabetical sorting with 'ls' & things
 export LC_COLLATE=C
 export LANG=en_US.UTF-8 # reiterate default lang for everything else just in case
 
-# Had a few programs lately complaining about this not being set
+# Miscellaneous env variables
+export LINES
+export COLUMNS
 export EDITOR=vim
-
