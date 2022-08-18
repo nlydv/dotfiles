@@ -39,12 +39,10 @@ shopt -s checkwinsize
 # Source private env vars and configs that aren't version controlled
 [[ -r "$HOME/.bash/env" ]]       && source "$HOME/.bash/env"
 
+
+
 # ————— Unchanged Defaults from /etc/skel ————————————————————————————
 # ————————————————————————————————————————————————————————————————————
-
-# don't put duplicate lines or lines starting with space in the history.
-# See bash(1) for more options
-HISTCONTROL=ignoreboth
 
 # append to the history file, don't overwrite it
 shopt -s histappend
@@ -105,7 +103,6 @@ if ! live_agent &> /dev/null; then
     unset _status
 fi
 
-
 # reference material:
 #   https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh
 #   https://github.com/mattbostock/dotfiles/blob/master/ssh-agent-setup.sh
@@ -118,19 +115,6 @@ fi
 
 # ————— $PATH Locations, Prioritize Non-System Executables ———————————
 # ————————————————————————————————————————————————————————————————————
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-if ! shopt -oq posix; then
-    if [ -f /usr/share/bash-completion/bash_completion ]; then
-        . /usr/share/bash-completion/bash_completion
-    elif [ -f /etc/bash_completion ]; then
-        . /etc/bash_completion
-    fi
-fi
-
-# Bash Completion
-[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
 
 # NVM - NodeJS & NPM Version Manager
 export NVM_DIR="$HOME/.nvm"
@@ -143,18 +127,6 @@ export NVM_DIR="$HOME/.nvm"
 
 # Add user's home bin if it exists
 [[ -r $HOME/bin ]] && export PATH="$HOME/bin:$PATH"
-
-# PM2: node process manager
-if [[ -n $(which pm2) ]]; then
-    pm2sh="$HOME/.pm2/completion.sh"
-    if [[ -s $pm2sh ]]; then
-        . $pm2sh
-    else
-        pm2 completion > $pm2sh
-        . $pm2sh
-    fi
-    unset pm2sh
-fi
 
 # Dedupe $PATH Directories
 # shellcheck disable=SC2155,SC2046,SC2005,SC2086
@@ -178,7 +150,7 @@ export XDG_STATE_HOME="$HOME/.local/state"
 shopt -s cmdhist
 shopt -s lithist
 
-export HISTCONTROL="ignoredups"
+export HISTCONTROL="ignoredups" # prevents identical back-to-back history entries
 export HISTDIR="$HOME/.history"
 export HISTFILE="$HISTDIR/bash_history"
 
@@ -195,14 +167,30 @@ export SQLITE_HISTORY="$HISTDIR/sqlite_history"
 alias wget='wget --hsts-file ~/.history/wget-hsts'
 
 
+
 # ————— Other/Misc ———————————————————————————————————————————————————
 # ————————————————————————————————————————————————————————————————————
 
+# Built-in completion (copied from /etc/bash.bashrc)
+if ! shopt -oq posix; then
+    if [ -f /usr/share/bash-completion/bash_completion ]; then
+        . /usr/share/bash-completion/bash_completion
+    elif [ -f /etc/bash_completion ]; then
+        . /etc/bash_completion
+    fi
+fi
 
-# Other Completions (manually save completion output from non-brew tools here)
-for COMPLETION in /usr/local/etc/bash_completion.d/*; do
-    [[ -r "$COMPLETION" ]] && source "$COMPLETION"
-done
+# Enable CLI completions via "bash-completion" APT package
+if [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
+    source "/usr/local/etc/profile.d/bash_completion.sh";
+fi
+
+# Other Completions
+## Manually saved completion files should be saved into the
+## `$XDG_DATA_HOME/bash-completion/completions/` directory, from
+## where bash-completion will dynamically load and provide the
+## completions when needed on demand. The completion file saved
+## should have a name identical to its corresponding command.
 
 # PGP stuff
 if [[ -d "$HOME/.gnupg" ]] && which gpg &> /dev/null; then
@@ -219,12 +207,12 @@ export LS_COLORS="di=1;34:ln=1;35:so=1;32:pi=1;33:ex=1;31:bd=34;46:cd=34;43:su=3
 alias ls='ls --color=auto'
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
-# For timezone consistency
-export TZ=America/Chicago
-
 # Prefer C-style alphabetical sorting with 'ls' & things
 export LC_COLLATE=C
 export LANG=en_US.UTF-8 # reiterate default lang for everything else just in case
+
+# For timezone consistency
+export TZ=America/Chicago
 
 # Miscellaneous env variables
 export LINES
