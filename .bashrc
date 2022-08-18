@@ -158,10 +158,11 @@ export SHELL_SESSION_DIR="$HISTDIR/bash_sessions"
 export SHELL_SESSION_FILE="$SHELL_SESSION_DIR/$TERM_SESSION_ID.session"
 [[ ! -e "$SHELL_SESSION_DIR" ]] && mkdir -p "$SHELL_SESSION_DIR"
 
-# Redirect external programs' $HOME clutter
+# Set modified output directories to clean up external programs' $HOME clutter
 export LESSHISTFILE="$HISTDIR/lesshist"
 export NODE_REPL_HISTORY="$HISTDIR/node_repl_history"
 export SQLITE_HISTORY="$HISTDIR/sqlite_history"
+export PYTHONSTARTUP="$XDG_CONFIG_HOME/pythonrc"
 
 # Defined here instead of in .bash/aliases for logical grouping
 alias wget='wget --hsts-file ~/.history/wget-hsts'
@@ -218,3 +219,4 @@ export TZ=America/Chicago
 export LINES
 export COLUMNS
 export EDITOR=vim
+export SELECTED_EDITOR=vim
