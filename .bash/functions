@@ -110,7 +110,7 @@ nvm-upgrade () {
         echo -n -e "${bold}Latest$($lts && echo " LTS")${reset}:  ";
     fi
 
-    if [[ $installed == $latest ]]; then
+    if [[ $installed == "$latest" ]]; then
         echo -e "${blue}${bold}$latest${reset}\n";
         echo -e "    Node.js is already up-to-date with the latest $($lts && echo "LTS ")release\n";
         return 0;
@@ -145,16 +145,26 @@ nvm-upgrade () {
     $lts && alias="lts/*" || alias="node"
     [[ $installed == "N/A" ]] && reinstall="default" || reinstall=$installed
 
-    nvm install $($lts && echo "--lts ")$alias --reinstall-packages-from=$reinstall --latest-npm || return 4
+    if [[ $OSTYPE == "linux-gnu" && "$(lsb_release -ds)" =~ ^Ubuntu\ 1[0-9] ]]; then
+        if [[ $(nvm version-remote node) =~ ^v18 ]]; then
+            echo -e "\n${red}${bold}Node.js 18+ requires Ubuntu 20+${reset}"
+            exit 4
+        fi
+    fi
+
+    nvm install $($lts && echo "--lts ")$alias --reinstall-packages-from=$reinstall --latest-npm || return 5
     $default && nvm alias default $alias
-    nvm use $alias || return 5
-    nvm install-latest-npm || return 6
+    nvm use $alias || return 6
+    nvm install-latest-npm || return 7
 
     if ! $default; then
-        nvm use $current || return 7
+        nvm use $current || return 8
     fi
 
     echo -e "\n${bold}Node.js successfully upgraded ${reset} ${blue}${bold}$installed${reset} → ${magenta}${bold}$latest${reset}\n"
+
+    unset -v current lts installed latest default alias reinstall || return 9
+    return 0
 }
 
 
@@ -163,6 +173,34 @@ nvm-upgrade () {
 
 nvm-upgrade-lts() {
     nvm-upgrade --lts
+}
+
+
+# ————— NVM-UPGRADE-SELF —————————————————
+# Function to manually upgrade nvm itself by fetching/pulling
+# latest remote tags in $NVM_DIR, which is setup as local copy
+# of the projects public repo by default. Adapted from:
+# https://github.com/nvm-sh/nvm#manual-upgrade
+
+nvm-upgrade-self() {
+    cd "$NVM_DIR" || exit 1
+    git fetch --tags origin &> /dev/null
+
+    current="$(git tag --contains)"
+    latest="$(git tag --contains "$(git rev-list --tags --max-count=1)")"
+
+    if [[ $current == "$latest" ]]; then
+        echo -e "\n${bold}${italic}nvm${reset} is already up-to-date with the latest release."
+        echo -e "${blue}${bold}$latest${reset}\n"
+    else
+        echo -e "Upgrading ${bold}${italic}nvm${reset}..."
+        echo -e "${blue}${bold}$current${reset} ${bold}→${reset} ${magenta}${bold}$latest${reset}\n"
+        git checkout "$latest" && source "$NVM_DIR/nvm.sh"
+        echo -e "${bold}Done${reset}"
+    fi
+
+    cd "$OLDPWD" || exit 2
+    unset -v current latest
 }
 
 
