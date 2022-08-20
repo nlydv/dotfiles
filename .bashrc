@@ -36,9 +36,6 @@ shopt -s checkwinsize
 # Source dedicated file for custom command prompt
 [[ -r "$HOME/.bash/prompt" ]]    && source "$HOME/.bash/prompt"
 
-# Source private env vars and configs that aren't version controlled
-[[ -r "$HOME/.bash/env" ]]       && source "$HOME/.bash/env"
-
 
 
 # ————— Unchanged Defaults from /etc/skel ————————————————————————————
@@ -220,3 +217,15 @@ export LINES
 export COLUMNS
 export EDITOR=vim
 export SELECTED_EDITOR=vim
+
+
+
+# ————— POSTPONED ————————————————————————————————————————————————————
+# ————————————————————————————————————————————————————————————————————
+
+# Source private env vars and configs that aren't version controlled
+## These are user-specific variables, usually used by external apps/
+## programs, so may or may not use/rely on the actual startup vars
+## above being already defined. (e.g. PATH, or directory shortcuts).
+[[ -r "$HOME/.bash/env" ]] && source "$HOME/.bash/env"
+

@@ -28,6 +28,10 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
+# Tree aliases (maybe just make these a single function instead of doing it the hard way)
+alias lt='function f() { cmd="tree --noreport -l -I .git|.DS_Store -L "; if [[ $1 =~ ^[0-9]+$ ]]; then cmd+="$1 " && shift; else cmd+="1 "; fi; cmd+="$@"; $cmd; unset -v cmd l; unset -f f ;}; f'
+alias lta='function f() { cmd="tree --noreport -al -I .git|.DS_Store -L "; if [[ $1 =~ ^[0-9]+$ ]]; then cmd+="$1 " && shift; else cmd+="1 "; fi; cmd+="$@"; $cmd; unset -v cmd l; unset -f f ;}; f'
+
 # Git aliases
 alias adog='git log --all --decorate --oneline --graph'
 alias dot='git --git-dir=$HOME/git/dotfiles.git/ --work-tree=$HOME'
