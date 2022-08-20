@@ -51,3 +51,4 @@ endif
 
 imap <C-c> "+y<CR>
 vmap <C-c> "+y<CR>
+

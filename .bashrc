@@ -147,7 +147,6 @@ export SDKROOT="$(xcrun --show-sdk-path)"
 
 # Python environment variables and prioritize unversioned Python3 execs
 export PATH="$BREW/opt/python@3.9/libexec/bin:$PATH"
-export PYTHONSTARTUP="$HOME/.config/pythonrc"
 
 # PHP & PHPBrew & Composer environment variables
 export COMPOSER_HOME="$HOME/.composer"
@@ -200,7 +199,7 @@ export XDG_STATE_HOME="$HOME/.local/state"
 shopt -s cmdhist
 shopt -s lithist
 
-export HISTCONTROL="ignoredups"
+export HISTCONTROL="ignoredups" # prevents identical back-to-back history entries
 export HISTDIR="$HOME/.history"
 export HISTFILE="$HISTDIR/bash_history"
 
@@ -208,10 +207,11 @@ export SHELL_SESSION_DIR="$HISTDIR/bash_sessions"
 export SHELL_SESSION_FILE="$SHELL_SESSION_DIR/$TERM_SESSION_ID.session"
 [[ ! -e "$SHELL_SESSION_DIR" ]] && mkdir -p "$SHELL_SESSION_DIR"
 
-# Redirect external programs' $HOME clutter
+# Set modified output directories to clean up external programs' $HOME clutter
 export LESSHISTFILE="$HISTDIR/lesshist"
 export NODE_REPL_HISTORY="$HISTDIR/node_repl_history"
 export SQLITE_HISTORY="$HISTDIR/sqlite_history"
+export PYTHONSTARTUP="$XDG_CONFIG_HOME/pythonrc"
 
 # Defined here instead of in .bash/aliases for logical grouping
 alias wget='wget --hsts-file ~/.history/wget-hsts'

@@ -42,16 +42,15 @@
     process = git-lfs filter-process
     required = true
 
+[submodule]
+    recurse = true
+
 [alias]
     adog = log --all --decorate --oneline --graph
     recent = show --compact-summary --name-status
     uncommit = reset --soft HEAD~1
     delcommit = reset --hard HEAD~1
     hardreset = reset --hard HEAD
-
-[log]
-    abbrevCommit = true
-    date = "format:%b %d, %Y  %-l:%M %p %Z"
 
 # ————— Include for dotfiles repo ————————
 # (see "dot.config" file header)
@@ -101,6 +100,10 @@
 
 # ————— Custom UI & color configs ————————
 # personal prefs for built-in git cmds, also effects diff-so-fancy
+
+[log]
+    abbrevCommit = true
+    date = "format:%b %d, %Y  %-l:%M %p %Z"
 
 [format]
     pretty = "format:%C(auto)%h%d%n%nAuthor:  %Cblue%an%C(auto) <%ae>%nTime:    %Cblue%ad%C(auto) (%ar)%nSigner: %C(always,green)% GK%C(auto)%n%n%w(80,4)%B%n%n%-N%n"

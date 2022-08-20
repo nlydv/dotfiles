@@ -74,6 +74,7 @@ projects/
 .config/**/*
 
 .atom/
+.cache/
 .gnupg/
 .history/
 .local/
