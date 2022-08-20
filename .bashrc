@@ -36,9 +36,6 @@ shopt -s checkwinsize
 # Source dedicated file for custom command prompt
 [[ -r "$HOME/.bash/prompt" ]]    && source "$HOME/.bash/prompt"
 
-# Source private env vars and configs that aren't version controlled
-[[ -r "$HOME/.bash/env" ]]       && source "$HOME/.bash/env"
-
 
 
 # ————— SSH-Agent Startup Connection —————————————————————————————————
@@ -241,10 +238,20 @@ done
 # GPG Pinentry Display (remote SSH, etc. pinentry redirect to orig local display)
 export GPG_TTY=$(tty)
 
-# Add color to the command line!
-export GREP_OPTIONS='--color=auto' GREP_COLOR='1;32'
+# Options for macOS' (BSD) `ls` & `grep`
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
+export GREP_OPTIONS='--color=auto' GREP_COLOR='1;32'
+
+# Options of Linux's (GNU) `ls`
+## The only reason these two are needed (in this order!) on macOS/BSD distros is to
+## also allow custom colorized bash completion of file types since the Bash "readline"
+## system is an apparently GNU-based facility (see: ~/.inputrc). Note that since, clearly,
+## GNU's `LS_COLORS` allows for much greater customization than BSD's `LSCOLORS`, when
+## tabbing an ls command, completions can have more nuanced colors/styles that don't show
+## up in the actual output from entering the ls command.
+export LS_COLORS="di=1;34:ln=1;35:so=1;32:pi=1;33:ex=1;31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43:*.tar=1;31:*.tgz=1;31:*.arj=1;31:*.taz=1;31:*.lzh=1;31:*.lzma=1;31:*.tlz=1;31:*.txz=1;31:*.zip=1;31:*.z=1;31:*.Z=1;31:*.dz=1;31:*.gz=1;31:*.lz=1;31:*.xz=1;31:*.bz2=1;31:*.bz=1;31:*.tbz=1;31:*.tbz2=1;31:*.tz=1;31:*.deb=1;31:*.rpm=1;31:*.jar=1;31:*.rar=1;31:*.ace=1;31:*.7z=1;31:*.rz=1;31:or=3;33:mi=90"
+bind "set colored-stats on"
 
 # For timezone consistency
 export TZ=America/Chicago
@@ -254,3 +261,14 @@ export LINES
 export COLUMNS
 export EDITOR=vim
 export NODE_NO_WARNINGS=1
+
+
+
+# ————— POSTPONED ————————————————————————————————————————————————————
+# ————————————————————————————————————————————————————————————————————
+
+# Source private env vars and configs that aren't version controlled
+## These are user-specific variables, usually used by external apps/
+## programs, so may or may not use/rely on the actual startup vars
+## above being already defined. (e.g. PATH, or directory shortcuts).
+[[ -r "$HOME/.bash/env" ]] && source "$HOME/.bash/env"

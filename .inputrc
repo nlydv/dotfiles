@@ -1,15 +1,28 @@
 # ~/.inputrc (macOS)
 #
-#   Not entirely sure what functionality this file
-#   effects (or can effect), just added some quick
-#   tips and tricks that the internet told me about.
+#   Configurations for Bash's readline stuff.
+#   Modifies behavior of command line I/O by user
+#   for things such as completions, output formatting,
+#   file, key bindings, etc. At least as far as core
+#   shell functionality is concerned.
 #
 #   Neel Yadav
 #   06.29.2021
 
-# Make tab completion do case insensitive matching since macOS
-# has a case insensitive filesystem.
+
+# Make tab completion do case insensitive matching since macOS has a case
+# insensitive filesystem by default.
 set completion-ignore-case on
+
+# If command completion invoked by <TAB> results in multiple potential
+# matches, immediately print out list instead of requiring double <TAB>
+set show-all-if-ambiguous on
+
+# Display possible completions using different colors to indicate their
+# file type and disable appending / to directory completions since not
+# necessary. The color definitions are taken from the value of $LS_COLORS
+set colored-stats on
+set mark-directories off
 
 # Not sure exactly why I put these two here or what they do but
 # they're probably important for something I guess
