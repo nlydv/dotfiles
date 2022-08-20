@@ -143,26 +143,32 @@ export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 
+# Non-exported shortcut XDG variables to make stuff less verbose
+config=$XDG_CONFIG_HOME
+cache=$XDG_CACHE_HOME
+
 # Reducing auto-generated $HOME clutter from Bash itself
 shopt -s cmdhist
 shopt -s lithist
 
 export HISTCONTROL="ignoredups" # prevents identical back-to-back history entries
-export HISTDIR="$HOME/.history"
-export HISTFILE="$HISTDIR/bash_history"
+export HISTFILE="$cache/bash/history"
 
-export SHELL_SESSION_DIR="$HISTDIR/bash_sessions"
+export SHELL_SESSION_DIR="$cache/bash/sessions"
 export SHELL_SESSION_FILE="$SHELL_SESSION_DIR/$TERM_SESSION_ID.session"
-[[ ! -e "$SHELL_SESSION_DIR" ]] && mkdir -p "$SHELL_SESSION_DIR"
 
 # Set modified output directories to clean up external programs' $HOME clutter
-export LESSHISTFILE="$HISTDIR/lesshist"
-export NODE_REPL_HISTORY="$HISTDIR/node_repl_history"
-export SQLITE_HISTORY="$HISTDIR/sqlite_history"
-export PYTHONSTARTUP="$XDG_CONFIG_HOME/pythonrc"
+export LESSHISTFILE="$cache/less/history"
+export NODE_REPL_HISTORY="$cache/node/history"
+export SQLITE_HISTORY="$cache/sqlite/history"
+export PYTHONSTARTUP="$config/pythonrc" # saves repl to $cache/python/history
 
 # Defined here instead of in .bash/aliases for logical grouping
-alias wget='wget --hsts-file ~/.history/wget-hsts'
+alias wget='wget --hsts-file "~/$cache/wget/hsts"'
+
+for dir in bash/sessions less node sqlite python wget; do
+    [[ ! -e "$cache/$dir" ]] && mkdir -p "$cache/$dir"
+done
 
 
 
@@ -229,3 +235,5 @@ export SELECTED_EDITOR=vim
 ## above being already defined. (e.g. PATH, or directory shortcuts).
 [[ -r "$HOME/.bash/env" ]] && source "$HOME/.bash/env"
 
+# Unset shortcut vars with common names to avoid downstream issues
+unset -v config cache

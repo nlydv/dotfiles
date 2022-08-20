@@ -1,4 +1,4 @@
-# ~/.config/pythonrc (macOS)
+# ~/.config/pythonrc
 #
 #   A simple python interpreter config file that enables
 #   tab completion and moves the interactive REPL command
@@ -25,7 +25,7 @@ import atexit
 readline.parse_and_bind('tab: complete')
 
 # alternate history file
-histfile = os.path.join(os.environ['HOME'], '.history', 'python_history')
+histfile = os.path.join(os.environ['HOME'], '.cache', 'python', 'history')
 
 try:
     readline.read_history_file(histfile)
@@ -36,4 +36,3 @@ readline.set_history_length(1000)
 atexit.register(readline.write_history_file, histfile)
 
 del os, histfile, readline, rlcompleter
-
