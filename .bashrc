@@ -110,27 +110,6 @@ fi
 
 
 
-# ————— $PATH Locations, Prioritize Non-System Executables ———————————
-# ————————————————————————————————————————————————————————————————————
-
-# NVM - NodeJS & NPM Version Manager
-export NVM_DIR="$HOME/.nvm"
-## this loads nvm
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-## this loads nvm bash_completion
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-## optional nvm script to detect and switch to config'd version when in dir with .nvmrc
-[[ -s "$NVM_DIR/auto_nvm_use.sh" ]] && source "$NVM_DIR/auto_nvm_use.sh"
-
-# Add user's home bin if it exists
-[[ -r $HOME/bin ]] && export PATH="$HOME/bin:$PATH"
-
-# Dedupe $PATH Directories
-# shellcheck disable=SC2155,SC2046,SC2005,SC2086
-export PATH=$(echo $(echo $PATH | awk -v RS=: -v ORS=: '!($0 in a) {a[$0]; print}') | sed -E 's/ +:$//g')
-
-
-
 # ————— Clean $HOME == Happy $HOME ———————————————————————————————————
 # ————————————————————————————————————————————————————————————————————
 
@@ -142,6 +121,8 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
+## XDG spec mentions using .local/bin for user executables but no associated var
+export XDG_BIN_HOME="$HOME/.local/bin"
 
 # Non-exported shortcut XDG variables to make stuff less verbose
 config=$XDG_CONFIG_HOME
@@ -169,6 +150,28 @@ alias wget='wget --hsts-file "~/$cache/wget/hsts"'
 for dir in bash/sessions less node sqlite python wget; do
     [[ ! -e "$cache/$dir" ]] && mkdir -p "$cache/$dir"
 done
+
+
+
+# ————— $PATH Locations, Prioritize Non-System Executables ———————————
+# ————————————————————————————————————————————————————————————————————
+
+# NVM - NodeJS & NPM Version Manager
+export NVM_DIR="$HOME/.nvm"
+## this loads nvm
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+## this loads nvm bash_completion
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+## optional nvm script to detect and switch to config'd version when in dir with .nvmrc
+[[ -s "$NVM_DIR/auto_nvm_use.sh" ]] && source "$NVM_DIR/auto_nvm_use.sh"
+
+# Add local bin(s) to top of PATH which override other executables
+[[ -r $XDG_BIN_HOME ]] && export PATH="$XDG_BIN_HOME:$PATH"
+[[ -r $HOME/bin ]] && export PATH="$HOME/bin:$PATH"
+
+# Dedupe $PATH Directories
+# shellcheck disable=SC2155,SC2046,SC2005,SC2086
+export PATH=$(echo $(echo $PATH | awk -v RS=: -v ORS=: '!($0 in a) {a[$0]; print}') | sed -E 's/ +:$//g')
 
 
 
