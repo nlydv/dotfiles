@@ -60,12 +60,13 @@ $global com.apple.springing.delay -float 0.25
 # overriden on a per-app basis, see Nova setting further down for example)
 $global AppleMenuBarVisibleInFullscreen -bool false
 
+# Globally disable app behavior of saving state on quit and reopening windows from prev
+# session (by default; can be overriden on a per-app basis, again, see Nova app setting)
+$global NSQuitAlwaysKeepsWindows -bool false
+
 # Open each app's little manual booklet (Help Viewer), as non-floating windows (i.e.
 # normal window behavior when not focused by being displayed behind active window)
 $write com.apple.helpviewer DevMode -bool true
-
-# Automatically turn on keyboard backlight in dimly lit surroundings
-$write com.apple.BezelServices kDim -bool true
 
 
 # ————— FINDER ———————————————————————————
@@ -179,4 +180,12 @@ $write org.gpgtools.gpgservices RecipientWindowControllerSymetricEncryption -boo
 # use in fullscreen mode and its dense menu options are more frequently accessed. Moreover,
 # it just kinda looks "wrong" when its not visible for this app.
 $app Nova AppleMenuBarVisibleInFullscreen -bool true
+
+# Nova automatically saves tab/window/layout states internally per-project so that when
+# you re-open a specific project workspace, it's as you left it, which is nice. Opening
+# the last open project, if any (instead of showing the launcher w/ project list), upon
+# app launch would make this even better, but for this they rely on the system's global
+# preference to save/restore windows for *all* apps being enabled. This setting enables
+# Nova to save app state on quit even though the system-wide preference is disabled.
+$app Nova NSQuitAlwaysKeepsWindows -bool true
 
