@@ -221,8 +221,7 @@ export TZ=America/Chicago
 # Miscellaneous env variables
 export LINES
 export COLUMNS
-export EDITOR=vim
-export SELECTED_EDITOR=vim
+export EDITOR=/usr/bin/vim.basic
 
 
 

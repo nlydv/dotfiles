@@ -124,7 +124,7 @@ if [[ $cmd_host == *"neelyadav.com" ]]; then
     _PS1+='\[\e[0m\] \[\e[0;1;34m\]\w \[\e[0;37m\e[2m\]$(get_git)\[\e[0;1;35m\]◇\[\e[0;90m\]$(sh_depth)\[\e[0m\] '
 else
     if [[ $EUID -eq 0 ]]; then
-        _PS1="\[${red}${bold}${italic}\]\u\[\e[37m\]@\[${lwhite}${bold}${italic}\]\H\e[48;5;235m\]\[\e[0m\] \[\e[0;1;34m\]\w \[\e[0;37m\e[2m\]$(get_git)\[\e[0;1;31m\]◯\[\e[0;90m\]$(sh_depth)\[\e[0m\] "
+        _PS1="\[\e[0;1;3;31m\]\u\[\e[0m\]@\[\e[0;1;97m\]\H\[\e[0m\] \[\e[0;1;34m\]\w \[\e[0;37m\e[2m\]$(get_git)\[\e[0;1;31m\]◯\[\e[0;90m\]$(sh_depth)\[\e[0m\] "
     else
         _PS1='\[\e[0;1;32m\]\u@\h\[\e[0;1;34m\] \w \[\e[0;2;97m\]$(get_git)\[\e[0;1;97m\]◆\[\e[0;90m\]$(sh_depth)\[\e[0m\] '
     fi
