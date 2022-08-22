@@ -101,6 +101,50 @@ fi
 
 
 
+# ————— Clean $HOME == Happy $HOME ———————————————————————————————————
+# ————————————————————————————————————————————————————————————————————
+
+# Asserting default XDG spec for thoroughness
+## for a practical TL;DR of XDG_BASEDIRs, check this brief blog
+## post by ... *checks about page* ... Max from Hamburg, Germany:
+## https://maex.me/2019/12/the-power-of-the-xdg-base-directory-specification/
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
+## XDG spec mentions using .local/bin for user executables but no associated var
+export XDG_BIN_HOME="$HOME/.local/bin"
+
+# Non-exported shortcut XDG variables to make stuff less verbose
+config=$XDG_CONFIG_HOME
+cache=$XDG_CACHE_HOME
+
+# Reducing auto-generated $HOME clutter from Bash itself
+shopt -s cmdhist
+shopt -s lithist
+
+export HISTCONTROL="ignoredups" # prevents identical back-to-back history entries
+export HISTFILE="$cache/bash/history"
+
+export SHELL_SESSION_DIR="$cache/bash/sessions"
+export SHELL_SESSION_FILE="$SHELL_SESSION_DIR/$TERM_SESSION_ID.session"
+
+# Set modified output directories to clean up external programs' $HOME clutter
+export LESSHISTFILE="$cache/less/history"
+export NODE_REPL_HISTORY="$cache/node/history"
+export SQLITE_HISTORY="$cache/sqlite/history"
+export PYTHONSTARTUP="$config/pythonrc" # saves repl to $cache/python/history
+
+# Defined here instead of in .bash/aliases for logical grouping
+alias wget='wget --hsts-file "~/$cache/wget/hsts"'
+alias alpine='alpine -p "$HOME/.config/alpine/pinerc" -pwdcertdir "$HOME/.config/alpine/smime"'
+
+for dir in bash/sessions less node sqlite python wget; do
+    [[ ! -e "$cache/$dir" ]] && mkdir -p "$cache/$dir"
+done
+
+
+
 # ————— $PATH Locations, Prioritize Non-System Executables ———————————
 # ————————————————————————————————————————————————————————————————————
 # @TODO split up and organize this section into relevant parts
@@ -161,9 +205,6 @@ export NVM_DIR="$HOME/.nvm"
 ## optional nvm script to detect and switch to config'd version when in dir with .nvmrc
 [[ -s "$NVM_DIR/auto_nvm_use.sh" ]] && source "$NVM_DIR/auto_nvm_use.sh"
 
-# Add user's home bin if it exists
-[[ -r $HOME/bin ]] && export PATH="$HOME/bin:$PATH"
-
 # Mint - Swift CLI tool installer and dependency manager
 export PATH="$HOME/.mint/bin:$PATH"
 
@@ -174,51 +215,13 @@ export PATH="$PATH:$HOME.spicetify"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
+# Add local bin(s) to top of PATH which override other executables
+[[ -r $XDG_BIN_HOME ]] && export PATH="$XDG_BIN_HOME:$PATH"
+[[ -r $HOME/bin ]] && export PATH="$HOME/bin:$PATH"
+
 # Dedupe $PATH Directories
 # shellcheck disable=SC2155,SC2046,SC2005,SC2086
 export PATH=$(echo $(echo $PATH | awk -v RS=: -v ORS=: '!($0 in a) {a[$0]; print}') | sed -E 's/ +:$//g')
-
-
-
-# ————— Clean $HOME == Happy $HOME ———————————————————————————————————
-# ————————————————————————————————————————————————————————————————————
-
-# Asserting default XDG spec for thoroughness
-## for a practical TL;DR of XDG_BASEDIRs, check this brief blog
-## post by ... *checks about page* ... Max from Hamburg, Germany:
-## https://maex.me/2019/12/the-power-of-the-xdg-base-directory-specification/
-export XDG_CONFIG_HOME="$HOME/.config"
-export XDG_CACHE_HOME="$HOME/.cache"
-export XDG_DATA_HOME="$HOME/.local/share"
-export XDG_STATE_HOME="$HOME/.local/state"
-
-# Non-exported shortcut XDG variables to make stuff less verbose
-config=$XDG_CONFIG_HOME
-cache=$XDG_CACHE_HOME
-
-# Reducing auto-generated $HOME clutter from Bash itself
-shopt -s cmdhist
-shopt -s lithist
-
-export HISTCONTROL="ignoredups" # prevents identical back-to-back history entries
-export HISTFILE="$cache/bash/history"
-
-export SHELL_SESSION_DIR="$cache/bash/sessions"
-export SHELL_SESSION_FILE="$SHELL_SESSION_DIR/$TERM_SESSION_ID.session"
-
-# Set modified output directories to clean up external programs' $HOME clutter
-export LESSHISTFILE="$cache/less/history"
-export NODE_REPL_HISTORY="$cache/node/history"
-export SQLITE_HISTORY="$cache/sqlite/history"
-export PYTHONSTARTUP="$config/pythonrc" # saves repl to $cache/python/history
-
-# Defined here instead of in .bash/aliases for logical grouping
-alias wget='wget --hsts-file "~/$cache/wget/hsts"'
-alias alpine='alpine -p "$HOME/.config/alpine/pinerc" -pwdcertdir "$HOME/.config/alpine/smime"'
-
-for dir in bash/sessions less node sqlite python wget; do
-    [[ ! -e "$cache/$dir" ]] && mkdir -p "$cache/$dir"
-done
 
 
 
